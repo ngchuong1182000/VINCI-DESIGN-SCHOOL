@@ -9,7 +9,6 @@ const signToken = _id => {
 };
 
 const createSendToken = catchAsync(async (user, res) => {
-  console.log(user);
   const token = signToken(user._id);
   cookieOptions = {
     signed: true,
@@ -22,6 +21,7 @@ const createSendToken = catchAsync(async (user, res) => {
   // tạm thời chưa tạo token --- sửa sau khi hoàn thành giao diện
   if (user.role === 1) {
     res.redirect('/admin/index');
+    return;
   }
   res.redirect('/index');
 });
@@ -82,7 +82,6 @@ exports.postSignupSuccess = catchAsync(async (req, res, next) => {
   }
   user.isActive = true;
   user.codeActive = "";
-  user.save();
   await User.findByIdAndUpdate({ _id: user._id }, { user });
   createSendToken(user, res);
 });
@@ -123,7 +122,7 @@ module.exports.signin = catchAsync(async (req, res, next) => {
 exports.checkUser = catchAsync(async (req, res, next) => {
   const { token } = req.signedCookies;
   if (!token) {
-    next();
+    next(); 
     return;
   }
   const { _id } = jwt.verify(token, process.env.JWT_SECRET);
@@ -139,10 +138,11 @@ module.exports.signout = (req, res) => {
   })
 };
 
-exports.checkPermisstion = () => {
+exports.restrictTo = (...role) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      res.render('err/Error404')
+    console.log("hihi");
+    if (!req.user || !role.includes(req.user.role)) {
+      return res.render('err/Error404');
     }
     return next();
   }

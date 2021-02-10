@@ -8,6 +8,7 @@ const path = require("path");
 const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const { checkUser, restrictTo } = require("./controllers/auth.controller");
 
 // bring routes
 const db = require('./helpers/dbConnect');
@@ -66,7 +67,7 @@ app.use("/section", sectionRoutes);
 app.use("/lesson", lessonRoutes);
 app.use("/order", orderRoutes);
 app.use("/payment", paymentRoutes);
-app.use('/admin', adminRouter)
+app.use('/admin', checkUser, restrictTo(1), adminRouter)
 app.use("/", indexRoutes);
 
 app.use(globalErrorHandler);
