@@ -1,0 +1,98 @@
+extends ../layout
+block content
+  .main-content
+    section.section
+      .section-header
+        .section-header-back
+          a.btn.btn-icon(href='features-posts.html')
+            i.fas.fa-arrow-left
+        h1 Create New Course
+        .section-header-breadcrumb
+          .breadcrumb-item.active
+            a(href='#') Dashboard
+          .breadcrumb-item
+            a(href='#') Courses
+          .breadcrumb-item Create New Course
+      .section-body
+        h2.section-title Create New Course
+        p.section-lead
+          | On this page you can create a new Course
+        .row
+          .col-12
+            .card
+              .card-header
+                h4 Write Your Post
+              .card-body
+                form(action="", method="post", enctype="multipart/form-data")
+                  .row.align-items-start
+                    .col
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Name Course
+                        .col-sm-12.col-md-7
+                          input.form-control(type='text', name='courseName', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Lecturers
+                        .col-sm-12.col-md-7
+                          input.form-control(type='text', name='trainerName', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Category
+                        .col-sm-12.col-md-7
+                          select.form-control.selectric(name="categoryId", required)
+                            each c in category
+                              option(value= c._id)= c.name
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Sort Description
+                        .col-sm-12.col-md-7
+                          textarea.form-control(name='shortDescription', style="height: 7rem", required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Tilte Detail 1
+                        .col-sm-12.col-md-7
+                          input.form-control(type='text', name='title1',required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Description Detail 1
+                        .col-sm-12.col-md-7
+                          textarea.form-control(name='detailDescription1', style="height: 7rem" ,required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Tilte Detail 2
+                        .col-sm-12.col-md-7
+                          input.form-control(type='text', name='title2', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Description Detail 2
+                        .col-sm-12.col-md-7
+                          textarea.form-control(name='detailDescription2', style="height: 7rem" ,required)
+                    .col
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Price
+                        .col-sm-12.col-md-7.input-group
+                          .input-group-prepend
+                            .input-group-text
+                              | đ
+                          input.form-control.currency(type='text', name='price', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 image Cover
+                        .col-sm-12.col-md-7
+                          #image-preview.image-preview(style="height:10rem; width:auto")
+                            label#image-label(for='image-upload') Choose File
+                            input#image-upload(type='file', name='fileUpload', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 image Detail 1
+                        .col-sm-12.col-md-7
+                          #image-preview.image-preview(style="height:10rem; width:auto")
+                            label#image-label(for='image-upload') Choose File
+                            input#image-upload(type='file', name='fileUpload', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 image Detail 1
+                        .col-sm-12.col-md-7
+                          #image-preview.image-preview(style="height:10rem; width:auto")
+                            label#image-label(for='image-upload') Choose File
+                            input#image-upload(type='file', name='fileUpload', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Video Demo Course
+                        .col-sm-12.col-md-7
+                          #image-preview.image-preview(style="height:10rem; width:auto")
+                            label#image-label(for='image-upload') Choose File
+                            input#image-upload(type='file', name='fileUpload', required)
+                  .form-group.row.mb-4
+                    label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3
+                    .col-sm-12.col-md-7
+                      button.btn.btn-primary(type="submit") Create Course

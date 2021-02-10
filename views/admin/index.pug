@@ -1,0 +1,28 @@
+extends ./layout
+block content
+  .main-content
+    section.section
+      .section-header
+        h1= `WellCome ${user.name} To ADMIN Page`
+      .section-body
+    .row
+      each item  in course
+        .card(style='max-width: 35rem; margin: 1rem 1rem')
+          .card-header
+            h4=item.courseName
+            .card-header-action
+              a.btn.btn-primary(href= `/admin/course/${item.slug}`) Detail
+          .card-body
+            .mb-2.text-muted= item.shortDescription
+            .chocolat-parent
+              a.chocolat-image(href= item.imageCover, title='Just an example')
+                div(data-crop-image='285')
+                  img.img-fluid(alt='image', src= item.imageCover)
+  footer.main-footer
+    .footer-left
+      | Copyright &copy; 2021
+      .bullet
+      |  Design By 
+      a(href='https://www.facebook.com/chuongcnbhaf180208/') Nguyên Chương
+    .footer-right
+      | 2.3.0

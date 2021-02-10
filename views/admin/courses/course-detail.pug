@@ -1,0 +1,123 @@
+extends ../layout
+block content
+  .main-content
+    section.section
+      .section-header
+        h1= course.courseName
+        .section-header-breadcrumb
+          .breadcrumb-item.active
+            a(href='#') Dashboard
+          .breadcrumb-item.active
+            a(href='#') Course
+          .breadcrumb-item= course.courseName
+      .section-body
+        h2.section-title Information
+        p.section-lead
+          | Change information about your course on this page.
+        .row.mt-sm-4
+          .col-12.col-md-12.col-lg-5
+            .card.profile-widget
+              .profile-widget-header
+                img.rounded-circle.profile-widget-picture(alt='image', src= course.imageCover)
+                .profile-widget-items
+                  .profile-widget-item
+                    .profile-widget-item-label Bought
+                    .profile-widget-item-value 187
+                  .profile-widget-item
+                    .profile-widget-item-label Price
+                    .profile-widget-item-value= course.price.toLocaleString("it-it", { style : "currency", currency: "VND"})
+                  .profile-widget-item
+                    .profile-widget-item-label Lecturer
+                    .profile-widget-item-value= course.trainerName
+              .profile-widget-description
+                .profile-widget-name Course / 
+                  .text-muted.d-inline.font-weight-normal
+                    .slash= course.courseName 
+                    div= course.shortDescription
+              div(style='width: 100%; height: auto;')
+                iframe(width='450', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+          .col-12.col-md-12.col-lg-7
+            .card
+              form.needs-validation(method='post', novalidate='')
+                .card-header
+                  h4 Edit Information
+                .card-body
+                  .row
+                    .form-group.col-md-6.col-12
+                      label Name Course
+                      input.form-control(type='text', value= course.courseName, required='', name='nameCourse')
+                    .form-group.col-md-6.col-12
+                      label Price
+                      input.form-control(type='text', value=course.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }), required='', name='price')
+                  .row
+                    .form-group.col-md-5.col-12
+                      label(for='site-description') Short Description
+                      textarea#site-description.form-control(name='shortDescription',style='min-height:7rem')= course.shortDescription
+                    .col
+                      .form-group.col-12
+                        label Lecturer
+                        input.form-control(type='text',name="trainerName" value= course.trainerName, required='')
+                      .form-group.row.align-items-center.col-md-12.col-12
+                        label.form-control-label.col-sm-3.text-md-right Image Cover
+                        .col-sm-6.col-md-9
+                          .custom-file
+                            input#site-logo.custom-file-input(type='file', name='fileUpload')
+                            label.custom-file-label Choose File
+                          .form-text.text-muted The image must have a maximum size of 10 MB
+                  .row
+                    .form-group.col-md-5.col-12
+                      label(for='site-description') Description Detail 1
+                      textarea#site-description.form-control(name='detailDescription1',style='min-height:7rem')= course.detailDescription[0].content
+                    .col
+                      .form-group.col-12
+                        label title Detail 1
+                        input.form-control(type='text',name="trainerName" value= course.detailDescription[0].title, required='')
+                      .form-group.row.align-items-center.col-md-12.col-12
+                          label.form-control-label.col-sm-3.text-md-right Image Detail 2
+                          .col-sm-6.col-md-9
+                            .custom-file
+                              input#site-logo.custom-file-input(type='file', name='fileUpload')
+                              label.custom-file-label Choose File
+                            .form-text.text-muted The image must have a maximum size of 10 MB
+                  .row
+                    .form-group.col-md-5.col-12
+                      label(for='site-description') Description Detail 2
+                      textarea#site-description.form-control(name='detailDescription2',style='min-height:5rem')= course.detailDescription[0].content
+                    .col
+                      .form-group.col-12
+                        label title Detail 1
+                        input.form-control(type='text',name="trainerName" value= course.detailDescription[1].title, required='')
+                      .form-group.row.align-items-center.col-md-12.col-12
+                          label.form-control-label.col-sm-3.text-md-right Image Detail 1
+                          .col-sm-6.col-md-9
+                            .custom-file
+                              input#site-logo.custom-file-input(type='file', name='fileUpload')
+                              label.custom-file-label Choose File
+                            .form-text.text-muted The image must have a maximum size of 10 MB
+                  .row
+                    label.form-control-label.col-sm-3.text-md-right Video Demo
+                    .col-sm-6.col-md-9
+                      .custom-file
+                        input#site-logo.custom-file-input(type='file', name='fileUpload')
+                        label.custom-file-label Choose File
+                      .form-text.text-muted The Video must have a maximum size of 100 MB
+                .card-footer.text-right
+                  button.btn.btn-primary Save Changes
+      each section in course.sectionId
+        .section-body
+          h2.section-title= section.sectionTitle
+            a.btn.btn-primary(href=`/admin/course/${course.slug}/add/lesson`) Add New Lesson
+          p.section-lead= section.sectionDescription
+          .row
+            each lesson in section.lessonId
+              .col-12.col-sm-6.col-md-6.col-lg-3
+                article.article
+                  .article-header
+                    .article-image(data-background='/admin/img/news/img08.jpg')
+                    .article-title
+                      h2
+                        a(href='#')= lesson.lessonTitle
+                  .article-details
+                    p= lesson.lessonDescription
+                    .article-cta
+                      a.btn.btn-primary(href= `/admin/course/${course.slug}/lesson/${lesson.slug}`) Read More

@@ -1,0 +1,135 @@
+extends ../layouts/common
+block content
+  section.header_table
+    .introduction
+      img(src=course.imageCover, alt='', height='820px', width='100%')
+    .courses__preview__content
+      .landing__line
+      span.preview__header__title= course.courseName
+      span.preview__header__body= course.shortDescription
+      if !user
+        a(href= `/auth/login`)
+          button.preview__btn
+            i.fas.fa-shopping-cart.fa-2x
+            span.course_text_body
+              span.text Học Ngay -
+              span.text= course.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+      else if !isBought
+        a(href= `/payment/course/${course.slug}`)
+          button.preview__btn
+            i.fas.fa-shopping-cart.fa-2x
+            span.course_text_body
+              span.text Học Ngay -
+              span.text= course.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+  section.description
+    .description_section
+      span.section_general
+        div.das__landing__line
+        span.description_section_text Sứ Mệnh
+      .preview__overview
+        each item in course.detailDescription
+          h1
+            span(style='color: rgb(245, 180, 35); background-color: transparent;')= item.title
+          p
+            br
+          p
+            span(style='background-color: transparent;')= item.content
+          p
+            br
+          p
+            img(src= item.imgURL, alt='', width='100%')
+          p
+            br
+          p
+            br
+  section.course__wrapper
+    span.section_general
+      .das__landing__line(style='color: rgb(245, 180, 35);')
+      span.description_section_text(style='color: #fff;') Gi&#x1EDB;i thi&#x1EC7;u kh&oacute;a h&#x1ECD;c
+    .course__content
+      span.course__name= course.courseName
+      .player__container.course__preview__video
+        div(style='width: 100%; height: auto;')
+          iframe(width='560', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+      .course__title__text Giáo trình
+      .course__slide
+        i.far.fa-arrow-alt-circle-down.fa-2x(style='color: #fff;')
+        span.course__download__title=`Tải Giáo Trình ${course.courseName}`
+      each item in course.sectionId
+        .course__chapter
+          .dropdown
+            span.course__chapter__name= item.sectionTitle
+            a(href='#', data-mdb-toggle='dropdown', aria-expanded='false')
+              i.fas.fa-chevron-circle-down.fa-2x(style='color: #fff;')
+          if !user
+            each i in item.lessonId
+               a(href= `/auth/login`)
+                .course__chapter__content
+                  .course__lecture__wrapper
+                    .course__lecture__detail
+                      i.far.fa-play-circle.fa-2x(style='color: #fff;')
+                      span.course__lecture__name= i.lessonTitle
+                    .course__time
+                      span.course__lecture__name.course__lenght (3:54)
+          else
+            each i in item.lessonId
+              if !isBought
+                a(href= `/payment/course/${course.slug}`)
+                  .course__chapter__content
+                    .course__lecture__wrapper
+                      .course__lecture__detail
+                        i.far.fa-play-circle.fa-2x(style='color: #fff;')
+                        span.course__lecture__name= i.lessonTitle
+                      .course__time
+                        span.course__lecture__name.course__lenght (3:54)
+              else
+                .course__chapter__content
+                  .course__lecture__wrapper
+                    .course__lecture__detail
+                      i.far.fa-play-circle.fa-2x(style='color: #fff;')
+                      span.course__lecture__name= i.lessonTitle
+                    .course__time
+                      span.course__lecture__name.course__lenght (3:54)
+  section.course__professor
+    span.section_general
+      .das__landing__line
+      span.description_section_text(style="color: #fff;") Giảng Viên
+    .course__professor__wrapper
+      span.text__title.course__professor__name(style="color: #fff;") Phượng Phạm
+      span.course__professor__position Fouder at DAS
+      .professor_contact
+        i.fab.fa-facebook.fa-2x(style="color: #fff;")
+        i.fab.fa-youtube.fa-2x(style="color: #fff;")
+        i.fab.fa-instagram.fa-2x(style="color: #fff;") 
+      span.text__body.course__professor__detail Phượng Phạm là một nhà thiết kế nhận diện thương hiệu ở Hà nội. Từ năm 2014, Phượng Phạm đã làm việc với rất nhiều thương hiệu trong và ngoài nước để đi đến các giải pháp thiết kế tối ưu nhất. Năm 2018, Phượng Phạm thành lập VINCI DESIGN SCHOOL (VDS), một chương trình đào tạo thiết kế đồ hoạ dành cho những bạn muốn theo ngành. Chương trình đã giúp hàng trăm học viên đi đến thiết kế đồ hoạ với một tâm thế vững vàng.
+      .course__professor__website
+        span.text__body
+  section.course__register
+    img.course__register__image(src="/image/footer_eUP5Ss7P9VYXdk9F7Nsxp")
+    span.text__title-black.course__register__text Đăng ký ngay khoá
+    span.text__title-black-bold.course__register__course-name Logo Design 101
+    .course__register__benefit
+      span.text__title-black Lợi Ích
+    .course__register__benefit__item
+      i.far.fa-check-circle.fa-2x(style="color: black;") 
+      span.text__body_black.course__register__benefit__text 24 videos chưa tính các video bonus cập nhật sau
+    .course__register__benefit__item
+      i.far.fa-check-circle.fa-2x(style="color: black;") 
+      span.text__body_black.course__register__benefit__text 24 videos chưa tính các video bonus cập nhật sau
+    .course__register__benefit__item
+      i.far.fa-check-circle.fa-2x(style="color: black;") 
+      span.text__body_black.course__register__benefit__text 24 videos chưa tính các video bonus cập nhật sau
+    .course__register__benefit__item
+      i.far.fa-check-circle.fa-2x(style="color: black;") 
+      span.text__body_black.course__register__benefit__text 24 videos chưa tính các video bonus cập nhật sau
+    .course__register__benefit__item
+      i.far.fa-check-circle.fa-2x(style="color: black;") 
+      span.text__body_black.course__register__benefit__text 24 videos chưa tính các video bonus cập nhật sau
+    .course__register__benefit__item
+      i.far.fa-check-circle.fa-2x(style="color: black;") 
+      span.text__body_black.course__register__benefit__text 24 videos chưa tính các video bonus cập nhật sau
+    button.preview__btn
+      a(href= `/payment/course/${course.slug}`)
+        i.fas.fa-shopping-cart.fa-2x
+        span.course_text_body
+          span.text= `Học Ngay  --  ${course.price.toLocaleString("it-It", {style : "currency", currency : "VND"})}`

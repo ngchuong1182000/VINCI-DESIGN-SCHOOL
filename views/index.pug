@@ -1,0 +1,67 @@
+extends ./layouts/common
+block content
+  section.header_table 
+    .introduction
+      img(src='/image/COVER FB.jpg', alt='', width='100%')
+    .landing__social
+      a(href='/index.html').mr-2
+        <i class="fab fa-facebook-square fa-2x" style="color: #FFF; font-size:1.5rem"></i>
+      a(href='/index.html').mr-2
+        <i class="fab fa-instagram fa-2x" style="color: #FFF; font-size:1.5rem"></i>
+      a(href='/index.html').mr-2
+        <i class="fab fa-youtube fa-2x" style="color: #FFF; font-size:1.5rem"></i>
+  section.description
+    .description_section
+      span.section_general
+        .das__landing__line
+        span.description_section_text Sứ Mệnh
+      .description__section__detail
+        span.section__detail__title Lược Bỏ Sự Thừa Thãi
+        span.section__detail__content Để tìm được các kiến thức về thiết kế đồ hoạ trên mạng là không khó. Nhưng để chắt lọc, sắp xếp, xác minh thì không phải là việc dễ dàng. Sự nhiễu loạn thông tin ở thời đại này dễ mang đến cho ta những tư duy sai lầm về ngành, làm ta đi chệch hướng, bấp bênh trong con đường trở thành designer. DAS thấu hiểu điều này, và chỉ giảng dạy những gì quan trọng cho sự nghiệp các bạn.
+        span.section__detail__other
+          span(class='#') Hello xin chào các bạn
+  section.description.second-children
+    .description_section
+      span.section_general
+        .das__landing__line
+        span.description_section_text Tiêu chí
+      .description__section__detail
+        span.section__detail__title Tập trung vào tư duy
+        span.section__detail__content Để tìm được các kiến thức về thiết kế đồ hoạ trên mạng là không khó. Nhưng để chắt lọc, sắp xếp, xác minh thì không phải là việc dễ dàng. Sự nhiễu loạn thông tin ở thời đại này dễ mang đến cho ta những tư duy sai lầm về ngành, làm ta đi chệch hướng, bấp bênh trong con đường trở thành designer. DAS thấu hiểu điều này, và chỉ giảng dạy những gì quan trọng cho sự nghiệp các bạn.
+        span.section__detail__other
+          span(class='#') Hello xin chào các bạn
+
+  section.landing__video
+    .carousel-item.active
+      <iframe width="100%" height="575px" src="https://www.youtube.com/embed/3w5sepozKig" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      
+  section.courses__online
+    .section_general
+      .das__landing__line
+      span.courses__section Học Ngay Tại Đây
+    .course__content
+      span.courses__title Khoá VDS Online
+      .couses_container
+        each c in course
+          a(href=`/course/${c.slug}/course-detail`)
+            article.vsn_course
+              img.course__image(src=`${c.imageCover}`, alt='Logo Design 101')
+              section.course__content
+                span.course__title=c.courseName
+                span.course__description=c.shortDescription
+                section.course__footer
+                  button.course__btn(type='button')
+                    <i class="fas fa-hand-point-right fa-lg" style="color:red"></i>
+                  span.course__btn__text Xem Chi Tiết
+      button.btn_see_all(type='button')
+        a(href='/course/course-online', style='color: #fff;')  XEM TẤT CẢ
+
+
+
+  section.subscription
+    span.subscription__title Subscribe để nhận thông báo mới nhất về khoá học
+      .subscription__container
+        .subscription__input
+          .input__wrapper
+            input#subscription.input(type='email', name='subscription', placeholder='Điền email của bạn', value='')
+        button.subscription__btn(type='button') G&#x1EEC;I

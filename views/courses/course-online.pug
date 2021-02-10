@@ -1,0 +1,31 @@
+extends ../layouts/common
+block content
+  section.header_table
+    .introduction
+      img(src='/image/online-courses@3x.1b259e63.jpg', alt='', width='100%')
+    span.online__header__title Khóa Online.
+    span.online__header__body Học mọi lúc, mọi nơi.
+  section.courses__online
+    .section_general
+      .das__landing__line
+      span.courses__section Kh&oacute;a h&#x1ECD;c online
+    .course__content
+      span.courses__title Kho&aacute; VDS Online
+      .couses_container
+        each c in course
+          a(href=`/course/${c.slug}/course-detail`)
+            article.vsn_course
+              img.course__image(src= c.imageCover, alt='Logo Design 101')
+              section.course__content
+                span.course__title= c.courseName
+                span.course__description=c.shortDescription
+                section.course__footer
+                  .course__owner
+                    .lecturer__avatar
+                      img(src='/image/COVER FB.jpg', alt='')
+                    .course__professor__details
+                      b.text-black= c.trainerName
+                      span.text-black Founder at VDS
+                  .course__price
+                    span.body__price= c.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                    span.text__price Giá

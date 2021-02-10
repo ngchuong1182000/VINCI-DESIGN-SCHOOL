@@ -1,0 +1,81 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  meta(http-equiv='X-UA-Compatible', content='ie=edge')
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css')
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css', rel='stylesheet')
+  // Google Fonts
+  link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap', rel='stylesheet')
+  // MDB
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.css', rel='stylesheet')
+  // MDB
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js')
+  link(rel='stylesheet', href='/css/style-users.css')
+  title VINCI DESIGN SCHOOL
+body
+  #root
+    main
+      .login_user
+        a(href="/index")
+          svg.icon__back(xmlns='http://www.w3.org/2000/svg', width='64', height='64', viewbox='0 0 64 64', alt='icon', style='height: 64px; width: 64px; cursor: pointer;')
+            a(href='/index.html')
+              g(fill='#FFF')
+                path(d='M32 0C14.327 0 0 14.327 0 32c0 17.673 14.327 32 32 32 17.673 0 32-14.327 32-32C64 14.327 49.673 0 32 0zm0 1c17.12 0 31 13.88 31 31 0 17.12-13.88 31-31 31C14.88 63 1 49.12 1 32 1 14.88 14.88 1 32 1z')
+                path(d='M20.32 32.756L28.727 41l1.543-1.512-6.545-6.418h19.184c.603 0 1.091-.48 1.091-1.07 0-.59-.488-1.07-1.09-1.07H23.724l6.545-6.418L28.727 23l-8.407 8.244c-.427.418-.427 1.094 0 1.512')
+        .login__header
+        .login_content
+          .login_item
+            .modal__line
+            span.modal__title
+            section
+              .login_other
+                button.bnt_login_email(type='button')
+                  span(style='padding: 10px; font-weight: 500;')
+                    .login__google__wrapper
+                      svg.das__icon.login__google__icon(width='28px', height='28px', viewbox='0 0 28 28', version='1.1', xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', alt='icon')
+                        g(id='Icons/28px/Gmail', stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                          g#Gmail_Icon(transform='translate(0.000000, 4.000000)')
+                            g#Group
+                              rect#Rectangle(fill='#E1E1E1', fill-rule='nonzero', x='3.16377554', y='4.58747372', width='21.5136681', height='15.6606846')
+                              path#Path(d='M0,1.89826579 L0,18.3498949 C0,19.3939431 0.854219835,20.2481583 1.89826579,20.2481583 L3.16377554,20.2481583 L3.16377554,1.89826579 L0,1.89826579 Z', fill='#D23F31', fill-rule='nonzero')
+                              path#Path(d='M24.6774436,1.89826579 L24.6774436,20.2481583 L25.9429557,20.2481583 C26.9870017,20.2481583 27.8412192,19.3939408 27.8412192,18.3498949 L27.8412192,1.89826579 L24.6774436,1.89826579 Z', fill='#C53929', fill-rule='nonzero')
+                              path#Path(d='M0.556825124,3.23970645 L17.5636965,20.2481583 L25.9429557,20.2481583 C26.9870017,20.2481583 27.8412192,19.3939408 27.8412192,18.3498949 L27.8412192,1.89826579 L0.556825124,3.23970645 Z', fill='url(#linearGradient-3)', fill-rule='nonzero')
+                              g
+                                path#Path(d='M25.9429534,0 L13.9206096,8.22581455 L1.89826579,0 C0.854219835,0 0,0.854219835 0,1.89826579 C0,2.54842347 0.327449587,3.12264793 0.825745455,3.46433587 L13.9206096,12.4241438 L27.0154737,3.46433587 C27.5137673,3.12264793 27.8412192,2.54842347 27.8412192,1.89826579 C27.8412192,0.854219835 26.9869993,0 25.9429534,0 Z', fill='#DB4437', fill-rule='nonzero')
+                      .login__google__divider
+                      span.text_login_other Qua Email
+                span(style='transition: opacity 0.5s ease 0s;')
+                  button.login__facebook__btn.metro(type='button')
+                    .login__facebook__wrapper
+                      svg.das__icon.login__facebook__icon(width='28px', height='28px', viewbox='0 0 28 28', version='1.1', xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', alt='icon')
+                        title Icons/28px/FB
+                        desc Created with Sketch.
+                        g(id='Icons/28px/FB', stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                          g#path4680-2(fill='#3B5998', fill-rule='nonzero')
+                            path(d='M14.9557178,10.8429907 L11.3068098,10.8429907 L11.3068098,15.0687724 L14.9557178,15.0687724 L14.9557178,18.185129 C14.9557178,21.8016973 17.1644082,23.7709661 20.3907349,23.7709661 C21.9360733,23.7709661 23.2643509,23.6558797 23.6514723,23.6044737 L23.6514723,23.6044737 L23.6514723,19.8249799 L21.4137216,19.8239308 C19.6591908,19.8239308 19.3194891,18.9902096 19.3194891,17.7667472 L19.3194891,17.7667472 L19.3194891,15.0687724 L23.5040724,15.0687724 L22.9591649,10.8429907 L19.3194891,10.8429907 L19.3194891,-2.45670151e-12 L26.4546616,-2.24353869e-12 C27.3080073,-2.24353869e-12 28,0.691987486 28,1.54532681 L28,26.4545683 C28,27.3082223 27.3080073,28 26.4546616,28 L1.54533839,28 C0.691677938,28 -3.17967874e-13,27.3082223 -3.17967874e-13,26.4545683 L-3.17967874e-13,1.54532681 C-3.17967874e-13,0.691987486 0.691677938,-2.24353869e-12 1.54533839,-2.24353869e-12 L14.9557178,-2.45670151e-12 L14.9557178,10.8429907 Z', transform='translate(14.000000, 14.000000) scale(-1, 1) rotate(-180.000000) translate(-14.000000, -14.000000) ')
+                      .login__facebook__divider
+                      span.text_login_other Qua Facebook
+              span.text_choose - or -
+            form(action="/auth/login", method="post")
+              span Email
+              .form-outline.mb-4
+                .imput_email
+                  input#form1Example1.form-control(type='email',name='email', style=' height: 50px;' value= email? email : '')
+                  label.form-label(for='form1Example1') Email address
+              span Password
+              .form-outline.mb-4
+                .imput_email
+                  input#form1Example1.form-control(type='password',name='password' style=' height: 50px; ')
+                  label.form-label(for='form1Example1') Password
+              if message
+                .form-outline.mb-4
+                  .alert.alert-warning(role='alert')= message
+              a.forgot_pass(href='/fogot-password.html') Quên mật khẩu ?
+              .login__btn
+                button.btn_login(type='submit') ĐĂNG NHẬP
+              .login__register
+                span.register__text Bạn chưa có tài khoản  ?
+                a.login__register__link(href='/auth/signup') Đăng ký ngay
+
+
