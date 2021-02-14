@@ -140,7 +140,6 @@ module.exports.signout = (req, res) => {
 
 exports.restrictTo = (...role) => {
   return (req, res, next) => {
-    console.log("hihi");
     if (!req.user || !role.includes(req.user.role)) {
       return res.render('err/Error404');
     }

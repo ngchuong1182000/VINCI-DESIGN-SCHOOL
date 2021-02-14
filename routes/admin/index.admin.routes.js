@@ -2,26 +2,25 @@ const express = require("express");
 const router = express.Router();
 const multer = require('../../utils/setup.multer');
 
-
-const { checkUser } = require('../../controllers/auth.controller');
 const {
   getIndex,
   getPageCreateCourse,
   postPageCreateCourse,
-  getDetailCourse
+  getDetailCourse,
+  updateCourse
 } = require('../../controllers/admin/index.controller');
 
 
 router.route("/index")
-  .get(checkUser, getIndex)
+  .get(getIndex)
 
 router.route("/course/create-course")
-  .get(checkUser, getPageCreateCourse)
-  .post(checkUser, multer.array("fileUpload", 12), postPageCreateCourse)
+  .get(getPageCreateCourse)
+  .post(multer.array("fileUpload", 12), postPageCreateCourse)
 
 router.route("/course/:slug")
-  .get(checkUser, getDetailCourse)
-  .post()
+  .get(getDetailCourse)
+  .post(multer.array("fileUpload", 12), updateCourse)
 
 
 module.exports = router;

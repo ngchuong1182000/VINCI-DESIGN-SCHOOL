@@ -38,14 +38,14 @@ block content
                 iframe(width='450', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
           .col-12.col-md-12.col-lg-7
             .card
-              form.needs-validation(method='post', novalidate='')
+              form.needs-validation(action="", method="post", enctype="multipart/form-data")
                 .card-header
                   h4 Edit Information
                 .card-body
                   .row
                     .form-group.col-md-6.col-12
                       label Name Course
-                      input.form-control(type='text', value= course.courseName, required='', name='nameCourse')
+                      input.form-control(type='text', value= course.courseName, required='', name='courseName')
                     .form-group.col-md-6.col-12
                       label Price
                       input.form-control(type='text', value=course.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }), required='', name='price')
@@ -71,7 +71,7 @@ block content
                     .col
                       .form-group.col-12
                         label title Detail 1
-                        input.form-control(type='text',name="trainerName" value= course.detailDescription[0].title, required='')
+                        input.form-control(type='text',name="title1" value= course.detailDescription[0].title, required='')
                       .form-group.row.align-items-center.col-md-12.col-12
                           label.form-control-label.col-sm-3.text-md-right Image Detail 2
                           .col-sm-6.col-md-9
@@ -86,7 +86,7 @@ block content
                     .col
                       .form-group.col-12
                         label title Detail 1
-                        input.form-control(type='text',name="trainerName" value= course.detailDescription[1].title, required='')
+                        input.form-control(type='text',name="title2" value= course.detailDescription[1].title, required='')
                       .form-group.row.align-items-center.col-md-12.col-12
                           label.form-control-label.col-sm-3.text-md-right Image Detail 1
                           .col-sm-6.col-md-9
@@ -103,21 +103,25 @@ block content
                       .form-text.text-muted The Video must have a maximum size of 100 MB
                 .card-footer.text-right
                   button.btn.btn-primary Save Changes
-      each section in course.sectionId
-        .section-body
-          h2.section-title= section.sectionTitle
-            a.btn.btn-primary(href=`/admin/course/${course.slug}/add/lesson`) Add New Lesson
-          p.section-lead= section.sectionDescription
-          .row
-            each lesson in section.lessonId
-              .col-12.col-sm-6.col-md-6.col-lg-3
-                article.article
-                  .article-header
-                    .article-image(data-background='/admin/img/news/img08.jpg')
-                    .article-title
-                      h2
-                        a(href='#')= lesson.lessonTitle
-                  .article-details
-                    p= lesson.lessonDescription
-                    .article-cta
-                      a.btn.btn-primary(href= `/admin/course/${course.slug}/lesson/${lesson.slug}`) Read More
+      .section-body
+        h2.section-title
+          a.btn.btn-primary(href=`/admin/course/${course.slug}/add/section`) Add New Section
+      if course.sectionId.length > 0
+        each section in course.sectionId
+          .section-body
+            h2.section-title= `${section.sectionTitle} `
+              a.btn.btn-primary(href=`/admin/course/${course.slug}/add/lesson`) Add New Lesson
+            p.section-lead= section.sectionDescription
+            .row
+              each lesson in section.lessonId
+                .col-12.col-sm-6.col-md-6.col-lg-3
+                  article.article
+                    .article-header
+                      .article-image(data-background='/admin/img/news/img08.jpg')
+                      .article-title
+                        h2
+                          a(href='#')= lesson.lessonTitle
+                    .article-details
+                      p= lesson.lessonDescription
+                      .article-cta
+                        a.btn.btn-primary(href= `/admin/course/${course.slug}/lesson/${lesson.slug}`) Read More

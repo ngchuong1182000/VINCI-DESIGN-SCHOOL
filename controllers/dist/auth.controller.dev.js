@@ -301,8 +301,6 @@ exports.restrictTo = function () {
   }
 
   return function (req, res, next) {
-    console.log("hihi");
-
     if (!req.user || !role.includes(req.user.role)) {
       return res.render('err/Error404');
     }

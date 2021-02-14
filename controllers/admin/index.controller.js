@@ -32,7 +32,6 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
     shortDescription,
     price,
   }
-
   for (const file of files) {
     let folder;
     const options = {};
@@ -64,8 +63,8 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
       imgURL: urls[2]
     }
   ]
-  console.log({ data });
   await Course.create(data);
+
   res.redirect('/admin/index');
 });
 
@@ -73,6 +72,58 @@ exports.getDetailCourse = catchAsync(async (req, res, next) => {
   const { user } = req;
   const { slug } = req.params;
   const course = await Course.findOne({ slug });
-  console.log(course.sectionId[0].lessonId);
   res.render('admin/courses/course-detail', { user, course })
+});
+
+exports.updateCourse = catchAsync(async (req, res, next) => {
+  // get course by params
+  const { courseName, price, shortDescription, trainerName, detailDescription1, title1, detailDescription2, title2 } = req.body;
+  const urls = [];
+  const { files } = req;
+  const data = {
+    courseName,
+    trainerName,
+    shortDescription,
+    price: price.toString().split('.').splice(0, 1).join() * 1000
+  }
+  const _id = await (await Course.findOne({ slug: req.params.slug }))._id;
+  if (!_id) {
+    res.redirect('/admin/index');
+  }
+  // lấy dữ liệu gửi lên server
+  for (const file of files) {
+    let folder;
+    const options = {}
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      folder = "images"
+    } else {
+      folder = "video"
+      options.resource_type = "video"
+    }
+    const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+    options.public_id = `${folder}/${nameVideos}`
+    const uploader = async path => await cloudinary.uploads(path, options);
+    const newPath = await uploader(file.path);
+    urls.push(newPath.url);
+    fs.unlinkSync(file.path);
+  }
+  data.imageCover = urls[0];
+  data.detailDescription = [
+    {
+      title: title1,
+      content: detailDescription1,
+      imgURL: urls[1]
+    },
+    {
+      title: title2,
+      content: detailDescription2,
+      imgURL: urls[2]
+    }
+  ]
+  if (urls.length == 4) {
+    data.demoVideoId = urls[3];
+  }
+  // update dữ liệu vào db
+  await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
+  res.redirect("back")
 });
