@@ -1,7 +1,10 @@
-const mongoose = require("mongoose");
-const slugify = require("slugify");
+"use strict";
 
-const lessonSchema = mongoose.Schema({
+var mongoose = require("mongoose");
+
+var slugify = require("slugify");
+
+var lessonSchema = mongoose.Schema({
   lessonTitle: {
     type: String,
     required: true,
@@ -19,18 +22,21 @@ const lessonSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     required: [true, "a lesson should be in 1 section"],
     ref: "Section"
-  },
+  }
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
 });
-
 lessonSchema.pre("save", function (next) {
-  this.slug = slugify(this.lessonTitle, { lower: true });
+  this.slug = slugify(this.lessonTitle, {
+    lower: true
+  });
   next();
 });
-
-const Lesson = mongoose.model('Lesson', lessonSchema)
-
+var Lesson = mongoose.model('Lesson', lessonSchema);
 module.exports = Lesson;

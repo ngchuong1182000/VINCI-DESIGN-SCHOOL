@@ -1,0 +1,47 @@
+extends ../layout
+block content
+  .main-content
+    section.section
+      .section-header
+        .section-header-back
+          a.btn.btn-icon(href='features-posts.html')
+            i.fas.fa-arrow-left
+        h1 Create New Section
+        .section-header-breadcrumb
+          .breadcrumb-item.active
+            a(href='#') Dashboard
+          .breadcrumb-item
+            a(href='#') Courses
+          .breadcrumb-item Create New Section
+      .section-body
+        h2.section-title Create New Section
+        p.section-lead
+          | On this page you can create a new Section
+        .row
+          .col-12
+            .card
+              .card-header
+                h4 Write Your Post
+              .card-body
+                form(action="", method="post", enctype="multipart/form-data")
+                  .row.align-items-start
+                    .col
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Lesson Title
+                        .col-sm-12.col-md-7
+                          input.form-control(type='text', name='lessonTitle', required)
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Lesson Description
+                        .col-sm-12.col-md-7
+                          input.form-control(type='text', name='lessonDescription', required)
+                    .col
+                      .form-group.row.mb-4
+                        label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Video 
+                        .col-sm-12.col-md-7
+                          #image-preview.image-preview(style="height:10rem; width:auto")
+                            label#image-label(for='image-upload') Choose File
+                            input#image-upload(type='file', name='fileUpload', required)
+                  .form-group.row.mb-4
+                    label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3
+                    .col-sm-12.col-md-7
+                      button.btn.btn-primary(type="submit") Create Course

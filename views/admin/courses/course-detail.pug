@@ -110,7 +110,7 @@ block content
         each section in course.sectionId
           .section-body
             h2.section-title= `${section.sectionTitle} `
-              a.btn.btn-primary(href=`/admin/course/${course.slug}/add/lesson`) Add New Lesson
+              a.btn.btn-primary(href=`/admin/course/${course.slug}/${section.slug}/add/lesson`) Add Lesson
             p.section-lead= section.sectionDescription
             .row
               each lesson in section.lessonId

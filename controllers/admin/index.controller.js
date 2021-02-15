@@ -1,6 +1,8 @@
 const catchAsync = require("../../utils/catchAsync");
 const Course = require("../../models/course.model");
-const Category = require("../../models/category.model")
+const Category = require("../../models/category.model");
+const Section = require("../../models/section.model");
+const Lesson = require("../../models/lesson.model");
 const formidable = require('formidable');
 const cloudinary = require('../../utils/setup.cloudinary');
 const fs = require('fs');
@@ -72,7 +74,7 @@ exports.getDetailCourse = catchAsync(async (req, res, next) => {
   const { user } = req;
   const { slug } = req.params;
   const course = await Course.findOne({ slug });
-  res.render('admin/courses/course-detail', { user, course })
+  res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase() })
 });
 
 exports.updateCourse = catchAsync(async (req, res, next) => {
@@ -125,5 +127,55 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
   }
   // update dữ liệu vào db
   await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
+  res.redirect("back")
+});
+
+
+exports.getAddSection = catchAsync(async (req, res, next) => {
+  const user = req.user
+  res.render('admin/section/new-section', { user })
+});
+
+exports.postAddSection = catchAsync(async (req, res, next) => {
+  const { sectionTitle, sectionDescription } = req.body
+  const { file } = req;
+  const { slug } = req.params;
+  const courseId = (await Course.findOne({ slug }))._id;
+  const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+  const options = {
+    public_id: `images/${nameVideos}`
+  }
+  const uploader = async path => await cloudinary.uploads(path, options)
+  const imageCover = (await uploader(file.path)).url
+  fs.unlinkSync(file.path)
+  const data = { sectionTitle, sectionDescription, imageCover, courseId }
+  await Section.create(data);
+  res.redirect("back")
+});
+
+exports.getAddLesion = catchAsync(async (req, res, next) => {
+  const { user } = req
+  res.render('admin/lession/new-lession', { user, title: "Add New Lession" })
+});
+
+exports.postAddLesion = catchAsync(async (req, res, next) => {
+  const { user } = req
+  const { lessonTitle, lessonDescription } = req.body
+  const { file } = req;
+  const { slug2 } = req.params;
+  const sectionId = (await Section.findOne({ slug: slug2 }))._id;
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    res.render('admin/lession/new-lession', { user, title: "Add New Lession", message: "vui long chon video" })
+  }
+  const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+  const options = {
+    resource_type: "video",
+    public_id: `video/${nameVideos}`
+  }
+  const uploader = async path => await cloudinary.uploads(path, options)
+  const videoId = (await uploader(file.path)).url
+  fs.unlinkSync(file.path)
+  const data = { lessonTitle, lessonDescription, videoId, sectionId }
+  await Lesson.create(data);
   res.redirect("back")
 });

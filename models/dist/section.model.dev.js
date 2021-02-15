@@ -1,7 +1,10 @@
-const mongoose = require("mongoose");
-const slugify = require('slugify');
+"use strict";
 
-const sectionSchema = mongoose.Schema({
+var mongoose = require("mongoose");
+
+var slugify = require('slugify');
+
+var sectionSchema = mongoose.Schema({
   sectionTitle: {
     type: String,
     required: [true, "section need a required !!!"],
@@ -9,7 +12,7 @@ const sectionSchema = mongoose.Schema({
     minlength: [3, "Course name need require more than 3 characters"],
     sectionDescription: String,
     sectionTotalName: String,
-    unique: true,
+    unique: true
   },
   slug: String,
   courseId: {
@@ -20,32 +23,34 @@ const sectionSchema = mongoose.Schema({
   sectionDescription: String,
   imageCover: {
     type: String,
-    required: [true, "required image cover"],
+    required: [true, "required image cover"]
   }
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
 });
-
 sectionSchema.pre("save", function (next) {
-  this.slug = slugify(this.sectionTitle, { lower: true });
+  this.slug = slugify(this.sectionTitle, {
+    lower: true
+  });
   next();
 });
-
 sectionSchema.pre(/^find/, function (next) {
   this.populate({
     path: "lessonId",
     select: '-__v'
   });
   next();
-})
-
+});
 sectionSchema.virtual("lessonId", {
   ref: "Lesson",
   foreignField: "sectionId",
   localField: "_id"
 });
-
-const Section = mongoose.model('Section', sectionSchema);
+var Section = mongoose.model('Section', sectionSchema);
 module.exports = Section;
