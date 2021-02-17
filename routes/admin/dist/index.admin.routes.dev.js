@@ -25,4 +25,5 @@ router.route("/course/create-course").get(getPageCreateCourse).post(multer.array
 router.route("/course/:slug").get(getDetailCourse).post(multer.array("fileUpload", 12), updateCourse);
 router.route("/course/:slug/add/section").get(getAddSection).post(multer.single("fileUpload"), postAddSection);
 router.route('/course/:slug1/:slug2/add/lesson').get(getAddLesion).post(multer.single("fileUpload"), postAddLesion);
+router.route('/course/:slug1/:slug2/slug3');
 module.exports = router;

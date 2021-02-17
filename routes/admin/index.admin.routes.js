@@ -35,4 +35,6 @@ router.route('/course/:slug1/:slug2/add/lesson')
   .get(getAddLesion)
   .post(multer.single("fileUpload"), postAddLesion)
 
+router.route('/course/:slug1/:slug2/slug3')
+
 module.exports = router;
