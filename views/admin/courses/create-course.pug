@@ -15,8 +15,12 @@ block content
           .breadcrumb-item Create New Course
       .section-body
         h2.section-title Create New Course
-        p.section-lead
-          | On this page you can create a new Course
+        p.section-lead On this page you can create a new Course
+        if message
+          .alert.hide
+            span.fas.fa-exclamation-circle
+            span.msg= `Warning : ${message}`
+            span.fas.fa-times.close-btn
         .row
           .col-12
             .card
@@ -95,4 +99,4 @@ block content
                   .form-group.row.mb-4
                     label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3
                     .col-sm-12.col-md-7
-                      button.btn.btn-primary(type="submit") Create Course
+                      button.btn.btn-primary#submit(type="submit") Create Course

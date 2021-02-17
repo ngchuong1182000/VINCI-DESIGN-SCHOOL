@@ -138,9 +138,10 @@ exports.getAddSection = catchAsync(async (req, res, next) => {
 
 exports.postAddSection = catchAsync(async (req, res, next) => {
   const { sectionTitle, sectionDescription } = req.body
+  const user = req.user
   const { file } = req;
   const { slug } = req.params;
-  const courseId = (await Course.findOne({ slug }))._id;
+  const course = await Course.findOne({ slug });
   const nameVideos = file.filename.split(".").slice(0, -1).join(".");
   const options = {
     public_id: `images/${nameVideos}`
@@ -148,9 +149,15 @@ exports.postAddSection = catchAsync(async (req, res, next) => {
   const uploader = async path => await cloudinary.uploads(path, options)
   const imageCover = (await uploader(file.path)).url
   fs.unlinkSync(file.path)
-  const data = { sectionTitle, sectionDescription, imageCover, courseId }
-  await Section.create(data);
-  res.redirect("back")
+  const data = { sectionTitle, sectionDescription, imageCover, courseId: course._id }
+  try {
+    await Section.create(data);
+    res.render(`admin/courses/course-detail`, { user, course })
+  } catch (error) {
+    console.log("hihi");
+    res.render(`admin/courses/course-detail`, { user, course, title: course.slug.toUpperCase(), message: `Đã Có Tên : ${sectionTitle}` })
+    return;
+  }
 });
 
 exports.getAddLesion = catchAsync(async (req, res, next) => {
@@ -176,6 +183,11 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
   const videoId = (await uploader(file.path)).url
   fs.unlinkSync(file.path)
   const data = { lessonTitle, lessonDescription, videoId, sectionId }
-  await Lesson.create(data);
+  try {
+    await Lesson.create(data);
+  } catch (error) {
+    res.render('admin/lession/new-lession', { user, title: "Add New Lession", message: `Đã Có Tên : ${lessonTitle}` })
+    return;
+  }
   res.redirect("back")
 });

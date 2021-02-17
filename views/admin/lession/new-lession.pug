@@ -1,5 +1,5 @@
 extends ../layout
-block content
+block content 
   .main-content
     section.section
       .section-header
@@ -15,8 +15,12 @@ block content
           .breadcrumb-item Create New Section
       .section-body
         h2.section-title Create New Section
-        p.section-lead
-          | On this page you can create a new Section
+        p.section-lead On this page you can create a new Section
+        if message
+          .alert.hide
+            span.fas.fa-exclamation-circle
+            span.msg= `Warning : ${message}`
+            span.fas.fa-times.close-btn
         .row
           .col-12
             .card
@@ -29,11 +33,11 @@ block content
                       .form-group.row.mb-4
                         label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Lesson Title
                         .col-sm-12.col-md-7
-                          input.form-control(type='text', name='lessonTitle', required)
+                          input.form-control#lessonTitle(type='text', name='lessonTitle', required)
                       .form-group.row.mb-4
                         label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Lesson Description
                         .col-sm-12.col-md-7
-                          input.form-control(type='text', name='lessonDescription', required)
+                          input.form-control#lessonDescription(type='text', name='lessonDescription', required)
                     .col
                       .form-group.row.mb-4
                         label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3 Video 
@@ -44,4 +48,6 @@ block content
                   .form-group.row.mb-4
                     label.col-form-label.text-md-right.col-12.col-md-3.col-lg-3
                     .col-sm-12.col-md-7
-                      button.btn.btn-primary(type="submit") Create Course
+                      button.btn.btn-primary#submit(type="submit") Create Course
+
+                  

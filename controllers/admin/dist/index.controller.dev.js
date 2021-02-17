@@ -444,22 +444,23 @@ exports.getAddSection = catchAsync(function _callee6(req, res, next) {
   });
 });
 exports.postAddSection = catchAsync(function _callee7(req, res, next) {
-  var _req$body3, sectionTitle, sectionDescription, file, slug, courseId, nameVideos, options, uploader, imageCover, data;
+  var _req$body3, sectionTitle, sectionDescription, user, file, slug, course, nameVideos, options, uploader, imageCover, data;
 
   return regeneratorRuntime.async(function _callee7$(_context12) {
     while (1) {
       switch (_context12.prev = _context12.next) {
         case 0:
           _req$body3 = req.body, sectionTitle = _req$body3.sectionTitle, sectionDescription = _req$body3.sectionDescription;
+          user = req.user;
           file = req.file;
           slug = req.params.slug;
-          _context12.next = 5;
+          _context12.next = 6;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: slug
           }));
 
-        case 5:
-          courseId = _context12.sent._id;
+        case 6:
+          course = _context12.sent;
           nameVideos = file.filename.split(".").slice(0, -1).join(".");
           options = {
             public_id: "images/".concat(nameVideos)
@@ -484,30 +485,48 @@ exports.postAddSection = catchAsync(function _callee7(req, res, next) {
             });
           };
 
-          _context12.next = 11;
+          _context12.next = 12;
           return regeneratorRuntime.awrap(uploader(file.path));
 
-        case 11:
+        case 12:
           imageCover = _context12.sent.url;
           fs.unlinkSync(file.path);
           data = {
             sectionTitle: sectionTitle,
             sectionDescription: sectionDescription,
             imageCover: imageCover,
-            courseId: courseId
+            courseId: course._id
           };
-          _context12.next = 16;
+          _context12.prev = 15;
+          _context12.next = 18;
           return regeneratorRuntime.awrap(Section.create(data));
 
-        case 16:
-          res.redirect("back");
+        case 18:
+          res.render("admin/courses/course-detail", {
+            user: user,
+            course: course
+          });
+          _context12.next = 26;
+          break;
 
-        case 17:
+        case 21:
+          _context12.prev = 21;
+          _context12.t0 = _context12["catch"](15);
+          console.log("hihi");
+          res.render("admin/courses/course-detail", {
+            user: user,
+            course: course,
+            title: course.slug.toUpperCase(),
+            message: "\u0110\xE3 C\xF3 T\xEAn : ".concat(sectionTitle)
+          });
+          return _context12.abrupt("return");
+
+        case 26:
         case "end":
           return _context12.stop();
       }
     }
-  });
+  }, null, null, [[15, 21]]);
 });
 exports.getAddLesion = catchAsync(function _callee8(req, res, next) {
   var user;
@@ -592,16 +611,31 @@ exports.postAddLesion = catchAsync(function _callee9(req, res, next) {
             videoId: videoId,
             sectionId: sectionId
           };
-          _context15.next = 18;
+          _context15.prev = 16;
+          _context15.next = 19;
           return regeneratorRuntime.awrap(Lesson.create(data));
 
-        case 18:
+        case 19:
+          _context15.next = 25;
+          break;
+
+        case 21:
+          _context15.prev = 21;
+          _context15.t0 = _context15["catch"](16);
+          res.render('admin/lession/new-lession', {
+            user: user,
+            title: "Add New Lession",
+            message: "\u0110\xE3 C\xF3 T\xEAn : ".concat(lessonTitle)
+          });
+          return _context15.abrupt("return");
+
+        case 25:
           res.redirect("back");
 
-        case 19:
+        case 26:
         case "end":
           return _context15.stop();
       }
     }
-  });
+  }, null, null, [[16, 21]]);
 });

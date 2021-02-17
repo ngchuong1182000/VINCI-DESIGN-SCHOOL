@@ -190,6 +190,8 @@ body
               a.dropdown-item.has-icon.text-danger(href='#')
                 i.fas.fa-sign-out-alt
                 |  Logout
+      .loading#loading
+        img(src="/admin/img/laoding.gif", alt="loading", srcset="")
       .main-sidebar
         aside#sidebar-wrapper
           .sidebar-brand
@@ -269,3 +271,4 @@ body
   script(src='/admin/js/scripts.js')
   script(src='/admin/js/custom.js')
   // Page Specific JS File
+  script(src='/admin/js/loading.js')
