@@ -3,9 +3,9 @@ const Course = require("../../models/course.model");
 const Category = require("../../models/category.model");
 const Section = require("../../models/section.model");
 const Lesson = require("../../models/lesson.model");
-const formidable = require('formidable');
 const cloudinary = require('../../utils/setup.cloudinary');
 const fs = require('fs');
+const slugify = require('slugify');
 
 exports.getIndex = catchAsync(async (req, res, next) => {
   const { user } = req;
@@ -154,7 +154,6 @@ exports.postAddSection = catchAsync(async (req, res, next) => {
     await Section.create(data);
     res.render(`admin/courses/course-detail`, { user, course })
   } catch (error) {
-    console.log("hihi");
     res.render(`admin/courses/course-detail`, { user, course, title: course.slug.toUpperCase(), message: `Đã Có Tên : ${sectionTitle}` })
     return;
   }
@@ -191,3 +190,46 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
   }
   res.redirect("back")
 });
+
+exports.getLesson = catchAsync(async (req, res, next) => {
+  console.log("hih");
+  const { user } = req
+  const { slug1, slug2, slug3 } = req.params
+  const course = await Course.findOne({ slug: slug1 })
+  const section = await Section.findOne({ slug: slug2 })
+  const lesson = await Lesson.findOne({ slug: slug3 })
+  console.log(lesson);
+  res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson })
+})
+
+exports.updateLesson = catchAsync(async (req, res, next) => {
+  const { slug1, slug2, slug3 } = req.params
+  const { file } = req
+  let { lessonDescription, lessonTitle } = req.body;
+  const lesson = await Lesson.findOne({ slug: slug3 });
+  if (file) {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      res.render(`admin/course/${slug1}/${slug2}/${slug3}`, { user, title: "Add New Lession", message: "vui long chon video" })
+    }
+    const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+    const options = {
+      resource_type: "video",
+      public_id: `video/${nameVideos}`
+    }
+    const uploader = async path => await cloudinary.uploads(path, options)
+    const videoId = (await uploader(file.path)).url
+    fs.unlinkSync(file.path)
+
+    const slug = slugify(lessonTitle, { lower: true });
+
+    const data = { lessonTitle, lessonDescription, videoId, slug }
+
+    try {
+      await Lesson.findByIdAndUpdate({ _id: lesson._id }, data)
+    } catch (error) {
+
+    }
+  } else {
+
+  }
+})

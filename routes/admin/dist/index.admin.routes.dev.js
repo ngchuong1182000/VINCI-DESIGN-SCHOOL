@@ -15,7 +15,9 @@ var _require = require('../../controllers/admin/index.controller'),
     getAddSection = _require.getAddSection,
     postAddSection = _require.postAddSection,
     getAddLesion = _require.getAddLesion,
-    postAddLesion = _require.postAddLesion;
+    postAddLesion = _require.postAddLesion,
+    getLesson = _require.getLesson,
+    updateLesson = _require.updateLesson;
 
 var _require2 = require("lodash"),
     get = _require2.get;
@@ -25,5 +27,5 @@ router.route("/course/create-course").get(getPageCreateCourse).post(multer.array
 router.route("/course/:slug").get(getDetailCourse).post(multer.array("fileUpload", 12), updateCourse);
 router.route("/course/:slug/add/section").get(getAddSection).post(multer.single("fileUpload"), postAddSection);
 router.route('/course/:slug1/:slug2/add/lesson').get(getAddLesion).post(multer.single("fileUpload"), postAddLesion);
-router.route('/course/:slug1/:slug2/slug3');
+router.route('/course/:slug1/:slug2/:slug3').get(getLesson).post(multer.single("fileUpload"), updateLesson);
 module.exports = router;

@@ -1,0 +1,56 @@
+extends ../layout
+block content 
+  .main-content
+    section.section
+      .section-header
+        h1= lesson.lessonTitle
+        .section-header-breadcrumb
+          .breadcrumb-item.active
+            a(href='#') Dashboard
+          .breadcrumb-item.active
+            a(href='#') Course
+          .breadcrumb-item.active
+            a(href= `/admin/course/${course.slug}`)= course.courseName
+          .breadcrumb-item.active
+            a(href= `/admin/course/${course.slug}`)= section.sectionTitle
+          .breadcrumb-item=  lesson.lessonTitle
+      .section-body
+        h2.section-title Information
+        p.section-lead Change information about your lesson on this page.
+        if message
+          .alert.hide
+            span.fas.fa-exclamation-circle
+            span.msg= `Warning : ${message}`
+            span.fas.fa-times.close-btn
+        .row.mt-sm-4
+          .col-12.col-md-12.col-lg-5
+            .card.profile-widget
+              .profile-widget-description
+                .profile-widget-name= lesson.lessonTitle
+                  .text-muted.d-inline.font-weight-normal
+                    div= lesson.lessonDescription
+              div(style='width: 100%; height: auto;')
+                iframe(width='100%', height='300', src= lesson.videoId, frameborder='0', allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+          .col-12.col-md-12.col-lg-7
+            .card
+              form.needs-validation(action="", method="post", enctype="multipart/form-data")
+                .card-header
+                  h4 Edit Information
+                .card-body
+                  .row
+                    .form-group.col-md-5.col-12
+                      label Name lesson
+                      input.form-control(type='text', value= lesson.lessonTitle, required='', name='lessonTitle')
+                    .col
+                      .form-group.col-12
+                        label Lecturer
+                        textarea#site-description.form-control(name='lessonDescription',style='min-height:7rem')= lesson.lessonDescription
+                  .row
+                    label.form-control-label.col-sm-3.text-md-right Video
+                    .col-sm-6.col-md-9
+                      .custom-file
+                        input#site-logo.custom-file-input(type='file', name='fileUpload')
+                        label.custom-file-label Choose File
+                      .form-text.text-muted The Video must have a maximum size of 100 MB
+                .card-footer.text-right
+                  button.btn.btn-primary Save Changes

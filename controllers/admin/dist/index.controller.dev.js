@@ -10,11 +10,11 @@ var Section = require("../../models/section.model");
 
 var Lesson = require("../../models/lesson.model");
 
-var formidable = require('formidable');
-
 var cloudinary = require('../../utils/setup.cloudinary');
 
 var fs = require('fs');
+
+var slugify = require('slugify');
 
 exports.getIndex = catchAsync(function _callee(req, res, next) {
   var user, course;
@@ -638,4 +638,147 @@ exports.postAddLesion = catchAsync(function _callee9(req, res, next) {
       }
     }
   }, null, null, [[16, 21]]);
+});
+exports.getLesson = catchAsync(function _callee10(req, res, next) {
+  var user, _req$params, slug1, slug2, slug3, course, section, lesson;
+
+  return regeneratorRuntime.async(function _callee10$(_context16) {
+    while (1) {
+      switch (_context16.prev = _context16.next) {
+        case 0:
+          console.log("hih");
+          user = req.user;
+          _req$params = req.params, slug1 = _req$params.slug1, slug2 = _req$params.slug2, slug3 = _req$params.slug3;
+          _context16.next = 5;
+          return regeneratorRuntime.awrap(Course.findOne({
+            slug: slug1
+          }));
+
+        case 5:
+          course = _context16.sent;
+          _context16.next = 8;
+          return regeneratorRuntime.awrap(Section.findOne({
+            slug: slug2
+          }));
+
+        case 8:
+          section = _context16.sent;
+          _context16.next = 11;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            slug: slug3
+          }));
+
+        case 11:
+          lesson = _context16.sent;
+          console.log(lesson);
+          res.render('admin/lession/detail-lesson', {
+            user: user,
+            title: lesson.slug,
+            course: course,
+            section: section,
+            lesson: lesson
+          });
+
+        case 14:
+        case "end":
+          return _context16.stop();
+      }
+    }
+  });
+});
+exports.updateLesson = catchAsync(function _callee11(req, res, next) {
+  var _req$params2, slug1, slug2, slug3, file, _req$body5, lessonDescription, lessonTitle, lesson, nameVideos, _options, uploader, videoId, slug, data;
+
+  return regeneratorRuntime.async(function _callee11$(_context18) {
+    while (1) {
+      switch (_context18.prev = _context18.next) {
+        case 0:
+          _req$params2 = req.params, slug1 = _req$params2.slug1, slug2 = _req$params2.slug2, slug3 = _req$params2.slug3;
+          file = req.file;
+          _req$body5 = req.body, lessonDescription = _req$body5.lessonDescription, lessonTitle = _req$body5.lessonTitle;
+          _context18.next = 5;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            slug: slug3
+          }));
+
+        case 5:
+          lesson = _context18.sent;
+
+          if (!file) {
+            _context18.next = 26;
+            break;
+          }
+
+          if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+            res.render("admin/course/".concat(slug1, "/").concat(slug2, "/").concat(slug3), {
+              user: user,
+              title: "Add New Lession",
+              message: "vui long chon video"
+            });
+          }
+
+          nameVideos = file.filename.split(".").slice(0, -1).join(".");
+          _options = {
+            resource_type: "video",
+            public_id: "video/".concat(nameVideos)
+          };
+
+          uploader = function uploader(path) {
+            return regeneratorRuntime.async(function uploader$(_context17) {
+              while (1) {
+                switch (_context17.prev = _context17.next) {
+                  case 0:
+                    _context17.next = 2;
+                    return regeneratorRuntime.awrap(cloudinary.uploads(path, _options));
+
+                  case 2:
+                    return _context17.abrupt("return", _context17.sent);
+
+                  case 3:
+                  case "end":
+                    return _context17.stop();
+                }
+              }
+            });
+          };
+
+          _context18.next = 13;
+          return regeneratorRuntime.awrap(uploader(file.path));
+
+        case 13:
+          videoId = _context18.sent.url;
+          fs.unlinkSync(file.path);
+          slug = slugify(lessonTitle, {
+            lower: true
+          });
+          data = {
+            lessonTitle: lessonTitle,
+            lessonDescription: lessonDescription,
+            videoId: videoId,
+            slug: slug
+          };
+          _context18.prev = 17;
+          _context18.next = 20;
+          return regeneratorRuntime.awrap(Lesson.findByIdAndUpdate({
+            _id: lesson._id
+          }, data));
+
+        case 20:
+          _context18.next = 24;
+          break;
+
+        case 22:
+          _context18.prev = 22;
+          _context18.t0 = _context18["catch"](17);
+
+        case 24:
+          _context18.next = 26;
+          break;
+
+        case 26:
+        case "end":
+          return _context18.stop();
+      }
+    }
+  }, null, null, [[17, 22]]);
 });

@@ -11,7 +11,9 @@ const {
   getAddSection,
   postAddSection,
   getAddLesion,
-  postAddLesion
+  postAddLesion,
+  getLesson,
+  updateLesson
 } = require('../../controllers/admin/index.controller');
 const { get } = require("lodash");
 
@@ -35,6 +37,8 @@ router.route('/course/:slug1/:slug2/add/lesson')
   .get(getAddLesion)
   .post(multer.single("fileUpload"), postAddLesion)
 
-router.route('/course/:slug1/:slug2/slug3')
+router.route('/course/:slug1/:slug2/:slug3')
+  .get(getLesson)
+  .post(multer.single("fileUpload"), updateLesson)
 
 module.exports = router;

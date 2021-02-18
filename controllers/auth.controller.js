@@ -122,7 +122,7 @@ module.exports.signin = catchAsync(async (req, res, next) => {
 exports.checkUser = catchAsync(async (req, res, next) => {
   const { token } = req.signedCookies;
   if (!token) {
-    next(); 
+    next();
     return;
   }
   const { _id } = jwt.verify(token, process.env.JWT_SECRET);
@@ -141,7 +141,7 @@ module.exports.signout = (req, res) => {
 exports.restrictTo = (...role) => {
   return (req, res, next) => {
     if (!req.user || !role.includes(req.user.role)) {
-      return res.render('err/Error404');
+      return res.render('err/Error404', { code: 404 });
     }
     return next();
   }
