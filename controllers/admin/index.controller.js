@@ -192,21 +192,23 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
 });
 
 exports.getLesson = catchAsync(async (req, res, next) => {
-  console.log("hih");
   const { user } = req
   const { slug1, slug2, slug3 } = req.params
   const course = await Course.findOne({ slug: slug1 })
   const section = await Section.findOne({ slug: slug2 })
   const lesson = await Lesson.findOne({ slug: slug3 })
-  console.log(lesson);
   res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson })
 })
 
 exports.updateLesson = catchAsync(async (req, res, next) => {
   const { slug1, slug2, slug3 } = req.params
   const { file } = req
+  const { user } = req
   let { lessonDescription, lessonTitle } = req.body;
-  const lesson = await Lesson.findOne({ slug: slug3 });
+  const course = await Course.findOne({ slug: slug1 })
+  const section = await Section.findOne({ slug: slug2 })
+  const oldLesson = await Lesson.findOne({ slug: slug3 });
+  const slug = slugify(lessonTitle, { lower: true });
   if (file) {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       res.render(`admin/course/${slug1}/${slug2}/${slug3}`, { user, title: "Add New Lession", message: "vui long chon video" })
@@ -219,17 +221,23 @@ exports.updateLesson = catchAsync(async (req, res, next) => {
     const uploader = async path => await cloudinary.uploads(path, options)
     const videoId = (await uploader(file.path)).url
     fs.unlinkSync(file.path)
-
-    const slug = slugify(lessonTitle, { lower: true });
-
     const data = { lessonTitle, lessonDescription, videoId, slug }
-
     try {
-      await Lesson.findByIdAndUpdate({ _id: lesson._id }, data)
+      await Lesson.findByIdAndUpdate({ _id: oldLesson._id }, data)
+      const lesson = await Lesson.findOne({ slug: slug3 });
+      res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson, message: "Update Success !!!" })
     } catch (error) {
-
+      res.render('err/Error404', { code: 500 })
     }
   } else {
-
+    try {
+      const data = { lessonTitle, lessonDescription, slug }
+      await Lesson.findByIdAndUpdate({ _id: oldLesson._id }, data)
+      const lesson = await Lesson.findOne({ slug: slug3 });
+      res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson, message: "Update Success !!!" })
+    } catch (error) {
+      console.log(error);
+      res.render('err/Error404', { code: 500 })
+    }
   }
 })

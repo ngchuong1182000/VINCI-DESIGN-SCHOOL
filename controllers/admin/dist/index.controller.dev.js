@@ -645,31 +645,29 @@ exports.getLesson = catchAsync(function _callee10(req, res, next) {
     while (1) {
       switch (_context16.prev = _context16.next) {
         case 0:
-          console.log("hih");
           user = req.user;
           _req$params = req.params, slug1 = _req$params.slug1, slug2 = _req$params.slug2, slug3 = _req$params.slug3;
-          _context16.next = 5;
+          _context16.next = 4;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: slug1
           }));
 
-        case 5:
+        case 4:
           course = _context16.sent;
-          _context16.next = 8;
+          _context16.next = 7;
           return regeneratorRuntime.awrap(Section.findOne({
             slug: slug2
           }));
 
-        case 8:
+        case 7:
           section = _context16.sent;
-          _context16.next = 11;
+          _context16.next = 10;
           return regeneratorRuntime.awrap(Lesson.findOne({
             slug: slug3
           }));
 
-        case 11:
+        case 10:
           lesson = _context16.sent;
-          console.log(lesson);
           res.render('admin/lession/detail-lesson', {
             user: user,
             title: lesson.slug,
@@ -678,7 +676,7 @@ exports.getLesson = catchAsync(function _callee10(req, res, next) {
             lesson: lesson
           });
 
-        case 14:
+        case 12:
         case "end":
           return _context16.stop();
       }
@@ -686,7 +684,7 @@ exports.getLesson = catchAsync(function _callee10(req, res, next) {
   });
 });
 exports.updateLesson = catchAsync(function _callee11(req, res, next) {
-  var _req$params2, slug1, slug2, slug3, file, _req$body5, lessonDescription, lessonTitle, lesson, nameVideos, _options, uploader, videoId, slug, data;
+  var _req$params2, slug1, slug2, slug3, file, user, _req$body5, lessonDescription, lessonTitle, course, section, oldLesson, slug, nameVideos, _options, uploader, videoId, data, lesson, _data, _lesson;
 
   return regeneratorRuntime.async(function _callee11$(_context18) {
     while (1) {
@@ -694,17 +692,35 @@ exports.updateLesson = catchAsync(function _callee11(req, res, next) {
         case 0:
           _req$params2 = req.params, slug1 = _req$params2.slug1, slug2 = _req$params2.slug2, slug3 = _req$params2.slug3;
           file = req.file;
+          user = req.user;
           _req$body5 = req.body, lessonDescription = _req$body5.lessonDescription, lessonTitle = _req$body5.lessonTitle;
-          _context18.next = 5;
+          _context18.next = 6;
+          return regeneratorRuntime.awrap(Course.findOne({
+            slug: slug1
+          }));
+
+        case 6:
+          course = _context18.sent;
+          _context18.next = 9;
+          return regeneratorRuntime.awrap(Section.findOne({
+            slug: slug2
+          }));
+
+        case 9:
+          section = _context18.sent;
+          _context18.next = 12;
           return regeneratorRuntime.awrap(Lesson.findOne({
             slug: slug3
           }));
 
-        case 5:
-          lesson = _context18.sent;
+        case 12:
+          oldLesson = _context18.sent;
+          slug = slugify(lessonTitle, {
+            lower: true
+          });
 
           if (!file) {
-            _context18.next = 26;
+            _context18.next = 38;
             break;
           }
 
@@ -741,43 +757,97 @@ exports.updateLesson = catchAsync(function _callee11(req, res, next) {
             });
           };
 
-          _context18.next = 13;
+          _context18.next = 21;
           return regeneratorRuntime.awrap(uploader(file.path));
 
-        case 13:
+        case 21:
           videoId = _context18.sent.url;
           fs.unlinkSync(file.path);
-          slug = slugify(lessonTitle, {
-            lower: true
-          });
           data = {
             lessonTitle: lessonTitle,
             lessonDescription: lessonDescription,
             videoId: videoId,
             slug: slug
           };
-          _context18.prev = 17;
-          _context18.next = 20;
+          _context18.prev = 24;
+          _context18.next = 27;
           return regeneratorRuntime.awrap(Lesson.findByIdAndUpdate({
-            _id: lesson._id
+            _id: oldLesson._id
           }, data));
 
-        case 20:
-          _context18.next = 24;
+        case 27:
+          _context18.next = 29;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            slug: slug3
+          }));
+
+        case 29:
+          lesson = _context18.sent;
+          res.render('admin/lession/detail-lesson', {
+            user: user,
+            title: lesson.slug,
+            course: course,
+            section: section,
+            lesson: lesson,
+            message: "Update Success !!!"
+          });
+          _context18.next = 36;
           break;
 
-        case 22:
-          _context18.prev = 22;
-          _context18.t0 = _context18["catch"](17);
+        case 33:
+          _context18.prev = 33;
+          _context18.t0 = _context18["catch"](24);
+          res.render('err/Error404', {
+            code: 500
+          });
 
-        case 24:
-          _context18.next = 26;
+        case 36:
+          _context18.next = 52;
           break;
 
-        case 26:
+        case 38:
+          _context18.prev = 38;
+          _data = {
+            lessonTitle: lessonTitle,
+            lessonDescription: lessonDescription,
+            slug: slug
+          };
+          _context18.next = 42;
+          return regeneratorRuntime.awrap(Lesson.findByIdAndUpdate({
+            _id: oldLesson._id
+          }, _data));
+
+        case 42:
+          _context18.next = 44;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            slug: slug3
+          }));
+
+        case 44:
+          _lesson = _context18.sent;
+          res.render('admin/lession/detail-lesson', {
+            user: user,
+            title: _lesson.slug,
+            course: course,
+            section: section,
+            lesson: _lesson,
+            message: "Update Success !!!"
+          });
+          _context18.next = 52;
+          break;
+
+        case 48:
+          _context18.prev = 48;
+          _context18.t1 = _context18["catch"](38);
+          console.log(_context18.t1);
+          res.render('err/Error404', {
+            code: 500
+          });
+
+        case 52:
         case "end":
           return _context18.stop();
       }
     }
-  }, null, null, [[17, 22]]);
+  }, null, null, [[24, 33], [38, 48]]);
 });
