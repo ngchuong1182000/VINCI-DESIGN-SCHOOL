@@ -506,13 +506,12 @@ exports.postAddSection = catchAsync(function _callee7(req, res, next) {
             user: user,
             course: course
           });
-          _context12.next = 26;
+          _context12.next = 25;
           break;
 
         case 21:
           _context12.prev = 21;
           _context12.t0 = _context12["catch"](15);
-          console.log("hihi");
           res.render("admin/courses/course-detail", {
             user: user,
             course: course,
@@ -521,7 +520,7 @@ exports.postAddSection = catchAsync(function _callee7(req, res, next) {
           });
           return _context12.abrupt("return");
 
-        case 26:
+        case 25:
         case "end":
           return _context12.stop();
       }

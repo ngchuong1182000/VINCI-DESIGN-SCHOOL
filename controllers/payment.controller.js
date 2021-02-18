@@ -26,7 +26,7 @@ exports.getDetail = catchAsync(async (req, res, next) => {
   const { user } = req;
   const course = await Course.findOne({ slug });
   if (!course) {
-    res.render('err/Error404')
+    res.render('err/Error404', { code: 500 })
   }
   let isBought = false;
   // check list khóa học của account này đã có khóa học đó chưa
@@ -129,6 +129,6 @@ exports.returnPaymentLink = catchAsync(async (req, res, next) => {
     res.render('err/Success', { code: vnp_Params['vnp_ResponseCode'] });
     console.log("secureHash === checkSum");
   } else {
-    res.render('err/Error404', { code: '97' })
+    res.render('err/Error404', { code: 500 })
   }
 })
