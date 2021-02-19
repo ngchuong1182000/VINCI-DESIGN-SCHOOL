@@ -50,7 +50,7 @@ block content
       span.course__name= course.courseName
       .player__container.course__preview__video
         div(style='width: 100%; height: auto;')
-          iframe(width='560', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+          iframe(width='560', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
       .course__title__text Giáo trình
       .course__slide
         i.far.fa-arrow-alt-circle-down.fa-2x(style='color: #fff;')
@@ -89,7 +89,7 @@ block content
                       button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target=`#flush-${item.slug}-${index}`, aria-expanded='false', aria-controls=`#flush-${item.slug}-${index}`)= i.lessonTitle
                     .accordion-collapse.collapse(id=`flush-${item.slug}-${index}` aria-labelledby='flush-headingOne', data-bs-parent='#accordionFlushExample')
                       .accordion-body 
-                        iframe(width='560', height='315', src= i.videoId, frameborder='0', allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+                        iframe(width='560', height='315', src= i.videoId, frameborder='0', allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
   section.course__professor
     span.section_general
       .das__landing__line
