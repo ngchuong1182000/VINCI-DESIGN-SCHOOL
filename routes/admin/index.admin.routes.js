@@ -7,7 +7,8 @@ const {
   getPageCreateCourse,
   postPageCreateCourse,
   getDetailCourse,
-  updateCourse,
+  updateInformationCourse,
+  updateVideoImages,
   getAddSection,
   postAddSection,
   getAddLesion,
@@ -25,9 +26,16 @@ router.route("/course/create-course")
   .get(getPageCreateCourse)
   .post(multer.array("fileUpload", 12), postPageCreateCourse)
 
+// Course
 router.route("/course/:slug")
   .get(getDetailCourse)
-  .post(multer.array("fileUpload", 12), updateCourse)
+
+router.route("/course/:slug/updateInformation")
+  .post(updateInformationCourse)
+router.route("/course/:slug/updateVideoImages")
+  .post(multer.array("fileUpload", 12), updateVideoImages)
+
+
 
 router.route("/course/:slug/add/section")
   .get(getAddSection)

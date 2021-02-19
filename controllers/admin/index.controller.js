@@ -77,22 +77,38 @@ exports.getDetailCourse = catchAsync(async (req, res, next) => {
   res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase() })
 });
 
-exports.updateCourse = catchAsync(async (req, res, next) => {
-  // get course by params
+exports.updateInformationCourse = catchAsync(async (req, res, next) => {
+  const { user } = req;
+  const oldSlug = req.params.slug;
   const { courseName, price, shortDescription, trainerName, detailDescription1, title1, detailDescription2, title2 } = req.body;
-  const urls = [];
-  const { files } = req;
+  const _id = (await Course.findOne({ slug: oldSlug }))._id
+  const slug = slugify(courseName, { lower: true });
   const data = {
     courseName,
-    trainerName,
+    price: price.toString().split('.').splice(0, 1).join() * 1000,
     shortDescription,
-    price: price.toString().split('.').splice(0, 1).join() * 1000
+    trainerName,
+    detailDescription1,
+    title1,
+    detailDescription2,
+    title2,
+    slug
   }
-  const _id = await (await Course.findOne({ slug: req.params.slug }))._id;
-  if (!_id) {
-    res.redirect('/admin/index');
+  try {
+    const newCourse = await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
+    const course = await Course.findById({ _id: newCourse._id })
+    res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase(), message: "Update Information Successfully !!!" })
+  } catch (error) {
+    res.render('err/Error404', { code: 500 });
   }
-  // lấy dữ liệu gửi lên server
+})
+
+exports.updateVideoImages = catchAsync(async (req, res, next) => {
+  const { user } = req;
+  const urls = [];
+  const { files } = req;
+  const _id = (await Course.findOne({ slug: req.params.slug }))._id;
+  const data = {}
   for (const file of files) {
     let folder;
     const options = {}
@@ -110,25 +126,45 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
     fs.unlinkSync(file.path);
   }
   data.imageCover = urls[0];
-  data.detailDescription = [
-    {
-      title: title1,
-      content: detailDescription1,
-      imgURL: urls[1]
-    },
-    {
-      title: title2,
-      content: detailDescription2,
-      imgURL: urls[2]
-    }
-  ]
-  if (urls.length == 4) {
+  // data.detailDescription = [
+  //   {
+  //     $set: {
+  //       imgURL: urls[1]
+  //     }
+  //   },
+  //   {
+  //     $set: {
+  //       imgURL: urls[2]
+  //     }
+  //   }
+  // ]
+  if (urls.length >= 4) {
     data.demoVideoId = urls[3];
   }
   // update dữ liệu vào db
-  await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
-  res.redirect("back")
-});
+  try {
+    const newCourse = await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
+    await Course.updateOne({ _id }, {
+      $set: {
+        "detailDescription.0.imgURL": urls[1]
+      }
+    }, {
+      runValidators: true
+    });
+    await Course.updateOne({ _id }, {
+      $set: {
+        "detailDescription.1.imgURL": urls[2]
+      }
+    }, {
+      runValidators: true
+    });
+
+    const course = await Course.findById({ _id: newCourse._id })
+    res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase(), message: "Update Video And Image Successfully !!!" })
+  } catch (error) {
+    res.render('err/Error404', { code: 500 });
+  }
+})
 
 
 exports.getAddSection = catchAsync(async (req, res, next) => {
@@ -236,7 +272,6 @@ exports.updateLesson = catchAsync(async (req, res, next) => {
       const lesson = await Lesson.findOne({ slug: slug3 });
       res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson, message: "Update Success !!!" })
     } catch (error) {
-      console.log(error);
       res.render('err/Error404', { code: 500 })
     }
   }
