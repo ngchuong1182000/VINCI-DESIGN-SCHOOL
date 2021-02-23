@@ -44,12 +44,17 @@ exports.getDetail = catchAsync(function _callee(req, res, next) {
         case 4:
           course = _context.sent;
 
-          if (!course) {
-            res.render('err/Error404', {
-              code: 500
-            });
+          if (course) {
+            _context.next = 8;
+            break;
           }
 
+          res.render('err/Error404', {
+            code: 500
+          });
+          return _context.abrupt("return");
+
+        case 8:
           isBought = false; // check list khóa học của account này đã có khóa học đó chưa
 
           user.purchased_course.forEach(function (element) {
@@ -65,7 +70,7 @@ exports.getDetail = catchAsync(function _callee(req, res, next) {
             user: user
           });
 
-        case 9:
+        case 11:
         case "end":
           return _context.stop();
       }
@@ -149,6 +154,7 @@ exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
+          console.log(req.query);
           vnp_Params = req.query;
           secureHash = vnp_Params['vnp_SecureHash'];
           delete vnp_Params['vnp_SecureHash'];
@@ -162,19 +168,22 @@ exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
           sha256 = require('sha256');
           checkSum = sha256(signData);
 
-          if (secureHash === checkSum) {
-            //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-            res.render('err/Success', {
-              code: vnp_Params['vnp_ResponseCode']
-            });
-            console.log("secureHash === checkSum");
-          } else {
-            res.render('err/Error404', {
-              code: 500
-            });
+          if (!(secureHash === checkSum)) {
+            _context3.next = 16;
+            break;
           }
 
-        case 11:
+          //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+          res.redirect("/user/myCourse");
+          return _context3.abrupt("return");
+
+        case 16:
+          res.render('err/Error404', {
+            code: 500
+          });
+          return _context3.abrupt("return");
+
+        case 18:
         case "end":
           return _context3.stop();
       }

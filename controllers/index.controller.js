@@ -2,10 +2,6 @@ const catchAsync = require('../utils/catchAsync');
 const Course = require("../models/course.model");
 const jwt = require('jsonwebtoken');
 
-exports.Error404 = function (req, res, next) {
-  res.render('err/Error404', { code: 404 });
-}
-
 exports.getHomePage = function (req, res, next) {
   res.redirect('/index');
 }

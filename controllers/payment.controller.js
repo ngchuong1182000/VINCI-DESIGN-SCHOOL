@@ -27,6 +27,7 @@ exports.getDetail = catchAsync(async (req, res, next) => {
   const course = await Course.findOne({ slug });
   if (!course) {
     res.render('err/Error404', { code: 500 })
+    return;
   }
   let isBought = false;
   // check list khóa học của account này đã có khóa học đó chưa
@@ -106,29 +107,23 @@ exports.postCheckOut = catchAsync(async (req, res, next) => {
 });
 
 exports.returnPaymentLink = catchAsync(async (req, res, next) => {
+  console.log(req.query);
   var vnp_Params = req.query;
-
   var secureHash = vnp_Params['vnp_SecureHash'];
-
   delete vnp_Params['vnp_SecureHash'];
   delete vnp_Params['vnp_SecureHashType'];
-
   vnp_Params = sortObject(vnp_Params);
-
   var secretKey = process.env.vnp_HashSecret;
-
   var querystring = require('qs');
   var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-
   var sha256 = require('sha256');
-
   var checkSum = sha256(signData);
-
   if (secureHash === checkSum) {
     //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-    res.render('err/Success', { code: vnp_Params['vnp_ResponseCode'] });
-    console.log("secureHash === checkSum");
+    res.redirect("/user/myCourse")
+    return;
   } else {
     res.render('err/Error404', { code: 500 })
+    return;
   }
 })

@@ -1,5 +1,8 @@
-const Order = require("../models/order.model");
-const factory = require("./handleFactory");
+"use strict";
+
+var Order = require("../models/order.model");
+
+var factory = require("./handleFactory");
 
 module.exports.getAll = factory.getAll(Order);
 module.exports.createOne = factory.createOne(Order);

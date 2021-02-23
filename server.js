@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
 const sgMail = require('@sendgrid/mail');
+const port = process.env.PORT || 8000;
+
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { checkUser, restrictTo } = require("./controllers/auth.controller");
@@ -24,6 +26,7 @@ const orderRoutes = require("./routes/order.routes");
 const indexRoutes = require("./routes/index.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const adminRouter = require("./routes/admin/index.admin.routes");
+const clientRouter = require("./routes/clients/user.routes")
 
 // app
 const app = express();
@@ -66,13 +69,13 @@ app.use("/category", categoryRoutes);
 app.use("/section", sectionRoutes);
 app.use("/lesson", lessonRoutes);
 app.use("/order", orderRoutes);
-app.use("/payment", paymentRoutes);
+app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter)
+app.use('/user', checkUser, clientRouter)
 app.use("/", indexRoutes);
 
 app.use(globalErrorHandler);
 
-const port = process.env.PORT || 8000;
 app.listen(port, () => {
-  console.log(`Server is running on port : http://localhost:${8000}`);
+  console.log(`Server is running on port : http://localhost:${port}`);
 });

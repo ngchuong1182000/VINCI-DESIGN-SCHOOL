@@ -11,7 +11,6 @@ head
     // MDB
     link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.css', rel='stylesheet')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl', crossorigin='anonymous')
     // MDB
     link(rel='stylesheet', href='/css/style.css')
     title= title ? title.toUpperCase() : "VINCI DESIGN SCHOOL"
@@ -61,49 +60,78 @@ body
                                         ul.dropdown-menu(aria-labelledby='dropdownMenuButton', style= "min-width:22rem;position: absolute;inset: 0px auto auto 0px;")
                                             a.dropdown-item(href='', disabled)
                                                 .image__avatar
-                                                    img(src= user.photo ? user.photo : '/image/favicon.ico', width="50px")
+                                                    img(src= user.photo ? user.photo : '/image/avatar-1.png', width="50px")
                                                 .user__infor
                                                     .user__name()= user.name ? user.name : user.username
                                                     .user__email= user.email
-
                                             .divider.dropdown-divider
-                                            a.dropdown-item(href='/course/myCourse') Khóa Học Của Tôi
+                                            a.dropdown-item(href='/user/myCourse') Khóa Học Của Tôi
                                             a.dropdown-item(href='/user/setting') Cài đạt tài khoản
                                             a.dropdown-item(href='/auth/signout') Đặng Xuất !
             block content
 
-        footer.bg-light.text-center.text-lg-start
+        footer.bg-dark.text-center.text-lg-start.text-light
             .container.p-4
                 .row
-                    .col-lg-6.col-md-12.mb-4.mb-md-0
-                        h5.text-uppercase Footer Content
-                        p Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolor facilis neque eos, ea aspernatur, ad voluptatum nam magnam tempore iure non officia voluptatibus quidem maiores veritatis impedit natus? Assumenda, sapiente.
-                    .col-lg-3.col-md-6.mb-4.mb-md-0
-                        h5.text-uppercase Links
-                        ul.list-unstyled.mb-0
-                            li
-                                a.text-dark(href='#!') Link 1
-                            li
-                                a.text-dark(href='#!') Link 2
-                            li
-                                a.text-dark(href='#!') Link 3
-                            li
-                                a.text-dark(href='#!') Link 4
-                    .col-lg-3.col-md-6.mb-4.mb-md-0
-                        h5.text-uppercase.mb-0 Links
-                        ul.list-unstyled
-                            li
-                                a.text-dark(href='#!') Link 1
-                            li
-                                a.text-dark(href='#!') Link 2
-                            li
-                                a.text-dark(href='#!') Link 3
-                            li
-                                a.text-dark(href='#!') Link 4
-            .text-center.p-3(style='background-color: rgba(0, 0, 0, 0.2)')
-                | &copy; 2020 Copyright : 
-                a.text-dark(href='https://www.facebook.com/hoangnamcao1512/') Cao Mạnh
-
+                    .customer-footer
+                        .logo-contact
+                            .imageLogo
+                                img(src="/image/favicon.ico", alt="", srcset="", width="100")
+                            .hotline 
+                                i.fas.fa-phone-volume 
+                                span      098 7374 741
+                            .email-contact
+                                i.fas.fa-envelope
+                                span      chunguyenchuong2014bg@gmail.com
+                            .other-contact 
+                                ul 
+                                    li 
+                                        a.text-light(href='#!')
+                                            i.fab.fa-facebook
+                                    li 
+                                        a.text-light(href='#!')
+                                            i.fab.fa-twitter
+                                    li 
+                                        a.text-light.fab.fa-google-plus-g(href='#!')
+                                    li 
+                                        a.text-light(href='#!')
+                                            i.fab.fa-facebook
+                        .company-contact
+                            h5.text-uppercase COMPANY
+                            ul.list-unstyled.mb-0
+                                li
+                                    a.text-light(href='#!') About us
+                                li
+                                    a.text-light(href='#!') Blogs
+                                li
+                                    a.text-light(href='#!') Contact
+                                li
+                                    a.text-light(href='#!') Become a Teacher
+                        .links-contact
+                            h5.text-uppercase LINKS
+                            ul.list-unstyled
+                                li
+                                    a.text-light(href='#!') Course
+                                li
+                                    a.text-light(href='#!') Events
+                                li
+                                    a.text-light(href='#!') Gallery
+                                li
+                                    a.text-light(href='#!') FAQs
+                        .support-contact
+                            h5.text-uppercase SUPPORT
+                            ul.list-unstyled
+                                li
+                                    a.text-light(href='#!') Documentation
+                                li
+                                    a.text-light(href='#!') Forums
+                                li
+                                    a.text-light(href='#!') Language Packs
+                                li
+                                    a.text-light(href='#!') Release State
+            .copy 
+                .container Copyright (c) Cao Manh
+                
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')

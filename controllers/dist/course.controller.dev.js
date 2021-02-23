@@ -83,16 +83,21 @@ exports.getDetail = catchAsync(function _callee2(req, res, next) {
         case 4:
           course = _context2.sent;
 
-          if (!course) {
-            res.render('err/Error404', {
-              code: 500
-            });
+          if (course) {
+            _context2.next = 8;
+            break;
           }
 
+          res.render('err/Error404', {
+            code: 500
+          });
+          return _context2.abrupt("return");
+
+        case 8:
           isBought = false;
 
           if (user) {
-            _context2.next = 10;
+            _context2.next = 12;
             break;
           }
 
@@ -103,9 +108,8 @@ exports.getDetail = catchAsync(function _callee2(req, res, next) {
           });
           return _context2.abrupt("return");
 
-        case 10:
-          console.log("vao detel thoi"); //check list khóa học của account này đã có khóa học đó chưa
-
+        case 12:
+          //check list khóa học của account này đã có khóa học đó chưa
           user.purchased_course.forEach(function (element) {
             if (element.toString() !== course.id.toString()) {
               return isBought;
@@ -121,7 +125,7 @@ exports.getDetail = catchAsync(function _callee2(req, res, next) {
             isBought: isBought
           });
 
-        case 13:
+        case 14:
         case "end":
           return _context2.stop();
       }

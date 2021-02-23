@@ -10,9 +10,7 @@ const {
   getCourse,
   updateCourse,
   deleteCourse,
-  postCheckOut,
   getDetail,
-  returnPaymentLink
 } = require('../controllers/course.controller');
 const {
   requireSignin,

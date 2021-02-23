@@ -465,11 +465,15 @@ a:hover {
   width: 100%;
   border: 1px solid #dfdfdf;
   background-color: #fff;
-
+  padding-left: 30px;
   position: relative;
   font-size: 18px;
   font-weight: 600;
   color: #0c0d0d;
+}
+
+.input:focus {
+  outline: none;
 }
 
 .subscription__btn {
@@ -1027,7 +1031,7 @@ h2 {
 /* ==================course detail=================  */
 
 .payment__wrapper {
-  padding: 0px 10% 190px;
+  padding: 0px 10%;
   display: grid;
   grid-template-columns: 50% auto;
   grid-column-gap: 10%;
@@ -1333,3 +1337,115 @@ input[type=checkbox] {
   margin-top: 10px;
 }
 
+/* footer  */
+
+.customer-footer {
+  min-height: 17rem;
+  height: 17rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}
+
+.customer-footer .other-contact ul {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+}
+
+.hotline {
+  display: flex;
+}
+
+.hotline i {
+  width: 3rem;
+}
+
+.email-contact {
+  display: flex;
+}
+
+.email-contact i {
+  width: 3rem;
+}
+
+.email-contact span {
+  font-size: 01rem
+}
+
+.logo-contact {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around
+}
+
+.company-contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.links-contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.support-contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.company-contact ul li {
+  height: 2rem
+}
+
+.links-contact ul li {
+  height: 2rem
+}
+
+.support-contact ul li {
+  height: 2rem
+}
+
+.copy {
+  height: 3rem;
+  display: flex;
+  justify-content: space-between;
+  background-color: #2f2f2f;
+  align-items: center;
+  border-top: 1px solid #000000
+}
+
+/* My Course Page */
+
+.my-course-top {
+  height: 8rem;
+  background-color: #242424;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+  background-color: #fff;
+  border-radius: 3px;
+  border: none;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.card .card-body {
+  background-color: transparent;
+  padding: 20px 25px;
+}
+
+.card .card-body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+
+@media (max-width: 767.98px) {
+  .card .card-header {
+    height: auto;
+    flex-wrap: wrap;
+  }
+}

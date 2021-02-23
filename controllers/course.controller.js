@@ -43,7 +43,8 @@ exports.getDetail = catchAsync(async (req, res, next) => {
   const { user } = req;
   const course = await Course.findOne({ slug });
   if (!course) {
-    res.render('err/Error404', { code: 500 })
+    res.render('err/Error404', { code: 500 });
+    return;
   }
   let isBought = false;
 
@@ -55,7 +56,6 @@ exports.getDetail = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  console.log("vao detel thoi");
   //check list khóa học của account này đã có khóa học đó chưa
   user.purchased_course.forEach(element => {
     if (element.toString() !== course.id.toString()) {
@@ -73,3 +73,4 @@ exports.getDetail = catchAsync(async (req, res, next) => {
     isBought
   });
 });
+

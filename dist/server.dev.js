@@ -16,6 +16,7 @@ var path = require("path");
 
 var sgMail = require('@sendgrid/mail');
 
+var port = process.env.PORT || 8000;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 var _require = require("./controllers/auth.controller"),
@@ -45,7 +46,9 @@ var indexRoutes = require("./routes/index.routes");
 
 var paymentRoutes = require("./routes/payment.routes");
 
-var adminRouter = require("./routes/admin/index.admin.routes"); // app
+var adminRouter = require("./routes/admin/index.admin.routes");
+
+var clientRouter = require("./routes/clients/user.routes"); // app
 
 
 var app = express(); // database
@@ -84,11 +87,11 @@ app.use("/category", categoryRoutes);
 app.use("/section", sectionRoutes);
 app.use("/lesson", lessonRoutes);
 app.use("/order", orderRoutes);
-app.use("/payment", paymentRoutes);
+app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter);
+app.use('/user', checkUser, clientRouter);
 app.use("/", indexRoutes);
 app.use(globalErrorHandler);
-var port = process.env.PORT || 8000;
 app.listen(port, function () {
-  console.log("Server is running on port : http://localhost:".concat(8000));
+  console.log("Server is running on port : http://localhost:".concat(port));
 });

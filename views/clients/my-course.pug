@@ -1,0 +1,25 @@
+extends ../layouts/common
+block content
+  .my-course-top
+    //- h1(style="color: #fff; text-align: center; line-height: 9rem") My Course
+  .container
+    .my-course 
+      .card
+        .card-body
+          .table-responsive
+            table.table.table-bordered.table-md
+              tr
+                th Thứ Tự
+                th Course Name
+                th Giảng Viên
+                th Status
+              each course, i in myCourse
+                tr 
+                  td= i + 1
+                  td
+                    a.btn(href=`/course/${course.slug}/course-detail`)= course.courseName
+                  td= course.trainerName
+                  td
+                    .badge.badge-success Active      
+    button.btn.btn-success(type='button')
+      a(href='/course/course-online', style='color: #fff;')  XEM TẤT CẢ
