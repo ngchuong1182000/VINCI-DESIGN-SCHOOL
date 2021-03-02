@@ -44,7 +44,12 @@ module.exports.signup = catchAsync(async (req, res, next) => {
     });
     return;
   };
-  const userNew = await User.create({ username, email, password });
+  const userNew = await User.create({
+    username,
+    email,
+    password,
+    photo: '/image/avatar-1.png'
+  });
   const emailNew = userNew.email;
   const msg = {
     to: emailNew,
@@ -82,7 +87,7 @@ exports.postSignupSuccess = catchAsync(async (req, res, next) => {
   }
   user.isActive = true;
   user.codeActive = "";
-  await User.findByIdAndUpdate({ _id: user._id }, { user });
+  await User.findByIdAndUpdate({ _id: user._id }, user);
   createSendToken(user, res);
 });
 

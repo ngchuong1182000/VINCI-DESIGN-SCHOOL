@@ -101,7 +101,8 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
           return regeneratorRuntime.awrap(User.create({
             username: username,
             email: email,
-            password: password
+            password: password,
+            photo: '/image/avatar-1.png'
           }));
 
         case 13:
@@ -166,9 +167,7 @@ exports.postSignupSuccess = catchAsync(function _callee3(req, res, next) {
           _context3.next = 10;
           return regeneratorRuntime.awrap(User.findByIdAndUpdate({
             _id: user._id
-          }, {
-            user: user
-          }));
+          }, user));
 
         case 10:
           createSendToken(user, res);

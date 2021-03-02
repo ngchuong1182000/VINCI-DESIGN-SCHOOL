@@ -60,7 +60,7 @@ body
                                         ul.dropdown-menu(aria-labelledby='dropdownMenuButton', style= "min-width:22rem;position: absolute;inset: 0px auto auto 0px;")
                                             a.dropdown-item(href='', disabled)
                                                 .image__avatar
-                                                    img(src= user.photo ? user.photo : '/image/avatar-1.png', width="50px")
+                                                    img(src= user.photo,width="50px")
                                                 .user__infor
                                                     .user__name()= user.name ? user.name : user.username
                                                     .user__email= user.email
