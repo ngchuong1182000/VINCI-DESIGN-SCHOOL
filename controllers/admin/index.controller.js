@@ -25,6 +25,7 @@ exports.getPageCreateCourse = catchAsync(async (req, res, next) => {
 
 exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
   const { courseName, trainerName, categoryId, shortDescription, title1, title2, detailDescription1, detailDescription2, price } = req.body;
+  const slug = slugify(courseName, { lower: true })
   const { files } = req;
   const urls = [];
   const data = {
@@ -67,7 +68,7 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
   ]
   await Course.create(data);
 
-  res.redirect('/admin/index');
+  res.redirect(`/admin/course/${slug}`);
 });
 
 exports.getDetailCourse = catchAsync(async (req, res, next) => {
@@ -126,18 +127,6 @@ exports.updateVideoImages = catchAsync(async (req, res, next) => {
     fs.unlinkSync(file.path);
   }
   data.imageCover = urls[0];
-  // data.detailDescription = [
-  //   {
-  //     $set: {
-  //       imgURL: urls[1]
-  //     }
-  //   },
-  //   {
-  //     $set: {
-  //       imgURL: urls[2]
-  //     }
-  //   }
-  // ]
   if (urls.length >= 4) {
     data.demoVideoId = urls[3];
   }
@@ -188,7 +177,7 @@ exports.postAddSection = catchAsync(async (req, res, next) => {
   const data = { sectionTitle, sectionDescription, imageCover, courseId: course._id }
   try {
     await Section.create(data);
-    res.render(`admin/courses/course-detail`, { user, course })
+    res.redirect(`/admin/course/${slug}`)
   } catch (error) {
     res.render(`admin/courses/course-detail`, { user, course, title: course.slug.toUpperCase(), message: `Đã Có Tên : ${sectionTitle}` })
     return;
@@ -204,7 +193,7 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
   const { user } = req
   const { lessonTitle, lessonDescription } = req.body
   const { file } = req;
-  const { slug2 } = req.params;
+  const { slug1, slug2 } = req.params;
   const sectionId = (await Section.findOne({ slug: slug2 }))._id;
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     res.render('admin/lession/new-lession', { user, title: "Add New Lession", message: "vui long chon video" })
@@ -224,7 +213,7 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
     res.render('admin/lession/new-lession', { user, title: "Add New Lession", message: `Đã Có Tên : ${lessonTitle}` })
     return;
   }
-  res.redirect("back")
+  res.redirect(`/admin/course/${slug1}`)
 });
 
 exports.getLesson = catchAsync(async (req, res, next) => {

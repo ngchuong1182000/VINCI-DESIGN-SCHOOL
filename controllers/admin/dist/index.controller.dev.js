@@ -66,13 +66,16 @@ exports.getPageCreateCourse = catchAsync(function _callee2(req, res, next) {
   });
 });
 exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
-  var _req$body, courseName, trainerName, categoryId, shortDescription, title1, title2, detailDescription1, detailDescription2, price, files, urls, data, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
+  var _req$body, courseName, trainerName, categoryId, shortDescription, title1, title2, detailDescription1, detailDescription2, price, slug, files, urls, data, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
 
   return regeneratorRuntime.async(function _callee3$(_context5) {
     while (1) {
       switch (_context5.prev = _context5.next) {
         case 0:
           _req$body = req.body, courseName = _req$body.courseName, trainerName = _req$body.trainerName, categoryId = _req$body.categoryId, shortDescription = _req$body.shortDescription, title1 = _req$body.title1, title2 = _req$body.title2, detailDescription1 = _req$body.detailDescription1, detailDescription2 = _req$body.detailDescription2, price = _req$body.price;
+          slug = slugify(courseName, {
+            lower: true
+          });
           files = req.files;
           urls = [];
           data = {
@@ -85,7 +88,7 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
           _iteratorNormalCompletion = true;
           _didIteratorError = false;
           _iteratorError = undefined;
-          _context5.prev = 7;
+          _context5.prev = 8;
 
           _loop = function _loop() {
             var file, folder, options, nameVideos, uploader, newPath;
@@ -144,55 +147,55 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
 
           _iterator = files[Symbol.iterator]();
 
-        case 10:
+        case 11:
           if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-            _context5.next = 16;
+            _context5.next = 17;
             break;
           }
 
-          _context5.next = 13;
+          _context5.next = 14;
           return regeneratorRuntime.awrap(_loop());
 
-        case 13:
+        case 14:
           _iteratorNormalCompletion = true;
-          _context5.next = 10;
+          _context5.next = 11;
           break;
 
-        case 16:
-          _context5.next = 22;
+        case 17:
+          _context5.next = 23;
           break;
 
-        case 18:
-          _context5.prev = 18;
-          _context5.t0 = _context5["catch"](7);
+        case 19:
+          _context5.prev = 19;
+          _context5.t0 = _context5["catch"](8);
           _didIteratorError = true;
           _iteratorError = _context5.t0;
 
-        case 22:
-          _context5.prev = 22;
+        case 23:
           _context5.prev = 23;
+          _context5.prev = 24;
 
           if (!_iteratorNormalCompletion && _iterator["return"] != null) {
             _iterator["return"]();
           }
 
-        case 25:
-          _context5.prev = 25;
+        case 26:
+          _context5.prev = 26;
 
           if (!_didIteratorError) {
-            _context5.next = 28;
+            _context5.next = 29;
             break;
           }
 
           throw _iteratorError;
 
-        case 28:
-          return _context5.finish(25);
-
         case 29:
-          return _context5.finish(22);
+          return _context5.finish(26);
 
         case 30:
+          return _context5.finish(23);
+
+        case 31:
           data.imageCover = urls[0];
           data.demoVideoId = urls[3];
           data.detailDescription = [{
@@ -204,18 +207,18 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
             content: detailDescription2,
             imgURL: urls[2]
           }];
-          _context5.next = 35;
+          _context5.next = 36;
           return regeneratorRuntime.awrap(Course.create(data));
 
-        case 35:
-          res.redirect('/admin/index');
-
         case 36:
+          res.redirect("/admin/course/".concat(slug));
+
+        case 37:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[7, 18, 22, 30], [23,, 25, 29]]);
+  }, null, null, [[8, 19, 23, 31], [24,, 26, 30]]);
 });
 exports.getDetailCourse = catchAsync(function _callee4(req, res, next) {
   var user, slug, course;
@@ -445,18 +448,7 @@ exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
           return _context10.finish(25);
 
         case 33:
-          data.imageCover = urls[0]; // data.detailDescription = [
-          //   {
-          //     $set: {
-          //       imgURL: urls[1]
-          //     }
-          //   },
-          //   {
-          //     $set: {
-          //       imgURL: urls[2]
-          //     }
-          //   }
-          // ]
+          data.imageCover = urls[0];
 
           if (urls.length >= 4) {
             data.demoVideoId = urls[3];
@@ -604,10 +596,7 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
           return regeneratorRuntime.awrap(Section.create(data));
 
         case 18:
-          res.render("admin/courses/course-detail", {
-            user: user,
-            course: course
-          });
+          res.redirect("/admin/course/".concat(slug));
           _context13.next = 25;
           break;
 
@@ -649,7 +638,7 @@ exports.getAddLesion = catchAsync(function _callee9(req, res, next) {
   });
 });
 exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
-  var user, _req$body4, lessonTitle, lessonDescription, file, slug2, sectionId, nameVideos, options, uploader, videoId, data;
+  var user, _req$body4, lessonTitle, lessonDescription, file, _req$params, slug1, slug2, sectionId, nameVideos, options, uploader, videoId, data;
 
   return regeneratorRuntime.async(function _callee10$(_context16) {
     while (1) {
@@ -658,7 +647,7 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
           user = req.user;
           _req$body4 = req.body, lessonTitle = _req$body4.lessonTitle, lessonDescription = _req$body4.lessonDescription;
           file = req.file;
-          slug2 = req.params.slug2;
+          _req$params = req.params, slug1 = _req$params.slug1, slug2 = _req$params.slug2;
           _context16.next = 6;
           return regeneratorRuntime.awrap(Section.findOne({
             slug: slug2
@@ -731,7 +720,7 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
           return _context16.abrupt("return");
 
         case 25:
-          res.redirect("back");
+          res.redirect("/admin/course/".concat(slug1));
 
         case 26:
         case "end":
@@ -741,14 +730,14 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
   }, null, null, [[16, 21]]);
 });
 exports.getLesson = catchAsync(function _callee11(req, res, next) {
-  var user, _req$params, slug1, slug2, slug3, course, section, lesson;
+  var user, _req$params2, slug1, slug2, slug3, course, section, lesson;
 
   return regeneratorRuntime.async(function _callee11$(_context17) {
     while (1) {
       switch (_context17.prev = _context17.next) {
         case 0:
           user = req.user;
-          _req$params = req.params, slug1 = _req$params.slug1, slug2 = _req$params.slug2, slug3 = _req$params.slug3;
+          _req$params2 = req.params, slug1 = _req$params2.slug1, slug2 = _req$params2.slug2, slug3 = _req$params2.slug3;
           _context17.next = 4;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: slug1
@@ -786,13 +775,13 @@ exports.getLesson = catchAsync(function _callee11(req, res, next) {
   });
 });
 exports.updateLesson = catchAsync(function _callee12(req, res, next) {
-  var _req$params2, slug1, slug2, slug3, file, user, _req$body5, lessonDescription, lessonTitle, course, section, oldLesson, slug, nameVideos, _options, uploader, videoId, data, lesson, _data, _lesson;
+  var _req$params3, slug1, slug2, slug3, file, user, _req$body5, lessonDescription, lessonTitle, course, section, oldLesson, slug, nameVideos, _options, uploader, videoId, data, lesson, _data, _lesson;
 
   return regeneratorRuntime.async(function _callee12$(_context19) {
     while (1) {
       switch (_context19.prev = _context19.next) {
         case 0:
-          _req$params2 = req.params, slug1 = _req$params2.slug1, slug2 = _req$params2.slug2, slug3 = _req$params2.slug3;
+          _req$params3 = req.params, slug1 = _req$params3.slug1, slug2 = _req$params3.slug2, slug3 = _req$params3.slug3;
           file = req.file;
           user = req.user;
           _req$body5 = req.body, lessonDescription = _req$body5.lessonDescription, lessonTitle = _req$body5.lessonTitle;
