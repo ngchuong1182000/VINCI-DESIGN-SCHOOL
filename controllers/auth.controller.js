@@ -38,9 +38,16 @@ module.exports.signup = catchAsync(async (req, res, next) => {
     return;
   }
   const user = await User.findOne({ email });
+  const userOther = await User.findOne({ username });
   if (user) {
     res.render('auth/signup', {
       message: "Email is taken !"
+    });
+    return;
+  };
+  if (userOther) {
+    res.render('auth/signup', {
+      message: "User Name is taken !"
     });
     return;
   };

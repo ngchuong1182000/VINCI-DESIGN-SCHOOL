@@ -58,7 +58,7 @@ exports.getSignup = function (req, res, next) {
 };
 
 module.exports.signup = catchAsync(function _callee2(req, res, next) {
-  var _req$body, username, email, password, ConfirmPassword, user, userNew, emailNew, msg;
+  var _req$body, username, email, password, ConfirmPassword, user, userOther, userNew, emailNew, msg;
 
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
@@ -84,9 +84,16 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
 
         case 6:
           user = _context2.sent;
+          _context2.next = 9;
+          return regeneratorRuntime.awrap(User.findOne({
+            username: username
+          }));
+
+        case 9:
+          userOther = _context2.sent;
 
           if (!user) {
-            _context2.next = 10;
+            _context2.next = 13;
             break;
           }
 
@@ -95,9 +102,22 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
           });
           return _context2.abrupt("return");
 
-        case 10:
+        case 13:
           ;
-          _context2.next = 13;
+
+          if (!userOther) {
+            _context2.next = 17;
+            break;
+          }
+
+          res.render('auth/signup', {
+            message: "User Name is taken !"
+          });
+          return _context2.abrupt("return");
+
+        case 17:
+          ;
+          _context2.next = 20;
           return regeneratorRuntime.awrap(User.create({
             username: username,
             email: email,
@@ -105,7 +125,7 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
             photo: '/image/avatar-1.png'
           }));
 
-        case 13:
+        case 20:
           userNew = _context2.sent;
           emailNew = userNew.email;
           msg = {
@@ -125,7 +145,7 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
           });
           res.redirect("/auth/signup-success/".concat(userNew.email));
 
-        case 18:
+        case 25:
         case "end":
           return _context2.stop();
       }
