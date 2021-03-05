@@ -44,6 +44,9 @@ a:hover {
   align-items: center;
   color: #fff;
 }
+main #navbar {
+  max-height: 7rem;
+}
 
 .header #navbar {
   background-color: rgba(255, 0, 0, 0);

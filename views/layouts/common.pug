@@ -3,40 +3,40 @@ head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible', content='ie=edge')
-    // Google Fonts
-    link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap', rel='stylesheet')
+
     link(rel="stylesheet", href="/css/bootstrap5.min.css")
     // Font Awesome
-    script(src='/js/fc1ca022ce.js', crossorigin='anonymous')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css', rel='stylesheet')
+    // Google Fonts
+    link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap', rel='stylesheet')
     // MDB
     link(rel="stylesheet", href="/css/mdb.min.css")
     link(rel="stylesheet", href="/css/bootstrap4.min.css")
-    // customer
+    // MDB
     link(rel='stylesheet', href='/css/style.css')
     title= title ? title.toUpperCase() : "VINCI DESIGN SCHOOL"
     link(rel="shortcut icon", href="/image/favicon.ico", type="image/x-icon")
 body
     #root
         main
-            nav#navbar.navbar.navbar-expand-lg.navbar-light.header__wrapper(style='position: fixed; z-index: 9')
+            nav#navbar.navbar.navbar-expand-lg.navbar-light(style='position: fixed; z-index: 9')
                 .container-fluid.d-flex
-                    a.navbar-brand.d-flex.flex-column(href='/index', style='width:10%')
+                    a.navbar-brand.d-flex.flex-column(href='/index', style='width:8%')
                         img.justify-content-center(src=' /image/Logo Final-01.png', alt='', width='70%')
                         span.text-light(style='font-size: 70%; font-weight: 700') VINCI DESIGN SCHOOL
                     button.navbar-toggler.bg-light(type='button', data-bs-toggle='collapse', data-bs-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
                         span.navbar-toggler-icon
-                    .col
-                        #navbarSupportedContent.collapse.navbar-collapse
-                            ul.navbar-nav.header_list.me-auto.mb-2.mb-lg-0
+                    #navbarSupportedContent.collapse.navbar-collapse
+                        .col
+                            ul.navbar-nav.header_list
                                 li.nav-item
-                                    a.nav-link.text-light(href='/course/course-offline') Khóa Offline
+                                    a.nav-link.active.text-light(href='/course/course-offline') Khóa Offline
                                 li.nav-item
                                     a.nav-link.text-light(href='/course/course-online') Khóa Online
                                 li.nav-item
                                     a.nav-link.text-light(href='/course/document/free') Tài liệu miễn phí
                                 li.nav-item
                                     a.nav-link.text-light(href='/contact') Liên hệ
-                    .col
                         .col.d-flex.justify-content-end
                             ul.navbar-nav.mb-2.mb-lg-0.d-flex
                                 li.nav-item
@@ -66,73 +66,73 @@ body
                                             a.dropdown-item(href='/auth/signout') Đặng Xuất !
             block content
 
-        footer.bg-dark.text-center.text-lg-start.text-light
-            .container.p-4
-                .row
-                    .customer-footer
-                        .logo-contact
-                            .imageLogo
-                                img(src="/image/favicon.ico", alt="", srcset="", width="100")
-                            .hotline 
-                                i.fas.fa-phone-volume 
-                                span      098 7374 741
-                            .email-contact
-                                i.fas.fa-envelope
-                                span      chunguyenchuong2014bg@gmail.com
-                            .other-contact 
-                                ul 
-                                    li 
-                                        a.text-light(href='#!')
-                                            i.fab.fa-facebook
-                                    li 
-                                        a.text-light(href='#!')
-                                            i.fab.fa-twitter
-                                    li 
-                                        a.text-light.fab.fa-google-plus-g(href='#!')
-                                    li 
-                                        a.text-light(href='#!')
-                                            i.fab.fa-facebook
-                        .company-contact
-                            h5.text-uppercase COMPANY
-                            ul.list-unstyled.mb-0
-                                li
-                                    a.text-light(href='#!') About us
-                                li
-                                    a.text-light(href='#!') Blogs
-                                li
-                                    a.text-light(href='#!') Contact
-                                li
-                                    a.text-light(href='#!') Become a Teacher
-                        .links-contact
-                            h5.text-uppercase LINKS
-                            ul.list-unstyled
-                                li
-                                    a.text-light(href='#!') Course
-                                li
-                                    a.text-light(href='#!') Events
-                                li
-                                    a.text-light(href='#!') Gallery
-                                li
-                                    a.text-light(href='#!') FAQs
-                        .support-contact
-                            h5.text-uppercase SUPPORT
-                            ul.list-unstyled
-                                li
-                                    a.text-light(href='#!') Documentation
-                                li
-                                    a.text-light(href='#!') Forums
-                                li
-                                    a.text-light(href='#!') Language Packs
-                                li
-                                    a.text-light(href='#!') Release State
-            .copy 
-                .container Copyright (c) Cao Manh
+            footer.bg-dark.text-center.text-lg-start.text-light
+                .container.p-4
+                    .row
+                        .customer-footer
+                            .logo-contact
+                                .imageLogo
+                                    img(src="/image/favicon.ico", alt="", srcset="", width="100")
+                                .hotline 
+                                    i.fas.fa-phone-volume 
+                                    span      098 7374 741
+                                .email-contact
+                                    i.fas.fa-envelope
+                                    span      chunguyenchuong2014bg@gmail.com
+                                .other-contact 
+                                    ul 
+                                        li 
+                                            a.text-light(href='#!')
+                                                i.fab.fa-facebook
+                                        li 
+                                            a.text-light(href='#!')
+                                                i.fab.fa-twitter
+                                        li 
+                                            a.text-light.fab.fa-google-plus-g(href='#!')
+                                        li 
+                                            a.text-light(href='#!')
+                                                i.fab.fa-facebook
+                            .company-contact
+                                h5.text-uppercase COMPANY
+                                ul.list-unstyled.mb-0
+                                    li
+                                        a.text-light(href='#!') About us
+                                    li
+                                        a.text-light(href='#!') Blogs
+                                    li
+                                        a.text-light(href='#!') Contact
+                                    li
+                                        a.text-light(href='#!') Become a Teacher
+                            .links-contact
+                                h5.text-uppercase LINKS
+                                ul.list-unstyled
+                                    li
+                                        a.text-light(href='#!') Course
+                                    li
+                                        a.text-light(href='#!') Events
+                                    li
+                                        a.text-light(href='#!') Gallery
+                                    li
+                                        a.text-light(href='#!') FAQs
+                            .support-contact
+                                h5.text-uppercase SUPPORT
+                                ul.list-unstyled
+                                    li
+                                        a.text-light(href='#!') Documentation
+                                    li
+                                        a.text-light(href='#!') Forums
+                                    li
+                                        a.text-light(href='#!') Language Packs
+                                    li
+                                        a.text-light(href='#!') Release State
+                .copy 
+                    .container Copyright (c) Cao Manh
 
-    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js')
-    script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl', crossorigin='anonymous')
-    script(src='/js/style.js')
-    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js', integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0', crossorigin='anonymous')
+script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js')
+script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')
+script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl', crossorigin='anonymous')
+script(src='/js/style.js')
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js', integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0', crossorigin='anonymous')
 
 
