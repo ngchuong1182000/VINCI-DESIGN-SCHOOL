@@ -3,15 +3,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
-  <!-- Font Awesome-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
   <!-- Google Fonts-->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/bootstrap5.min.css">
+  <!-- Font Awesome-->
+  <script src="/js/fc1ca022ce.js" crossorigin="anonymous"></script>
   <!-- MDB-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <!-- MDB-->
+  <link rel="stylesheet" href="/css/mdb.min.css">
+  <link rel="stylesheet" href="/css/bootstrap4.min.css">
+  <!-- customer-->
   <link rel="stylesheet" href="/css/style.css">
   <title>VINCI DESIGN SCHOOL</title>
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/x-icon">
@@ -19,36 +19,37 @@
 <body>
   <div id="root">
     <main>
-      <section class="landing__header">
-        <div class="header">
-          <nav id="navbar" style="position: fixed;">
-            <div class="header__wrapper">
-              <div class="header__logo">
-                <li><a href="/index"><img src=" /image/Logo Final-01.png" alt="" width="60%" height="100px"></a></li>
-                <li style="color: #fff;  font-weight: 700;">VINCI DESIGN SCHOOL</li>
-              </div>
-              <div class="header_list">
-                <li class="header_item"><a href="/course/course-offline" style="color: #fff;">Khóa Offline</a></li>
-                <li class="header_item"><a href="/course/course-online" style="color: #fff;">Khóa Online</a></li>
-                <li class="header_item"> <a href="/document/free" style="color: #fff;">Tài liệu miễn phí</a></li>
-                <li class="header_item"> <a href="/contact" style="color: #fff;">Liên hệ</a></li>
-              </div>
-              <div class="header_user">
-                <li class="header_item">
-                  <div class="flexbox">
-                    <div class="search">
-                      <div>
-                        <input type="text" placeholder="Search . . ." required="">
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <button class="das__nav__btn" type="button"><a href="/auth/login" style="color: #fff;">ĐĂNG NHẬP</a></button>
-              </div>
+      <nav class="navbar navbar-expand-lg navbar-light header__wrapper" id="navbar" style="position: fixed; z-index: 9">
+        <div class="container-fluid d-flex"><a class="navbar-brand d-flex flex-column" href="/index" style="width:10%"><img class="justify-content-center" src=" /image/Logo Final-01.png" alt="" width="70%"><span class="text-light" style="font-size: 70%; font-weight: 700">VINCI DESIGN SCHOOL</span></a>
+          <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="col">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav header_list me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link text-light" href="/course/course-offline">Khóa Offline</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/course/course-online">Khóa Online</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/course/document/free">Tài liệu miễn phí</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/contact">Liên hệ</a></li>
+              </ul>
             </div>
-          </nav>
+          </div>
+          <div class="col">
+            <div class="col d-flex justify-content-end">
+              <ul class="navbar-nav mb-2 mb-lg-0 d-flex">
+                <li class="nav-item">
+                  <form class="d-flex align-items-center search">
+                    <div>
+                      <input type="text" placeholder="Search . . ." required="">
+                    </div>
+                  </form>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                  <button class="das__nav__btn" type="button"><a href="/auth/login" style="color: #fff;">ĐĂNG NHẬP</a></button>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </section>
+      </nav>
     </main>
     <footer class="bg-dark text-center text-lg-start text-light">
       <div class="container p-4">

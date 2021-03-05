@@ -3,56 +3,52 @@ head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible', content='ie=edge')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css')
-    // Font Awesome
-    link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css', rel='stylesheet')
     // Google Fonts
     link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap', rel='stylesheet')
+    link(rel="stylesheet", href="/css/bootstrap5.min.css")
+    // Font Awesome
+    script(src='/js/fc1ca022ce.js', crossorigin='anonymous')
     // MDB
-    link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
-    // MDB
+    link(rel="stylesheet", href="/css/mdb.min.css")
+    link(rel="stylesheet", href="/css/bootstrap4.min.css")
+    // customer
     link(rel='stylesheet', href='/css/style.css')
     title= title ? title.toUpperCase() : "VINCI DESIGN SCHOOL"
     link(rel="shortcut icon", href="/image/favicon.ico", type="image/x-icon")
 body
     #root
         main
-            section.landing__header
-                .header
-                    nav#navbar(style='position: fixed;')
-                        .header__wrapper
-                            .header__logo
-                                li
-                                    a(href='/index')
-                                        img(src=' /image/Logo Final-01.png', alt='', width='60%', height='100px')
-                                li(style='color: #fff;  font-weight: 700;')
-                                    | VINCI DESIGN SCHOOL
-                            .header_list
-                                li.header_item
-                                    a(href='/course/course-offline', style='color: #fff;') Khóa Offline
-                                li.header_item
-                                    a(href='/course/course-online', style='color: #fff;') Khóa Online
-                                li.header_item 
-                                    a(href='/document/free', style='color: #fff;') Tài liệu miễn phí
-                                li.header_item 
-                                    a(href='/contact', style='color: #fff;') Liên hệ
-                            .header_user
+            nav#navbar.navbar.navbar-expand-lg.navbar-light.header__wrapper(style='position: fixed; z-index: 9')
+                .container-fluid.d-flex
+                    a.navbar-brand.d-flex.flex-column(href='/index', style='width:10%')
+                        img.justify-content-center(src=' /image/Logo Final-01.png', alt='', width='70%')
+                        span.text-light(style='font-size: 70%; font-weight: 700') VINCI DESIGN SCHOOL
+                    button.navbar-toggler.bg-light(type='button', data-bs-toggle='collapse', data-bs-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+                        span.navbar-toggler-icon
+                    .col
+                        #navbarSupportedContent.collapse.navbar-collapse
+                            ul.navbar-nav.header_list.me-auto.mb-2.mb-lg-0
+                                li.nav-item
+                                    a.nav-link.text-light(href='/course/course-offline') Khóa Offline
+                                li.nav-item
+                                    a.nav-link.text-light(href='/course/course-online') Khóa Online
+                                li.nav-item
+                                    a.nav-link.text-light(href='/course/document/free') Tài liệu miễn phí
+                                li.nav-item
+                                    a.nav-link.text-light(href='/contact') Liên hệ
+                    .col
+                        .col.d-flex.justify-content-end
+                            ul.navbar-nav.mb-2.mb-lg-0.d-flex
+                                li.nav-item
+                                    form.d-flex.align-items-center.search
+                                        div
+                                            input(type='text', placeholder='Search . . .', required='')
                                 if !user
-                                    li.header_item
-                                        .flexbox
-                                            .search
-                                                div
-                                                    input(type='text', placeholder='Search . . .', required='')
-                                    button.das__nav__btn(type='button')
-                                        a(href='/auth/login', style='color: #fff;') ĐĂNG NHẬP
+                                    li.nav-item.d-flex.align-items-center
+                                        button.das__nav__btn(type='button')
+                                            a(href='/auth/login', style='color: #fff;') ĐĂNG NHẬP
                                 else
-                                    li.header_item
-                                        .flexbox
-                                            .search
-                                                div
-                                                    input(type='text', placeholder='Search . . .', required='')
-                                    li.header_item
+                                    li.nav-item.d-flex.align-items-center
                                         a#dropdownMenuButton.btn.btn-primarydropdown-toggle(href='#', data-mdb-toggle='dropdown', aria-expanded='false')
                                             .img-border
                                                 img(src= user.photo ? user.photo :"/image/favicon.ico"  , width='10px')
@@ -131,7 +127,7 @@ body
                                     a.text-light(href='#!') Release State
             .copy 
                 .container Copyright (c) Cao Manh
-                
+
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')
