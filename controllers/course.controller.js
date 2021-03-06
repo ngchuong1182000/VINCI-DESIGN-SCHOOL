@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const factory = require("./handleFactory");
 const apiFeatures = require('../utils/apiFeatures');
+const Lesson = require("../models/lesson.model");
 
 exports.getAllCourse = catchAsync(async (req, res, next) => {
   let filter = {};
@@ -74,3 +75,11 @@ exports.getDetail = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getStudy = catchAsync(async (req, res, next) => {
+  const { slug, slug1, slug2 } = req.params;
+  const { user } = req;
+  const course = await Course.findOne({ slug });
+  const lesson = await Lesson.findOne({ slug: slug2 });
+  console.log(lesson);
+  res.render('clients/study-course', { course, user, lesson });
+})

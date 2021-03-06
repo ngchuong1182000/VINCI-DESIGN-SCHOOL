@@ -12,6 +12,8 @@ var factory = require("./handleFactory");
 
 var apiFeatures = require('../utils/apiFeatures');
 
+var Lesson = require("../models/lesson.model");
+
 exports.getAllCourse = catchAsync(function _callee(req, res, next) {
   var filter, user, temp, section, futures, doc;
   return regeneratorRuntime.async(function _callee$(_context) {
@@ -128,6 +130,43 @@ exports.getDetail = catchAsync(function _callee2(req, res, next) {
         case 14:
         case "end":
           return _context2.stop();
+      }
+    }
+  });
+});
+exports.getStudy = catchAsync(function _callee3(req, res, next) {
+  var _req$params, slug, slug1, slug2, user, course, lesson;
+
+  return regeneratorRuntime.async(function _callee3$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _req$params = req.params, slug = _req$params.slug, slug1 = _req$params.slug1, slug2 = _req$params.slug2;
+          user = req.user;
+          _context3.next = 4;
+          return regeneratorRuntime.awrap(Course.findOne({
+            slug: slug
+          }));
+
+        case 4:
+          course = _context3.sent;
+          _context3.next = 7;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            slug: slug2
+          }));
+
+        case 7:
+          lesson = _context3.sent;
+          console.log(lesson);
+          res.render('clients/study-course', {
+            course: course,
+            user: user,
+            lesson: lesson
+          });
+
+        case 10:
+        case "end":
+          return _context3.stop();
       }
     }
   });

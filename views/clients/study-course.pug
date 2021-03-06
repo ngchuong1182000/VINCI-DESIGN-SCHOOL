@@ -1,0 +1,134 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Document
+    link(rel="stylesheet", href="/css/bootstrap5.min.css")
+    // Font Awesome
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css', rel='stylesheet')
+    // Google Fonts
+    link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap', rel='stylesheet')
+    // MDB
+    link(rel="stylesheet", href="/css/mdb.min.css")
+    link(rel="stylesheet", href="/css/bootstrap4.min.css")
+    // CLOULDINARY
+    link(rel="stylesheet", href="/css/cld-video-player.min.css")
+    script(src='/js/cloudinary-core-shrinkwrap.min.js')
+    script(src="/js/cld-video-player.min.js") 
+
+    link(rel='stylesheet', href='/css/style.css')
+    title= title ? title.toUpperCase() : "VINCI DESIGN SCHOOL"
+    link(rel="shortcut icon", href="/image/favicon.ico", type="image/x-icon")
+  body(style=`background-image: url(${course.imageCover})`)
+    nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      .container-fluid.d-flex
+        a.navbar-brand.d-flex.flex-column(href='/index', style='width:8%')
+          img.justify-content-center(src=' /image/Logo Final-01.png', alt='', width='70%')
+          span.text-light(style='font-size: 70%; font-weight: 700') VINCI DESIGN SCHOOL
+        button.navbar-toggler.bg-light(type='button', data-bs-toggle='collapse', data-bs-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarSupportedContent.collapse.navbar-collapse
+          .col
+            ul.navbar-nav.header_list
+              li.nav-item
+                a.nav-link.active.text-light(href='/course/course-offline') Khóa Offline
+              li.nav-item
+                a.nav-link.text-light(href='/course/course-online') Khóa Online
+              li.nav-item
+                a.nav-link.text-light(href='/course/document/free') Tài liệu miễn phí
+              li.nav-item
+                a.nav-link.text-light(href='/contact') Liên hệ
+          .col.d-flex.justify-content-end
+            ul.navbar-nav.mb-2.mb-lg-0.d-flex
+              li.nav-item
+                form.d-flex.align-items-center.search
+                  div
+                    input(type='text', placeholder='Search . . .', required='')
+              if !user
+                li.nav-item.d-flex.align-items-center
+                  button.das__nav__btn(type='button')
+                    a(href='/auth/login', style='color: #fff;') ĐĂNG NHẬP
+              else
+                li.nav-item.d-flex.align-items-center
+                  a#dropdownMenuButton.btn.btn-primarydropdown-toggle(href='#', data-mdb-toggle='dropdown', aria-expanded='false')
+                    .img-border
+                      img(src= user.photo ? user.photo :"/image/favicon.ico"  , width='10px')
+                    .username= user.name ? user.name : user.username
+                  ul.dropdown-menu(aria-labelledby='dropdownMenuButton', style= "min-width:22rem;position: absolute;inset: 0px auto auto 0px;")
+                    a.dropdown-item(href='', disabled)
+                      .image__avatar
+                        img(src= user.photo,width="50px")
+                      .user__infor
+                        .user__name()= user.name ? user.name : user.username
+                        .user__email= user.email
+                    .divider.dropdown-divider
+                    a.dropdown-item(href='/user/myCourse') Khóa Học Của Tôi
+                    a.dropdown-item(href='/user/setting') Cài đạt tài khoản
+                    a.dropdown-item(href='/auth/signout') Đặng Xuất !
+                      h1.text-light= `${user.name ? user.name : user.username} : ${course.courseName}`
+  .container
+    .row 
+      .breadcrumb
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/index') Home
+          li.breadcrumb-item
+            a(href='#') Course
+          li.breadcrumb-item.active(aria-current='page')= course.courseName 
+    .row
+      .col-8.study-video
+        video#video.cld-video-player.cld-fluid(controls, loop, autoplay, data-default= lesson.videoId)
+
+      .col-4
+        #accordionSection.accordion
+          each section, i in course.sectionId
+            .accordion-item
+              h2#headingOne.accordion-header
+                button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target=`#section${i}`, aria-expanded='true', aria-controls=`#section${i}`)= section.sectionTitle
+              .accordion-collapse.collapse.show(aria-labelledby=`heading${i}`, data-bs-parent='#accordionSection', id=`section${i}`)
+                .accordion-body
+                  each l in  section.lessonId
+                    a.list-group-item.list-group-item-action(href=`/course/${course.slug}/section/${section.slug}/lesson/${l.slug}/study`, data-src= l.videoId)= l.lessonTitle
+    nav
+      #nav-tab.nav.nav-tabs(role='tablist')
+        button#nav-cmt-tab.nav-link.active(data-bs-toggle='tab', data-bs-target='#nav-cmt', type='button', role='tab', aria-controls='nav-cmt', aria-selected='true') COMMENT
+        button#nav-ratting-tab.nav-link(data-bs-toggle='tab', data-bs-target='#nav-ratting', type='button', role='tab', aria-controls='nav-ratting', aria-selected='false') RATING
+        button#nav-feedback-tab.nav-link(data-bs-toggle='tab', data-bs-target='#nav-feedback', type='button', role='tab', aria-controls='nav-feedback', aria-selected='false') FEEDBACK
+      
+      #nav-tabContent.tab-content.bg-light
+        #nav-cmt.tab-pane.fade.show.active.p-4(role='tabpanel', aria-labelledby='nav-cmt-tab')
+          .comment.px-5
+            .toast.show.mb-2(role='alert', aria-live='assertive', aria-atomic='true')
+              .toast-header
+                img.rounded.me-2(src='...', alt='...')
+                strong.me-auto Bootstrap
+                small 11 mins ago
+              .toast-body
+                | Hello, world! This is a toast message.
+            .toast.show.mb-2(role='alert', aria-live='assertive', aria-atomic='true')
+              .toast-header
+                img.rounded.me-2(src='...', alt='...')
+                strong.me-auto Bootstrap
+                small 11 mins ago
+              .toast-body
+                | Hello, world! This is a toast message.
+
+          form(action="", method="post") 
+            .input-group.mb-3
+              span#basic-addon3.input-group-text= user.username
+              input.form-control(type='text', placeholder="Comment in here ~~",name="comment" )
+              input#videoId.form-control(type='text', placeholder="Comment in here ~~",name="video" style='display:none')
+              button#button-addon2.btn.btn-outline-primary(type='submit') comment
+
+
+        #nav-ratting.tab-pane.fade.p-4(role='tabpanel', aria-labelledby='nav-ratting-tab') RATING
+        #nav-feedback.tab-pane.fade.p-4(role='tabpanel', aria-labelledby='nav-feedback-tab') FEEDBACK
+
+script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.0.0/mdb.min.js')
+script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')
+script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl', crossorigin='anonymous')
+script(src='/js/study.js')
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js', integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0', crossorigin='anonymous')

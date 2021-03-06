@@ -32,8 +32,6 @@ var authRoutes = require("./routes/auth.routes");
 
 var courseRoutes = require("./routes/course.routes");
 
-var userRoutes = require("./routes/user.routes");
-
 var categoryRoutes = require("./routes/category.routes");
 
 var sectionRoutes = require("./routes/section.routes");
@@ -48,7 +46,7 @@ var paymentRoutes = require("./routes/payment.routes");
 
 var adminRouter = require("./routes/admin/index.admin.routes");
 
-var clientRouter = require("./routes/clients/user.routes"); // app
+var userRouter = require("./routes/clients/user.routes"); // app
 
 
 var app = express(); // database
@@ -58,7 +56,7 @@ db.Connect(); // middleware
 app.use(morgan("dev"));
 app.set("view engine", "pug");
 app.set("views", "./views");
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
@@ -74,7 +72,6 @@ if (process.env.NODE_ENV === "development") {
 
 app.use("/api", authRoutes);
 app.use('/api', courseRoutes);
-app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", sectionRoutes);
 app.use("/api", lessonRoutes);
@@ -82,14 +79,13 @@ app.use("/api", orderRoutes); // routes middleware
 
 app.use("/auth", authRoutes);
 app.use('/course', courseRoutes);
-app.use("/user", userRoutes);
 app.use("/category", categoryRoutes);
 app.use("/section", sectionRoutes);
 app.use("/lesson", lessonRoutes);
 app.use("/order", orderRoutes);
 app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter);
-app.use('/user', checkUser, clientRouter);
+app.use('/user', checkUser, userRouter);
 app.use("/", indexRoutes);
 app.use(globalErrorHandler);
 app.listen(port, function () {

@@ -3,7 +3,6 @@ const Course = require("../../models/course.model")
 
 exports.getMyCourse = catchAsync(async (req, res, next) => {
   const user = req.user;
-  const courses = await Course.find({})
   const myCourse = [];
 
   if (!user) {

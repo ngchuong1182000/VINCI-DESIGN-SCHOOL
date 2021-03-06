@@ -18,7 +18,6 @@ const globalErrorHandler = require('./controllers/err.controller');
 
 const authRoutes = require("./routes/auth.routes");
 const courseRoutes = require("./routes/course.routes");
-const userRoutes = require("./routes/user.routes");
 const categoryRoutes = require("./routes/category.routes");
 const sectionRoutes = require("./routes/section.routes");
 const lessonRoutes = require("./routes/lesson.routes");
@@ -26,7 +25,7 @@ const orderRoutes = require("./routes/order.routes");
 const indexRoutes = require("./routes/index.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const adminRouter = require("./routes/admin/index.admin.routes");
-const clientRouter = require("./routes/clients/user.routes")
+const userRouter = require("./routes/clients/user.routes")
 
 // app
 const app = express();
@@ -38,7 +37,7 @@ db.Connect();
 app.use(morgan("dev"));
 app.set("view engine", "pug");
 app.set("views", "./views");
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("secret"));
 app.use(express.static(path.join(__dirname, 'public')))
@@ -55,7 +54,6 @@ if (process.env.NODE_ENV === "development") {
 // routes middleware api 
 app.use("/api", authRoutes);
 app.use('/api', courseRoutes)
-app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", sectionRoutes);
 app.use("/api", lessonRoutes);
@@ -64,14 +62,13 @@ app.use("/api", orderRoutes);
 // routes middleware 
 app.use("/auth", authRoutes);
 app.use('/course', courseRoutes)
-app.use("/user", userRoutes);
 app.use("/category", categoryRoutes);
 app.use("/section", sectionRoutes);
 app.use("/lesson", lessonRoutes);
 app.use("/order", orderRoutes);
 app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter)
-app.use('/user', checkUser, clientRouter)
+app.use('/user', checkUser, userRouter)
 app.use("/", indexRoutes);
 
 app.use(globalErrorHandler);

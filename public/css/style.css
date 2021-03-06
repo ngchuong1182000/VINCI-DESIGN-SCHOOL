@@ -1452,3 +1452,13 @@ input[type=checkbox] {
     flex-wrap: wrap;
   }
 }
+
+.study-video {
+  height: 30rem;
+}
+
+
+.toast {
+  width: 100%;
+  /* margin-right: 1rem; */
+}

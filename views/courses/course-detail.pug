@@ -46,7 +46,7 @@ block content
     span.section_general
       .das__landing__line(style='color: rgb(245, 180, 35);')
       span.description_section_text(style='color: #fff;') Gi&#x1EDB;i thi&#x1EC7;u kh&oacute;a h&#x1ECD;c
-    .course__content
+    .course__content#course
       span.course__name= course.courseName
       .player__container.course__preview__video
         div(style='width: 100%; height: auto;')
@@ -58,12 +58,12 @@ block content
       each item in course.sectionId
         .course__chapter
           .dropdown
-            span.course__chapter__name= item.sectionTitle
+            span.course__chapter__name.text-center= item.sectionTitle
             a(href='#', data-mdb-toggle='dropdown', aria-expanded='false')
               i.fas.fa-chevron-circle-down.fa-2x(style='color: #fff;')
           if !user
             each i in item.lessonId
-               a(href= `/auth/login`)
+              a(href= `/auth/login`)
                 .course__chapter__content
                   .course__lecture__wrapper
                     .course__lecture__detail
@@ -85,11 +85,8 @@ block content
               else
                 #accordionFlushExample.accordion.accordion-flush
                   .accordion-item
-                    h2#flush-headingOne.accordion-header
-                      button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target=`#flush-${item.slug}-${index}`, aria-expanded='false', aria-controls=`#flush-${item.slug}-${index}`)= i.lessonTitle
-                    .accordion-collapse.collapse(id=`flush-${item.slug}-${index}` aria-labelledby='flush-headingOne', data-bs-parent='#accordionFlushExample')
-                      .accordion-body 
-                        iframe(width='560', height='315', src= i.videoId, frameborder='0', allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+                    h4#flush-headingOne.accordion-header
+                      a.list-group-item.list-group-item-action.text-light.text-center(href=`/course/${course.slug}/section/${item.slug}/lesson/${i.slug}/study`, style="background:#e01a1a")= i.lessonTitle
   section.course__professor
     span.section_general
       .das__landing__line

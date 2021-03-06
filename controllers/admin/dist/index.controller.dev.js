@@ -134,7 +134,7 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
 
                   case 9:
                     newPath = _context4.sent;
-                    urls.push(newPath.url);
+                    urls.push(newPath.secure_url);
                     fs.unlinkSync(file.path);
 
                   case 12:
@@ -386,7 +386,7 @@ exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
 
                   case 9:
                     newPath = _context9.sent;
-                    urls.push(newPath.url);
+                    urls.push(newPath.secure_url);
                     fs.unlinkSync(file.path);
 
                   case 12:
@@ -583,7 +583,7 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
           return regeneratorRuntime.awrap(uploader(file.path));
 
         case 12:
-          imageCover = _context13.sent.url;
+          imageCover = _context13.sent.secure_url;
           fs.unlinkSync(file.path);
           data = {
             sectionTitle: sectionTitle,
@@ -693,7 +693,7 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
           return regeneratorRuntime.awrap(uploader(file.path));
 
         case 13:
-          videoId = _context16.sent.url;
+          videoId = _context16.sent.secure_url;
           fs.unlinkSync(file.path);
           data = {
             lessonTitle: lessonTitle,
@@ -852,7 +852,7 @@ exports.updateLesson = catchAsync(function _callee12(req, res, next) {
           return regeneratorRuntime.awrap(uploader(file.path));
 
         case 21:
-          videoId = _context19.sent.url;
+          videoId = _context19.sent.secure_url;
           fs.unlinkSync(file.path);
           data = {
             lessonTitle: lessonTitle,

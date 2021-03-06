@@ -49,7 +49,7 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
     options.public_id = `${folder}/${nameVideos}`;
     const uploader = async path => await cloudinary.uploads(path, options);
     const newPath = await uploader(file.path);
-    urls.push(newPath.url);
+    urls.push(newPath.secure_url);
     fs.unlinkSync(file.path);
   }
   data.imageCover = urls[0];
@@ -123,7 +123,7 @@ exports.updateVideoImages = catchAsync(async (req, res, next) => {
     options.public_id = `${folder}/${nameVideos}`
     const uploader = async path => await cloudinary.uploads(path, options);
     const newPath = await uploader(file.path);
-    urls.push(newPath.url);
+    urls.push(newPath.secure_url);
     fs.unlinkSync(file.path);
   }
   data.imageCover = urls[0];
@@ -172,7 +172,7 @@ exports.postAddSection = catchAsync(async (req, res, next) => {
     public_id: `images/${nameVideos}`
   }
   const uploader = async path => await cloudinary.uploads(path, options)
-  const imageCover = (await uploader(file.path)).url
+  const imageCover = (await uploader(file.path)).secure_url
   fs.unlinkSync(file.path)
   const data = { sectionTitle, sectionDescription, imageCover, courseId: course._id }
   try {
@@ -204,7 +204,7 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
     public_id: `video/${nameVideos}`
   }
   const uploader = async path => await cloudinary.uploads(path, options)
-  const videoId = (await uploader(file.path)).url
+  const videoId = (await uploader(file.path)).secure_url
   fs.unlinkSync(file.path)
   const data = { lessonTitle, lessonDescription, videoId, sectionId }
   try {
@@ -244,7 +244,7 @@ exports.updateLesson = catchAsync(async (req, res, next) => {
       public_id: `video/${nameVideos}`
     }
     const uploader = async path => await cloudinary.uploads(path, options)
-    const videoId = (await uploader(file.path)).url
+    const videoId = (await uploader(file.path)).secure_url
     fs.unlinkSync(file.path)
     const data = { lessonTitle, lessonDescription, videoId, slug }
     try {
