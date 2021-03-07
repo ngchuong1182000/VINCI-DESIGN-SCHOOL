@@ -24,7 +24,7 @@ html(lang="en")
   body(style=`background-image: url(${course.imageCover})`)
     nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark
       .container-fluid.d-flex
-        a.navbar-brand.d-flex.flex-column(href='/index', style='width:8%')
+        a.navbar-brand.d-flex.flex-column(href='/', style='width:8%')
           img.justify-content-center(src=' /image/Logo Final-01.png', alt='', width='70%')
           span.text-light(style='font-size: 70%; font-weight: 700') VINCI DESIGN SCHOOL
         button.navbar-toggler.bg-light(type='button', data-bs-toggle='collapse', data-bs-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
@@ -100,26 +100,30 @@ html(lang="en")
       #nav-tabContent.tab-content.bg-light
         #nav-cmt.tab-pane.fade.show.active.p-4(role='tabpanel', aria-labelledby='nav-cmt-tab')
           .comment.px-5
-            .toast.show.mb-2(role='alert', aria-live='assertive', aria-atomic='true')
-              .toast-header
-                img.rounded.me-2(src='...', alt='...')
-                strong.me-auto Bootstrap
-                small 11 mins ago
-              .toast-body
-                | Hello, world! This is a toast message.
-            .toast.show.mb-2(role='alert', aria-live='assertive', aria-atomic='true')
-              .toast-header
-                img.rounded.me-2(src='...', alt='...')
-                strong.me-auto Bootstrap
-                small 11 mins ago
-              .toast-body
-                | Hello, world! This is a toast message.
+            if lesson.comment.length == 0
+              h4.text-center Bài Này Chưa Có Comment, Hãy Là Người Đầu Tiên Comment
+            each comment in lesson.comment
+              .toast.show.mb-2(role='alert', aria-live='assertive', aria-atomic='true')
+                .toast-header
+                  img.rounded.me-2(src= comment.userId.photo, height="50rem")
+                  strong.me-auto= comment.userId.username
+                  -
+                    let finalDate
+                    let date = new Date(currentLoadTime - comment.createdAt.getTime())
+                    let minutes = parseInt((date / (1000 * 60)) % 60)
+                    let hours = parseInt((date / (1000 * 60 * 60)) % 24)
+                    let days  = parseInt((date / (1000 * 60 * 60 *24)) % 24)
+                    finalDate = days + " day " + hours + " hours " + minutes + " minutes ago";
+                    if (days > 365){
+                      finalDate = "một năm trước"
+                    }
+                  small= finalDate
+                .toast-body= comment.comment
 
           form(action="", method="post") 
             .input-group.mb-3
               span#basic-addon3.input-group-text= user.username
               input.form-control(type='text', placeholder="Comment in here ~~",name="comment" )
-              input#videoId.form-control(type='text', placeholder="Comment in here ~~",name="video" style='display:none')
               button#button-addon2.btn.btn-outline-primary(type='submit') comment
 
 

@@ -38,5 +38,17 @@ lessonSchema.pre("save", function (next) {
   });
   next();
 });
+lessonSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "comment",
+    select: '-__v'
+  });
+  next();
+});
+lessonSchema.virtual("comment", {
+  ref: "comment",
+  foreignField: "lessonId",
+  localField: "_id"
+});
 var Lesson = mongoose.model('Lesson', lessonSchema);
 module.exports = Lesson;

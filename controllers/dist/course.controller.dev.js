@@ -4,6 +4,10 @@ var Course = require("../models/course.model");
 
 var Section = require("../models/section.model");
 
+var Comment = require("../models/comment.model");
+
+var User = require("../models/user.model");
+
 var catchAsync = require('../utils/catchAsync');
 
 var AppError = require('../utils/appError');
@@ -135,7 +139,7 @@ exports.getDetail = catchAsync(function _callee2(req, res, next) {
   });
 });
 exports.getStudy = catchAsync(function _callee3(req, res, next) {
-  var _req$params, slug, slug1, slug2, user, course, lesson;
+  var _req$params, slug, slug1, slug2, user, course, lesson, currentLoadTime;
 
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
@@ -157,16 +161,49 @@ exports.getStudy = catchAsync(function _callee3(req, res, next) {
 
         case 7:
           lesson = _context3.sent;
-          console.log(lesson);
+          currentLoadTime = new Date().getTime();
           res.render('clients/study-course', {
             course: course,
             user: user,
-            lesson: lesson
+            lesson: lesson,
+            currentLoadTime: currentLoadTime
           });
 
         case 10:
         case "end":
           return _context3.stop();
+      }
+    }
+  });
+});
+exports.postComment = catchAsync(function _callee4(req, res, next) {
+  var comment, _req$params2, slug, slug1, slug2, user, lesson, data;
+
+  return regeneratorRuntime.async(function _callee4$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          comment = req.body.comment;
+          _req$params2 = req.params, slug = _req$params2.slug, slug1 = _req$params2.slug1, slug2 = _req$params2.slug2;
+          user = req.user;
+          _context4.next = 5;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            slug: slug2
+          }));
+
+        case 5:
+          lesson = _context4.sent;
+          data = {
+            comment: comment,
+            lessonId: lesson._id,
+            userId: user._id
+          };
+          Comment.create(data);
+          res.redirect('back');
+
+        case 9:
+        case "end":
+          return _context4.stop();
       }
     }
   });

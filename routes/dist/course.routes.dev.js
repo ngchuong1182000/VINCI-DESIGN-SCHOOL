@@ -15,7 +15,8 @@ var _require = require('../controllers/course.controller'),
     updateCourse = _require.updateCourse,
     deleteCourse = _require.deleteCourse,
     getDetail = _require.getDetail,
-    getStudy = _require.getStudy;
+    getStudy = _require.getStudy,
+    postComment = _require.postComment;
 
 var _require2 = require("../controllers/auth.controller"),
     requireSignin = _require2.requireSignin,
@@ -25,5 +26,5 @@ var _require2 = require("../controllers/auth.controller"),
 router.route("/course-online").get(checkUser, getAllCourse).post(requireSignin, adminMiddleware, createCourse);
 router.route("/course/:slug").get(getCourse).patch(requireSignin, adminMiddleware, updateCourse)["delete"](requireSignin, adminMiddleware, deleteCourse);
 router.route("/:slug/course-detail").get(checkUser, getDetail);
-router.route('/:slug/section/:slug1/lesson/:slug2/study').get(checkUser, getStudy);
+router.route('/:slug/section/:slug1/lesson/:slug2/study').get(checkUser, getStudy).post(checkUser, postComment);
 module.exports = router;

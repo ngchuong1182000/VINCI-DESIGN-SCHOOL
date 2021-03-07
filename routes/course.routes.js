@@ -11,7 +11,8 @@ const {
   updateCourse,
   deleteCourse,
   getDetail,
-  getStudy
+  getStudy,
+  postComment
 } = require('../controllers/course.controller');
 const {
   requireSignin,
@@ -46,6 +47,7 @@ router
 
 router.route('/:slug/section/:slug1/lesson/:slug2/study')
   .get(checkUser, getStudy)
+  .post(checkUser, postComment)
 
 
 module.exports = router;

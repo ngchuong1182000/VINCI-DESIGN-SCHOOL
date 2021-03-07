@@ -19,7 +19,7 @@ const lessonSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     required: [true, "a lesson should be in 1 section"],
     ref: "Section"
-  },
+  }
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -29,6 +29,18 @@ const lessonSchema = mongoose.Schema({
 lessonSchema.pre("save", function (next) {
   this.slug = slugify(this.lessonTitle, { lower: true });
   next();
+});
+lessonSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "comment",
+    select: '-__v'
+  });
+  next();
+})
+lessonSchema.virtual("comment", {
+  ref: "comment",
+  foreignField: "lessonId",
+  localField: "_id"
 });
 
 const Lesson = mongoose.model('Lesson', lessonSchema)

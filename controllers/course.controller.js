@@ -1,5 +1,7 @@
 const Course = require("../models/course.model");
 const Section = require("../models/section.model");
+const Comment = require("../models/comment.model");
+const User = require("../models/user.model");
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const factory = require("./handleFactory");
@@ -80,6 +82,23 @@ exports.getStudy = catchAsync(async (req, res, next) => {
   const { user } = req;
   const course = await Course.findOne({ slug });
   const lesson = await Lesson.findOne({ slug: slug2 });
-  console.log(lesson);
-  res.render('clients/study-course', { course, user, lesson });
+  const currentLoadTime = new Date().getTime()
+  res.render('clients/study-course', { course, user, lesson, currentLoadTime });
+})
+
+exports.postComment = catchAsync(async (req, res, next) => {
+  const { comment } = req.body;
+  const { slug, slug1, slug2 } = req.params;
+  const { user } = req;
+  const lesson = await Lesson.findOne({ slug: slug2 });
+
+  const data = {
+    comment,
+    lessonId: lesson._id,
+    userId: user._id
+  }
+
+  Comment.create(data)
+  res.redirect('back')
+
 })
