@@ -43,7 +43,7 @@ var createSendToken = catchAsync(function _callee(user, res) {
           return _context.abrupt("return");
 
         case 8:
-          res.redirect('/index');
+          res.redirect('/');
 
         case 9:
         case "end":

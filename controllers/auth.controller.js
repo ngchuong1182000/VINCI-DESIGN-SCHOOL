@@ -23,7 +23,7 @@ const createSendToken = catchAsync(async (user, res) => {
     res.redirect('/admin/index');
     return;
   }
-  res.redirect('/index');
+  res.redirect('/');
 });
 
 exports.getSignup = function (req, res, next) {
