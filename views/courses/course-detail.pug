@@ -50,7 +50,7 @@ block content
       span.course__name= course.courseName
       .player__container.course__preview__video
         div(style='width: 100%; height: auto;')
-          iframe(width='560', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+          video#video.cld-video-player.cld-fluid(controls, loop, autoplay, data-default= course.demoVideoId)
       .course__title__text Giáo trình
       .course__slide
         i.far.fa-arrow-alt-circle-down.fa-2x(style='color: #fff;')

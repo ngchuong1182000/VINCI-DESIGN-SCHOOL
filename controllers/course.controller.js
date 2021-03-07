@@ -80,6 +80,9 @@ exports.getDetail = catchAsync(async (req, res, next) => {
 exports.getStudy = catchAsync(async (req, res, next) => {
   const { slug, slug1, slug2 } = req.params;
   const { user } = req;
+  if (!user) {
+    res.redirect('/auth/login')
+  }
   const course = await Course.findOne({ slug });
   const lesson = await Lesson.findOne({ slug: slug2 });
   const currentLoadTime = new Date().getTime()

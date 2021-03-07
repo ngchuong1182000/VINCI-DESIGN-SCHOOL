@@ -147,19 +147,24 @@ exports.getStudy = catchAsync(function _callee3(req, res, next) {
         case 0:
           _req$params = req.params, slug = _req$params.slug, slug1 = _req$params.slug1, slug2 = _req$params.slug2;
           user = req.user;
-          _context3.next = 4;
+
+          if (!user) {
+            res.redirect('/auth/login');
+          }
+
+          _context3.next = 5;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: slug
           }));
 
-        case 4:
+        case 5:
           course = _context3.sent;
-          _context3.next = 7;
+          _context3.next = 8;
           return regeneratorRuntime.awrap(Lesson.findOne({
             slug: slug2
           }));
 
-        case 7:
+        case 8:
           lesson = _context3.sent;
           currentLoadTime = new Date().getTime();
           res.render('clients/study-course', {
@@ -169,7 +174,7 @@ exports.getStudy = catchAsync(function _callee3(req, res, next) {
             currentLoadTime: currentLoadTime
           });
 
-        case 10:
+        case 11:
         case "end":
           return _context3.stop();
       }
