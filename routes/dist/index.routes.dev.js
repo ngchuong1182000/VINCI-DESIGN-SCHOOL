@@ -11,8 +11,7 @@ var _require2 = require('../controllers/index.controller'),
     getHomePage = _require2.getHomePage,
     getHomePage1 = _require2.getHomePage1;
 
-router.get('/', getHomePage);
-router.get('/index', checkUser, getHomePage1);
+router.get('/', checkUser, getHomePage);
 router.all("*", function (req, res, next) {
   res.render('err/Error404', {
     code: 404

@@ -6,11 +6,7 @@ var Course = require("../models/course.model");
 
 var jwt = require('jsonwebtoken');
 
-exports.getHomePage = function (req, res, next) {
-  res.redirect('/index');
-};
-
-exports.getHomePage1 = catchAsync(function _callee(req, res, next) {
+exports.getHomePage = catchAsync(function _callee(req, res, next) {
   var user, course;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {

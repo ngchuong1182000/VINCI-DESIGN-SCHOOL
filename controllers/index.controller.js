@@ -2,11 +2,7 @@ const catchAsync = require('../utils/catchAsync');
 const Course = require("../models/course.model");
 const jwt = require('jsonwebtoken');
 
-exports.getHomePage = function (req, res, next) {
-  res.redirect('/index');
-}
-
-exports.getHomePage1 = catchAsync(async (req, res, next) => {
+exports.getHomePage = catchAsync(async (req, res, next) => {
   const { user } = req;
   const course = await Course.find({});
   if (user) {
@@ -20,4 +16,4 @@ exports.getHomePage1 = catchAsync(async (req, res, next) => {
     title: "Home Page",
     course
   });
-});
+})
