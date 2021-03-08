@@ -134,7 +134,7 @@ module.exports.signin = catchAsync(async (req, res, next) => {
 exports.checkUser = catchAsync(async (req, res, next) => {
   const { token } = req.signedCookies;
   if (!token) {
-    res.redirect('/auth/login');
+    next()
     return;
   }
   const { _id } = jwt.verify(token, process.env.JWT_SECRET);
