@@ -1,0 +1,25 @@
+extends ../layouts/common
+block content
+  .my-course-top
+  .container-fluid
+    ul#myTab.nav.nav-tabs(role='tablist')
+      li.nav-item(role='presentation')
+        button#home-tab.nav-link.active(data-bs-toggle='tab', data-bs-target='#home', type='button', role='tab', aria-controls='home', aria-selected='true') thay avatar
+      li.nav-item(role='presentation')
+        button#profile-tab.nav-link(data-bs-toggle='tab', data-bs-target='#profile', type='button', role='tab', aria-controls='profile', aria-selected='false') đổi mật khẩu
+      li.nav-item(role='presentation')
+        button#contact-tab.nav-link(data-bs-toggle='tab', data-bs-target='#contact', type='button', role='tab', aria-controls='contact', aria-selected='false') Đỗi thông tin cá nhân
+
+    #myTabContent.tab-content
+      #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='home-tab') 
+        img.rounded.mx-auto.d-block(src= user.photo, alt='...')
+        h4.text-center= user.username
+        .container
+          form(action= `/user/${user._id}/avatar/patch`, method="post", enctype="multipart/form-data") 
+            .input-group.p-5
+              input#inputGroupFile04.form-control(type='file', aria-describedby='inputGroupFileAddon04', name="avatar", aria-label='Upload')
+              button#inputGroupFileAddon04.btn.btn-outline-secondary(type='submit') SAVE
+        if message
+          h4.text-center= message
+      #profile.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab') ...
+      #contact.tab-pane.fade(role='tabpanel', aria-labelledby='contact-tab') ...

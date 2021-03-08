@@ -284,7 +284,7 @@ exports.checkUser = catchAsync(function _callee5(req, res, next) {
             break;
           }
 
-          next();
+          res.redirect('/auth/login');
           return _context5.abrupt("return");
 
         case 4:
