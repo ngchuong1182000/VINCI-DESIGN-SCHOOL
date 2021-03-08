@@ -374,3 +374,151 @@ module.exports.adminMiddleware = function (req, res, next) {
     next();
   });
 };
+
+exports.forgotPassword = catchAsync(function _callee6(req, res, next) {
+  return regeneratorRuntime.async(function _callee6$(_context6) {
+    while (1) {
+      switch (_context6.prev = _context6.next) {
+        case 0:
+          res.render("auth/forgot-password");
+
+        case 1:
+        case "end":
+          return _context6.stop();
+      }
+    }
+  });
+});
+exports.postForgotPassword = catchAsync(function _callee7(req, res, next) {
+  var email, user, msg;
+  return regeneratorRuntime.async(function _callee7$(_context7) {
+    while (1) {
+      switch (_context7.prev = _context7.next) {
+        case 0:
+          email = req.body.email;
+
+          if (email) {
+            _context7.next = 4;
+            break;
+          }
+
+          res.render("auth/forgot-password", {
+            title: "Forgot Password",
+            message: "Bạn Cần Nhập Email !!!"
+          });
+          return _context7.abrupt("return");
+
+        case 4:
+          _context7.next = 6;
+          return regeneratorRuntime.awrap(User.findOne({
+            email: email
+          }));
+
+        case 6:
+          user = _context7.sent;
+
+          if (user) {
+            _context7.next = 10;
+            break;
+          }
+
+          res.render("auth/forgot-password", {
+            title: "Forgot Password",
+            message: "Can't found this email !!!",
+            email: email
+          });
+          return _context7.abrupt("return");
+
+        case 10:
+          user.createCodeActive();
+          _context7.next = 13;
+          return regeneratorRuntime.awrap(user.save());
+
+        case 13:
+          user = _context7.sent;
+          msg = {
+            to: email,
+            from: 'chunguyenchuong2014bg@gmail.com',
+            // Use the email address or domain you verified above
+            subject: "Xác Minh Tài Khoản",
+            text: "C\u1EA3m \u01A1n b\u1EA1n \u0111\xE3 tin t\u01B0\u1EDFng v\xE0 s\u1EED d\u1EE5ng d\u1ECBch v\u1EE5 c\u1EE7a VINCI DESIGN SCHOOL, vui l\xF2ng nh\u1EADp ".concat(user.codeActive, " v\xE0o trang b\xEAn d\u01B0\u1EDBi v\xE0 \u0111i\u1EC1n m\u1EADt kh\u1EA9u m\u1EDBi"),
+            html: "<div>C\u1EA3m \u01A1n b\u1EA1n \u0111\xE3 tin t\u01B0\u1EDFng v\xE0 s\u1EED d\u1EE5ng d\u1ECBch v\u1EE5 c\u1EE7a VINCI DESIGN SCHOOL, vui l\xF2ng nh\u1EADp <span style=\"font-weight: 700;\"> ".concat(user.codeActive, " </span> v\xE0o trang b\xEAn d\u01B0\u1EDBi v\xE0 \u0111i\u1EC1n m\u1EADt kh\u1EA9u m\u1EDBi.</div><a href=\"http://localhost:8000/auth/forgot-password/").concat(email, "\">Click Here !!</a>")
+          };
+          sgMail.send(msg).then(function () {}, function (error) {
+            console.error(error);
+
+            if (error.response) {
+              console.error(error.response.body);
+            }
+          });
+          res.redirect("/auth/forgot-password/".concat(user.email));
+
+        case 17:
+        case "end":
+          return _context7.stop();
+      }
+    }
+  });
+});
+exports.getForgotPasswordSuccess = catchAsync(function _callee8(req, res, next) {
+  return regeneratorRuntime.async(function _callee8$(_context8) {
+    while (1) {
+      switch (_context8.prev = _context8.next) {
+        case 0:
+          res.render('auth/forgot-password-success', {
+            title: 'Enter Code And New Password'
+          });
+
+        case 1:
+        case "end":
+          return _context8.stop();
+      }
+    }
+  });
+});
+exports.postForgotPasswordSuccess = catchAsync(function _callee9(req, res, next) {
+  var email, _req$body3, code, password, passwordAgain, user;
+
+  return regeneratorRuntime.async(function _callee9$(_context9) {
+    while (1) {
+      switch (_context9.prev = _context9.next) {
+        case 0:
+          email = req.params.email;
+          _req$body3 = req.body, code = _req$body3.code, password = _req$body3.password, passwordAgain = _req$body3.passwordAgain;
+          _context9.next = 4;
+          return regeneratorRuntime.awrap(User.findOne({
+            email: email
+          }));
+
+        case 4:
+          user = _context9.sent;
+
+          if (!(password !== passwordAgain || code !== user.codeActive)) {
+            _context9.next = 8;
+            break;
+          }
+
+          res.render('auth/forgot-password-success', {
+            title: 'Enter Code And New Password',
+            message: "Mã xác nhận không đúng hoặc 2 ô mật khẩu không giống nhau"
+          });
+          return _context9.abrupt("return");
+
+        case 8:
+          user.password = password;
+          user.codeActive = "";
+          _context9.next = 12;
+          return regeneratorRuntime.awrap(user.save());
+
+        case 12:
+          res.render('auth/login', {
+            message: "Thay đổi mật khẩu thành công !!!"
+          });
+
+        case 13:
+        case "end":
+          return _context9.stop();
+      }
+    }
+  });
+});

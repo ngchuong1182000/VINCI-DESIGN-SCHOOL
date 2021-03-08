@@ -198,4 +198,67 @@ module.exports.adminMiddleware = (req, res, next) => {
   });
 };
 
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  res.render("auth/forgot-password")
+})
 
+exports.postForgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    res.render("auth/forgot-password", {
+      title: "Forgot Password",
+      message: "Bạn Cần Nhập Email !!!"
+    })
+    return;
+  }
+  let user = await User.findOne({ email });
+  if (!user) {
+    res.render("auth/forgot-password", {
+      title: "Forgot Password",
+      message: "Can't found this email !!!",
+      email
+    })
+    return;
+  }
+  user.createCodeActive()
+  user = await user.save();
+  const msg = {
+    to: email,
+    from: 'chunguyenchuong2014bg@gmail.com', // Use the email address or domain you verified above
+    subject: "Xác Minh Tài Khoản",
+    text: `Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của VINCI DESIGN SCHOOL, vui lòng nhập ${user.codeActive} vào trang bên dưới và điền mật khẩu mới`,
+    html: `<div>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của VINCI DESIGN SCHOOL, vui lòng nhập <span style="font-weight: 700;"> ${user.codeActive} </span> vào trang bên dưới và điền mật khẩu mới.</div><a href="http://localhost:8000/auth/forgot-password/${email}">Click Here !!</a>`
+  };
+  sgMail
+    .send(msg)
+    .then(() => { }, error => {
+      console.error(error);
+      if (error.response) {
+        console.error(error.response.body)
+      }
+    });
+
+  res.redirect(`/auth/forgot-password/${user.email}`);
+})
+
+exports.getForgotPasswordSuccess = catchAsync(async (req, res, next) => {
+  res.render('auth/forgot-password-success', {
+    title: 'Enter Code And New Password',
+  })
+})
+exports.postForgotPasswordSuccess = catchAsync(async (req, res, next) => {
+  const { email } = req.params;
+  const { code, password, passwordAgain } = req.body;
+  const user = await User.findOne({ email })
+  if (password !== passwordAgain || code !== user.codeActive) {
+    res.render('auth/forgot-password-success', {
+      title: 'Enter Code And New Password',
+      message: "Mã xác nhận không đúng hoặc 2 ô mật khẩu không giống nhau"
+    })
+    return;
+  }
+  user.password = password
+  user.codeActive = ""
+  await user.save();
+  res.render('auth/login', { message: "Thay đổi mật khẩu thành công !!!" });
+})

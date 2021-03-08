@@ -98,6 +98,9 @@ userSchema.methods = {
   },
   makeSalt: function makeSalt() {
     return Math.round(new Date().valueOf() * Math.random()) + "";
+  },
+  createCodeActive: function createCodeActive() {
+    return this.codeActive = Math.floor(Math.random() * (99999 - 10000) + 10000);
   }
 };
 var User = mongoose.model("User", userSchema);

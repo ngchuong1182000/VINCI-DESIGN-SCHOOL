@@ -100,9 +100,11 @@ userSchema.methods = {
       return "";
     }
   },
-
   makeSalt: function () {
     return Math.round(new Date().valueOf() * Math.random()) + "";
+  },
+  createCodeActive: function () {
+    return this.codeActive = Math.floor(Math.random() * (99999 - 10000) + 10000);
   },
 };
 

@@ -7,7 +7,11 @@ const {
   getSignup,
   getLogin,
   getSignUpSuccess,
-  postSignupSuccess
+  postSignupSuccess,
+  forgotPassword,
+  postForgotPassword,
+  getForgotPasswordSuccess,
+  postForgotPasswordSuccess
 } = require("../controllers/auth.controller");
 
 
@@ -28,5 +32,12 @@ router
 
 router.get("/signout", signout);
 
+router.route("/forgot-password/:email")
+  .get(getForgotPasswordSuccess)
+  .post(postForgotPasswordSuccess)
+
+router.route("/forgot-password")
+  .get(forgotPassword)
+  .post(postForgotPassword);
 
 module.exports = router;
