@@ -1419,6 +1419,13 @@ input[type=checkbox] {
   border-top: 1px solid #000000
 }
 
+@media screen and (max-width: 992px) {
+  body {
+   
+  }
+}
+
+
 /* My Course Page */
 
 .my-course-top {
