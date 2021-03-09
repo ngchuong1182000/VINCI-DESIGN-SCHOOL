@@ -38,7 +38,6 @@ const app = express();
 // database
 db.Connect();
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCT_URL : process.env.CLIENT_URL
-
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -52,14 +51,15 @@ passport.use(new FacebookStrategy({
       photo: data.picture.data.url,
       username: data.name
     }
+    let newUser;
     const user = await User.findOne({ email: data.email });
     if (!user) {
-      const newUser = await User.create({ email: data.email, ...userData })
-      return cb(null, newUser)
+      newUser = await User.create({ email: data.email, ...userData })
     } else {
-      const newUser = await User.findOneAndUpdate({ email: data.email }, userData);
-      return cb(null, newUser)
+      await User.findOneAndUpdate({ email: data.email }, userData);
+      newUser = await User.findOne({ email: data.email })
     }
+    return cb(null, newUser)
   }
 ));
 
@@ -106,19 +106,6 @@ passport.deserializeUser(function (id, done) {
   done(null, id)
 });
 
-// facebook login routes
-// app.use('/auth/facebook',
-//   passport.authenticate('facebook', { scope: 'email' })
-// );
-
-// app.use('/auth/facebook/secrets',
-//   passport.authenticate('facebook', {
-//     failureRedirect: '/login'
-//   }), function (req, res, next) {
-//     console.log(req.user);
-//     res.redirect('/');
-//   }
-// );
 
 // routes middleware 
 app.use("/auth", authRoutes);

@@ -76,8 +76,7 @@ passport.use(new FacebookStrategy({
   enableProof: true,
   profileFields: ['id', 'displayName', 'photos', 'email']
 }, function _callee(accessToken, refreshToken, profile, cb) {
-  var data, userData, user, newUser, _newUser;
-
+  var data, userData, newUser, user;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -96,7 +95,7 @@ passport.use(new FacebookStrategy({
           user = _context.sent;
 
           if (user) {
-            _context.next = 12;
+            _context.next = 11;
             break;
           }
 
@@ -107,19 +106,28 @@ passport.use(new FacebookStrategy({
 
         case 8:
           newUser = _context.sent;
-          return _context.abrupt("return", cb(null, newUser));
+          _context.next = 16;
+          break;
 
-        case 12:
-          _context.next = 14;
+        case 11:
+          _context.next = 13;
           return regeneratorRuntime.awrap(User.findOneAndUpdate({
             email: data.email
           }, userData));
 
-        case 14:
-          _newUser = _context.sent;
-          return _context.abrupt("return", cb(null, _newUser));
+        case 13:
+          _context.next = 15;
+          return regeneratorRuntime.awrap(User.findOne({
+            email: data.email
+          }));
+
+        case 15:
+          newUser = _context.sent;
 
         case 16:
+          return _context.abrupt("return", cb(null, newUser));
+
+        case 17:
         case "end":
           return _context.stop();
       }
