@@ -171,19 +171,7 @@ passport.serializeUser(function (user, done) {
 });
 passport.deserializeUser(function (id, done) {
   done(null, id);
-}); // facebook login routes
-// app.use('/auth/facebook',
-//   passport.authenticate('facebook', { scope: 'email' })
-// );
-// app.use('/auth/facebook/secrets',
-//   passport.authenticate('facebook', {
-//     failureRedirect: '/login'
-//   }), function (req, res, next) {
-//     console.log(req.user);
-//     res.redirect('/');
-//   }
-// );
-// routes middleware 
+}); // routes middleware 
 
 app.use("/auth", authRoutes);
 app.use('/course', courseRoutes);
