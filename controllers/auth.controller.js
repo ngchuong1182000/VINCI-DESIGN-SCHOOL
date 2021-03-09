@@ -107,7 +107,7 @@ module.exports.signin = catchAsync(async (req, res, next) => {
   if (!user.isActive) {
     res.redirect(`/auth/signup-success/${user.email}`);
   }
-
+  req.user = user;
   createSendToken(user, res);
 });
 
@@ -120,6 +120,7 @@ exports.checkUser = catchAsync(async (req, res, next) => {
   }
   const { _id } = jwt.verify(token, process.env.JWT_SECRET);
   const user = await User.findById({ _id });
+  req.user = user
   next();
 });
 

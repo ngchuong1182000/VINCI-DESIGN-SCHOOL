@@ -4,6 +4,7 @@ const Course = require("../models/course.model");
 exports.getHomePage = catchAsync(async (req, res, next) => {
   const { user } = req;
   const course = await Course.find({});
+  console.log(user);
   if (user) {
     res.render('index', {
       title: "VINCI DESIGN SCHOOL",

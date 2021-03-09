@@ -186,7 +186,7 @@ app.use("/order", orderRoutes);
 app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter);
 app.use('/user', checkUser, userRouter);
-app.use("/", indexRoutes);
+app.use("/", checkUser, indexRoutes);
 app.use(globalErrorHandler);
 app.listen(port, function () {
   console.log("Server is running on port : http://localhost:".concat(port));

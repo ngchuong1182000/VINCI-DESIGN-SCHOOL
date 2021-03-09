@@ -16,9 +16,10 @@ exports.getHomePage = catchAsync(function _callee(req, res, next) {
 
         case 3:
           course = _context.sent;
+          console.log(user);
 
           if (!user) {
-            _context.next = 7;
+            _context.next = 8;
             break;
           }
 
@@ -29,13 +30,13 @@ exports.getHomePage = catchAsync(function _callee(req, res, next) {
           });
           return _context.abrupt("return");
 
-        case 7:
+        case 8:
           res.render('index', {
             title: "Home Page",
             course: course
           });
 
-        case 8:
+        case 9:
         case "end":
           return _context.stop();
       }

@@ -221,9 +221,10 @@ module.exports.signin = catchAsync(function _callee3(req, res, next) {
             res.redirect("/auth/signup-success/".concat(user.email));
           }
 
+          req.user = user;
           createSendToken(user, res);
 
-        case 16:
+        case 17:
         case "end":
           return _context3.stop();
       }
@@ -256,9 +257,10 @@ exports.checkUser = catchAsync(function _callee4(req, res, next) {
 
         case 7:
           user = _context4.sent;
+          req.user = user;
           next();
 
-        case 9:
+        case 10:
         case "end":
           return _context4.stop();
       }
