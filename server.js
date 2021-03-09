@@ -37,11 +37,12 @@ const app = express();
 
 // database
 db.Connect();
+const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCT_URL : process.env.CLIENT_URL
 
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:8000/auth/facebook/secrets",
+  callbackURL: `${url}/auth/facebook/secrets`,
   enableProof: true,
   profileFields: ['id', 'displayName', 'photos', 'email']
 },
