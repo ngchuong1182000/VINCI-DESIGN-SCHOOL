@@ -1,12 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
 const sgMail = require('@sendgrid/mail');
 const port = process.env.PORT || 8000;
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const expressSession = require('express-session')
+
+const User = require("./models/user.model")
+const { createSendToken } = require('./helpers/createSendToken')
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -25,7 +30,7 @@ const orderRoutes = require("./routes/order.routes");
 const indexRoutes = require("./routes/index.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const adminRouter = require("./routes/admin/index.admin.routes");
-const userRouter = require("./routes/clients/user.routes")
+const userRouter = require("./routes/clients/user.routes");
 
 // app
 const app = express();
@@ -33,14 +38,46 @@ const app = express();
 // database
 db.Connect();
 
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: "http://localhost:8000/auth/facebook/secrets",
+  enableProof: true,
+  profileFields: ['id', 'displayName', 'photos', 'email']
+},
+  async function (accessToken, refreshToken, profile, cb) {
+    let data = profile._json;
+    let userData = {
+      photo: data.picture.data.url,
+      username: data.name
+    }
+    const user = await User.findOne({ email: data.email });
+    if (!user) {
+      const newUser = await User.create({ email: data.email, ...userData })
+      return cb(null, newUser)
+    } else {
+      const newUser = await User.findOneAndUpdate({ email: data.email }, userData);
+      return cb(null, newUser)
+    }
+  }
+));
+
 // middleware
 app.use(morgan("dev"));
+app.set('trust proxy', 1)
 app.set("view engine", "pug");
 app.set("views", "./views");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("secret"));
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(expressSession({
+  secret: process.env.SECRET_SESSION,
+  resave: false,
+  saveUninitialized: true
+}))
+app.use(passport.initialize());
+app.use(passport.session());
 
 // cors
 if (process.env.NODE_ENV === "development") {
@@ -59,6 +96,29 @@ app.use("/api", sectionRoutes);
 app.use("/api", lessonRoutes);
 app.use("/api", orderRoutes);
 
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (id, done) {
+  done(null, id)
+});
+
+// facebook login routes
+// app.use('/auth/facebook',
+//   passport.authenticate('facebook', { scope: 'email' })
+// );
+
+// app.use('/auth/facebook/secrets',
+//   passport.authenticate('facebook', {
+//     failureRedirect: '/login'
+//   }), function (req, res, next) {
+//     console.log(req.user);
+//     res.redirect('/');
+//   }
+// );
+
 // routes middleware 
 app.use("/auth", authRoutes);
 app.use('/course', courseRoutes)
@@ -70,6 +130,7 @@ app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter)
 app.use('/user', checkUser, userRouter)
 app.use("/", indexRoutes);
+
 
 app.use(globalErrorHandler);
 

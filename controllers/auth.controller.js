@@ -3,28 +3,8 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const catchAsync = require('../utils/catchAsync');
 const sgMail = require('@sendgrid/mail');
+const { createSendToken } = require('../helpers/createSendToken')
 
-const signToken = _id => {
-  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-};
-
-const createSendToken = catchAsync(async (user, res) => {
-  const token = signToken(user._id);
-  cookieOptions = {
-    signed: true,
-    httpOnly: true,
-  }
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-  res.cookie("token", token, cookieOptions);
-  user.password = undefined;
-  // là admin thì chuyển vào trang admin
-  // tạm thời chưa tạo token --- sửa sau khi hoàn thành giao diện
-  if (user.role === 1) {
-    res.redirect('/admin/index');
-    return;
-  }
-  res.redirect('/');
-});
 
 exports.getSignup = function (req, res, next) {
   res.render('auth/signup');
@@ -131,6 +111,7 @@ module.exports.signin = catchAsync(async (req, res, next) => {
   createSendToken(user, res);
 });
 
+
 exports.checkUser = catchAsync(async (req, res, next) => {
   const { token } = req.signedCookies;
   if (!token) {
@@ -139,7 +120,6 @@ exports.checkUser = catchAsync(async (req, res, next) => {
   }
   const { _id } = jwt.verify(token, process.env.JWT_SECRET);
   const user = await User.findById({ _id });
-  req.user = user;
   next();
 });
 

@@ -59,7 +59,8 @@ var userSchema = new mongoose.Schema({
     type: Boolean,
     "default": false
   },
-  codeActive: String
+  codeActive: String,
+  facebookId: String
 }, {
   timestamps: true,
   toJSON: {

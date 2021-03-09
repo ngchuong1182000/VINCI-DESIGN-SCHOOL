@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
+const passport = require('passport');
+
 const {
   signup,
   signin,
@@ -39,5 +42,19 @@ router.route("/forgot-password/:email")
 router.route("/forgot-password")
   .get(forgotPassword)
   .post(postForgotPassword);
+
+// facebook login routes
+router.get('/facebook',
+  passport.authenticate('facebook', { scope: 'email' })
+);
+
+router.get('/facebook/secrets',
+  passport.authenticate('facebook', {
+    failureRedirect: '/login'
+  }), function (req, res, next) {
+    res.redirect('/')
+  }
+)
+
 
 module.exports = router;

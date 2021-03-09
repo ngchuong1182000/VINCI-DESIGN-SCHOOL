@@ -4,8 +4,6 @@ var catchAsync = require('../utils/catchAsync');
 
 var Course = require("../models/course.model");
 
-var jwt = require('jsonwebtoken');
-
 exports.getHomePage = catchAsync(function _callee(req, res, next) {
   var user, course;
   return regeneratorRuntime.async(function _callee$(_context) {

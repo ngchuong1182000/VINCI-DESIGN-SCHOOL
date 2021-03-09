@@ -10,114 +10,74 @@ var catchAsync = require('../utils/catchAsync');
 
 var sgMail = require('@sendgrid/mail');
 
-var signToken = function signToken(_id) {
-  return jwt.sign({
-    _id: _id
-  }, process.env.JWT_SECRET, {
-    expiresIn: "1d"
-  });
-};
-
-var createSendToken = catchAsync(function _callee(user, res) {
-  var token;
-  return regeneratorRuntime.async(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          token = signToken(user._id);
-          cookieOptions = {
-            signed: true,
-            httpOnly: true
-          };
-          if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-          res.cookie("token", token, cookieOptions);
-          user.password = undefined; // là admin thì chuyển vào trang admin
-          // tạm thời chưa tạo token --- sửa sau khi hoàn thành giao diện
-
-          if (!(user.role === 1)) {
-            _context.next = 8;
-            break;
-          }
-
-          res.redirect('/admin/index');
-          return _context.abrupt("return");
-
-        case 8:
-          res.redirect('/');
-
-        case 9:
-        case "end":
-          return _context.stop();
-      }
-    }
-  });
-});
+var _require = require('../helpers/createSendToken'),
+    createSendToken = _require.createSendToken;
 
 exports.getSignup = function (req, res, next) {
   res.render('auth/signup');
 };
 
-module.exports.signup = catchAsync(function _callee2(req, res, next) {
+module.exports.signup = catchAsync(function _callee(req, res, next) {
   var _req$body, username, email, password, ConfirmPassword, user, userOther, userNew, emailNew, msg;
 
-  return regeneratorRuntime.async(function _callee2$(_context2) {
+  return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context.prev = _context.next) {
         case 0:
           _req$body = req.body, username = _req$body.username, email = _req$body.email, password = _req$body.password, ConfirmPassword = _req$body.ConfirmPassword;
 
           if (!(password !== ConfirmPassword)) {
-            _context2.next = 4;
+            _context.next = 4;
             break;
           }
 
           res.render('auth/signup', {
             message: "Password and password confirm is not correct !"
           });
-          return _context2.abrupt("return");
+          return _context.abrupt("return");
 
         case 4:
-          _context2.next = 6;
+          _context.next = 6;
           return regeneratorRuntime.awrap(User.findOne({
             email: email
           }));
 
         case 6:
-          user = _context2.sent;
-          _context2.next = 9;
+          user = _context.sent;
+          _context.next = 9;
           return regeneratorRuntime.awrap(User.findOne({
             username: username
           }));
 
         case 9:
-          userOther = _context2.sent;
+          userOther = _context.sent;
 
           if (!user) {
-            _context2.next = 13;
+            _context.next = 13;
             break;
           }
 
           res.render('auth/signup', {
             message: "Email is taken !"
           });
-          return _context2.abrupt("return");
+          return _context.abrupt("return");
 
         case 13:
           ;
 
           if (!userOther) {
-            _context2.next = 17;
+            _context.next = 17;
             break;
           }
 
           res.render('auth/signup', {
             message: "User Name is taken !"
           });
-          return _context2.abrupt("return");
+          return _context.abrupt("return");
 
         case 17:
           ;
-          _context2.next = 20;
+          _context.next = 20;
           return regeneratorRuntime.awrap(User.create({
             username: username,
             email: email,
@@ -126,7 +86,7 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
           }));
 
         case 20:
-          userNew = _context2.sent;
+          userNew = _context.sent;
           emailNew = userNew.email;
           msg = {
             to: emailNew,
@@ -147,7 +107,7 @@ module.exports.signup = catchAsync(function _callee2(req, res, next) {
 
         case 25:
         case "end":
-          return _context2.stop();
+          return _context.stop();
       }
     }
   });
@@ -159,21 +119,21 @@ exports.getSignUpSuccess = function (req, res, next) {
   });
 };
 
-exports.postSignupSuccess = catchAsync(function _callee3(req, res, next) {
+exports.postSignupSuccess = catchAsync(function _callee2(req, res, next) {
   var slug, code, user;
-  return regeneratorRuntime.async(function _callee3$(_context3) {
+  return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
-      switch (_context3.prev = _context3.next) {
+      switch (_context2.prev = _context2.next) {
         case 0:
           slug = req.params.slug;
           code = req.body.code;
-          _context3.next = 4;
+          _context2.next = 4;
           return regeneratorRuntime.awrap(User.findOne({
             email: slug
           }));
 
         case 4:
-          user = _context3.sent;
+          user = _context2.sent;
 
           if (user.codeActive != code) {
             res.render(res.render("auth/signup-success", {
@@ -184,7 +144,7 @@ exports.postSignupSuccess = catchAsync(function _callee3(req, res, next) {
 
           user.isActive = true;
           user.codeActive = "";
-          _context3.next = 10;
+          _context2.next = 10;
           return regeneratorRuntime.awrap(User.findByIdAndUpdate({
             _id: user._id
           }, user));
@@ -194,7 +154,7 @@ exports.postSignupSuccess = catchAsync(function _callee3(req, res, next) {
 
         case 11:
         case "end":
-          return _context3.stop();
+          return _context2.stop();
       }
     }
   });
@@ -204,49 +164,49 @@ exports.getLogin = function (req, res, next) {
   res.render('auth/login');
 };
 
-module.exports.signin = catchAsync(function _callee4(req, res, next) {
+module.exports.signin = catchAsync(function _callee3(req, res, next) {
   var _req$body2, email, password, user;
 
-  return regeneratorRuntime.async(function _callee4$(_context4) {
+  return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
           // check if user exists
           _req$body2 = req.body, email = _req$body2.email, password = _req$body2.password;
 
           if (!(!email || !password)) {
-            _context4.next = 4;
+            _context3.next = 4;
             break;
           }
 
           res.render('auth/login', {
             message: "email or password can't empty !!!"
           });
-          return _context4.abrupt("return");
+          return _context3.abrupt("return");
 
         case 4:
           ;
-          _context4.next = 7;
+          _context3.next = 7;
           return regeneratorRuntime.awrap(User.findOne({
             email: email
           }));
 
         case 7:
-          user = _context4.sent;
+          user = _context3.sent;
 
           if (user) {
-            _context4.next = 11;
+            _context3.next = 11;
             break;
           }
 
           res.render('auth/login', {
             message: "Can Not Find This Email !!! "
           });
-          return _context4.abrupt("return");
+          return _context3.abrupt("return");
 
         case 11:
           if (user.authenticate(password)) {
-            _context4.next = 14;
+            _context3.next = 14;
             break;
           }
 
@@ -254,7 +214,7 @@ module.exports.signin = catchAsync(function _callee4(req, res, next) {
             message: "Password is not correct",
             email: email
           });
-          return _context4.abrupt("return");
+          return _context3.abrupt("return");
 
         case 14:
           if (!user.isActive) {
@@ -265,43 +225,42 @@ module.exports.signin = catchAsync(function _callee4(req, res, next) {
 
         case 16:
         case "end":
-          return _context4.stop();
+          return _context3.stop();
       }
     }
   });
 });
-exports.checkUser = catchAsync(function _callee5(req, res, next) {
+exports.checkUser = catchAsync(function _callee4(req, res, next) {
   var token, _jwt$verify, _id, user;
 
-  return regeneratorRuntime.async(function _callee5$(_context5) {
+  return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
-      switch (_context5.prev = _context5.next) {
+      switch (_context4.prev = _context4.next) {
         case 0:
           token = req.signedCookies.token;
 
           if (token) {
-            _context5.next = 4;
+            _context4.next = 4;
             break;
           }
 
           next();
-          return _context5.abrupt("return");
+          return _context4.abrupt("return");
 
         case 4:
           _jwt$verify = jwt.verify(token, process.env.JWT_SECRET), _id = _jwt$verify._id;
-          _context5.next = 7;
+          _context4.next = 7;
           return regeneratorRuntime.awrap(User.findById({
             _id: _id
           }));
 
         case 7:
-          user = _context5.sent;
-          req.user = user;
+          user = _context4.sent;
           next();
 
-        case 10:
+        case 9:
         case "end":
-          return _context5.stop();
+          return _context4.stop();
       }
     }
   });
@@ -375,30 +334,30 @@ module.exports.adminMiddleware = function (req, res, next) {
   });
 };
 
-exports.forgotPassword = catchAsync(function _callee6(req, res, next) {
-  return regeneratorRuntime.async(function _callee6$(_context6) {
+exports.forgotPassword = catchAsync(function _callee5(req, res, next) {
+  return regeneratorRuntime.async(function _callee5$(_context5) {
     while (1) {
-      switch (_context6.prev = _context6.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
           res.render("auth/forgot-password");
 
         case 1:
         case "end":
-          return _context6.stop();
+          return _context5.stop();
       }
     }
   });
 });
-exports.postForgotPassword = catchAsync(function _callee7(req, res, next) {
+exports.postForgotPassword = catchAsync(function _callee6(req, res, next) {
   var email, user, msg;
-  return regeneratorRuntime.async(function _callee7$(_context7) {
+  return regeneratorRuntime.async(function _callee6$(_context6) {
     while (1) {
-      switch (_context7.prev = _context7.next) {
+      switch (_context6.prev = _context6.next) {
         case 0:
           email = req.body.email;
 
           if (email) {
-            _context7.next = 4;
+            _context6.next = 4;
             break;
           }
 
@@ -406,19 +365,19 @@ exports.postForgotPassword = catchAsync(function _callee7(req, res, next) {
             title: "Forgot Password",
             message: "Bạn Cần Nhập Email !!!"
           });
-          return _context7.abrupt("return");
+          return _context6.abrupt("return");
 
         case 4:
-          _context7.next = 6;
+          _context6.next = 6;
           return regeneratorRuntime.awrap(User.findOne({
             email: email
           }));
 
         case 6:
-          user = _context7.sent;
+          user = _context6.sent;
 
           if (user) {
-            _context7.next = 10;
+            _context6.next = 10;
             break;
           }
 
@@ -427,15 +386,15 @@ exports.postForgotPassword = catchAsync(function _callee7(req, res, next) {
             message: "Can't found this email !!!",
             email: email
           });
-          return _context7.abrupt("return");
+          return _context6.abrupt("return");
 
         case 10:
           user.createCodeActive();
-          _context7.next = 13;
+          _context6.next = 13;
           return regeneratorRuntime.awrap(user.save());
 
         case 13:
-          user = _context7.sent;
+          user = _context6.sent;
           msg = {
             to: email,
             from: 'chunguyenchuong2014bg@gmail.com',
@@ -455,15 +414,15 @@ exports.postForgotPassword = catchAsync(function _callee7(req, res, next) {
 
         case 17:
         case "end":
-          return _context7.stop();
+          return _context6.stop();
       }
     }
   });
 });
-exports.getForgotPasswordSuccess = catchAsync(function _callee8(req, res, next) {
-  return regeneratorRuntime.async(function _callee8$(_context8) {
+exports.getForgotPasswordSuccess = catchAsync(function _callee7(req, res, next) {
+  return regeneratorRuntime.async(function _callee7$(_context7) {
     while (1) {
-      switch (_context8.prev = _context8.next) {
+      switch (_context7.prev = _context7.next) {
         case 0:
           res.render('auth/forgot-password-success', {
             title: 'Enter Code And New Password'
@@ -471,30 +430,30 @@ exports.getForgotPasswordSuccess = catchAsync(function _callee8(req, res, next) 
 
         case 1:
         case "end":
-          return _context8.stop();
+          return _context7.stop();
       }
     }
   });
 });
-exports.postForgotPasswordSuccess = catchAsync(function _callee9(req, res, next) {
+exports.postForgotPasswordSuccess = catchAsync(function _callee8(req, res, next) {
   var email, _req$body3, code, password, passwordAgain, user;
 
-  return regeneratorRuntime.async(function _callee9$(_context9) {
+  return regeneratorRuntime.async(function _callee8$(_context8) {
     while (1) {
-      switch (_context9.prev = _context9.next) {
+      switch (_context8.prev = _context8.next) {
         case 0:
           email = req.params.email;
           _req$body3 = req.body, code = _req$body3.code, password = _req$body3.password, passwordAgain = _req$body3.passwordAgain;
-          _context9.next = 4;
+          _context8.next = 4;
           return regeneratorRuntime.awrap(User.findOne({
             email: email
           }));
 
         case 4:
-          user = _context9.sent;
+          user = _context8.sent;
 
           if (!(password !== passwordAgain || code !== user.codeActive)) {
-            _context9.next = 8;
+            _context8.next = 8;
             break;
           }
 
@@ -502,12 +461,12 @@ exports.postForgotPasswordSuccess = catchAsync(function _callee9(req, res, next)
             title: 'Enter Code And New Password',
             message: "Mã xác nhận không đúng hoặc 2 ô mật khẩu không giống nhau"
           });
-          return _context9.abrupt("return");
+          return _context8.abrupt("return");
 
         case 8:
           user.password = password;
           user.codeActive = "";
-          _context9.next = 12;
+          _context8.next = 12;
           return regeneratorRuntime.awrap(user.save());
 
         case 12:
@@ -517,7 +476,7 @@ exports.postForgotPasswordSuccess = catchAsync(function _callee9(req, res, next)
 
         case 13:
         case "end":
-          return _context9.stop();
+          return _context8.stop();
       }
     }
   });
