@@ -39,7 +39,7 @@ const app = express();
 
 // database
 db.Connect();
-const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCT_URL : process.env.CLIENT_URL
+const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCT_URL : `http://localhost:${port}`
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
