@@ -6,12 +6,14 @@ const cors = require("cors");
 const path = require("path");
 const sgMail = require('@sendgrid/mail');
 const port = process.env.PORT || 8000;
+const redis = require('redis')
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const expressSession = require('express-session')
+let RedisStore = require('connect-redis')(expressSession)
+let redisClient = redis.createClient()
 
 const User = require("./models/user.model")
-const { createSendToken } = require('./helpers/createSendToken')
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -38,7 +40,6 @@ const app = express();
 // database
 db.Connect();
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCT_URL : process.env.CLIENT_URL
-
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -64,6 +65,7 @@ passport.use(new FacebookStrategy({
 ));
 
 // middleware
+app.set('trust proxy', 1);
 app.use(morgan("dev"));
 app.set('trust proxy', 1)
 app.set("view engine", "pug");
@@ -75,6 +77,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(expressSession({
   secret: process.env.SECRET_SESSION,
   resave: false,
+  store: new RedisStore({ client: redisClient }),
   saveUninitialized: true
 }))
 app.use(passport.initialize());
@@ -85,6 +88,12 @@ if (process.env.NODE_ENV === "development") {
   app.use(
     cors({
       origin: `${process.env.CLIENT_URL}`,
+    })
+  );
+} else {
+  app.use(
+    cors({
+      origin: `${process.env.PRODUCT_URL}`,
     })
   );
 }
@@ -132,9 +141,8 @@ app.use('/admin', checkUser, restrictTo(1), adminRouter)
 app.use('/user', checkUser, userRouter)
 app.use("/", checkUser, indexRoutes);
 
-
 app.use(globalErrorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is running on port : http://localhost:${port}`);
+  console.log(`Server is running ${process.env.NODE_ENV === 'production' ? `${process.env.PRODUCT_URL}` : `on port : http://localhost:${port}`}`);
 });

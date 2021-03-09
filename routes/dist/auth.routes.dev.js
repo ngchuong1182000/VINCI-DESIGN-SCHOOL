@@ -32,6 +32,7 @@ router.get('/facebook', passport.authenticate('facebook', {
 router.get('/facebook/secrets', passport.authenticate('facebook', {
   failureRedirect: '/login'
 }), function (req, res, next) {
+  console.log("hihi");
   res.redirect('/');
 });
 module.exports = router;

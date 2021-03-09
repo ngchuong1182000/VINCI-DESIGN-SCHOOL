@@ -22,22 +22,25 @@ var sgMail = require('@sendgrid/mail');
 
 var port = process.env.PORT || 8000;
 
+var redis = require('redis');
+
 var passport = require('passport');
 
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 var expressSession = require('express-session');
 
-var User = require("./models/user.model");
+var RedisStore = require('connect-redis')(expressSession);
 
-var _require = require('./helpers/createSendToken'),
-    createSendToken = _require.createSendToken;
+var redisClient = redis.createClient();
+
+var User = require("./models/user.model");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-var _require2 = require("./controllers/auth.controller"),
-    checkUser = _require2.checkUser,
-    restrictTo = _require2.restrictTo; // bring routes
+var _require = require("./controllers/auth.controller"),
+    checkUser = _require.checkUser,
+    restrictTo = _require.restrictTo; // bring routes
 
 
 var db = require('./helpers/dbConnect');
@@ -127,6 +130,7 @@ passport.use(new FacebookStrategy({
   });
 })); // middleware
 
+app.set('trust proxy', 1);
 app.use(morgan("dev"));
 app.set('trust proxy', 1);
 app.set("view engine", "pug");
@@ -140,6 +144,9 @@ app.use(express["static"](path.join(__dirname, 'public')));
 app.use(expressSession({
   secret: process.env.SECRET_SESSION,
   resave: false,
+  store: new RedisStore({
+    client: redisClient
+  }),
   saveUninitialized: true
 }));
 app.use(passport.initialize());
@@ -148,6 +155,10 @@ app.use(passport.session()); // cors
 if (process.env.NODE_ENV === "development") {
   app.use(cors({
     origin: "".concat(process.env.CLIENT_URL)
+  }));
+} else {
+  app.use(cors({
+    origin: "".concat(process.env.PRODUCT_URL)
   }));
 } // routes middleware api 
 
@@ -189,5 +200,5 @@ app.use('/user', checkUser, userRouter);
 app.use("/", checkUser, indexRoutes);
 app.use(globalErrorHandler);
 app.listen(port, function () {
-  console.log("Server is running on port : http://localhost:".concat(port));
+  console.log("Server is running ".concat(process.env.NODE_ENV === 'production' ? "".concat(process.env.PRODUCT_URL) : "on port : http://localhost:".concat(port)));
 });
