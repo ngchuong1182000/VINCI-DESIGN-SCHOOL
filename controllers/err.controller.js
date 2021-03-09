@@ -46,6 +46,7 @@ const sendErrProd = (err, res) => {
     res.status(500).json({
       status: "error",
       message: "some thing wrong",
+      stack: err
     });
   }
 }
