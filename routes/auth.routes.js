@@ -50,12 +50,24 @@ router.get('/facebook',
 
 router.get('/facebook/secrets',
   passport.authenticate('facebook', {
-    failureRedirect: '/login'
-  }), function (req, res, next) {
-    console.log("hihi");
+    failureRedirect: '/auth/login'
+  }), function (req, res) {
     res.redirect('/')
   }
 )
+
+router.get('/google',
+  passport.authenticate('google', {
+    scope:
+      ['email', 'profile']
+  }));
+
+router.get('/google/secrets',
+  passport.authenticate('google', { failureRedirect: '/auth/login' }),
+  function (req, res) {
+    res.redirect('/');
+  });
+
 
 
 module.exports = router;

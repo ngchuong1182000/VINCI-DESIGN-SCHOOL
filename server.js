@@ -11,7 +11,8 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const expressSession = require('express-session')
 
 const User = require("./models/user.model")
-const { createSendToken } = require('./helpers/createSendToken')
+const { connectAuthFacebook } = require('./utils/passport-facebook.setup')
+const { connectAuthGoogle } = require('./utils/passport-google.setup')
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -37,31 +38,9 @@ const app = express();
 
 // database
 db.Connect();
-const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCT_URL : process.env.CLIENT_URL
-passport.use(new FacebookStrategy({
-  clientID: process.env.FACEBOOK_APP_ID,
-  clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: `${url}/auth/facebook/secrets`,
-  enableProof: true,
-  profileFields: ['id', 'displayName', 'photos', 'email']
-},
-  async function (accessToken, refreshToken, profile, cb) {
-    let data = profile._json;
-    let userData = {
-      photo: data.picture.data.url,
-      username: data.name
-    }
-    let newUser;
-    const user = await User.findOne({ email: data.email });
-    if (!user) {
-      newUser = await User.create({ email: data.email, ...userData })
-    } else {
-      await User.findOneAndUpdate({ email: data.email }, userData);
-      newUser = await User.findOne({ email: data.email })
-    }
-    return cb(null, newUser)
-  }
-));
+connectAuthFacebook();
+connectAuthGoogle();
+
 
 // middleware
 app.use(morgan("dev"));
@@ -97,16 +76,6 @@ app.use("/api", sectionRoutes);
 app.use("/api", lessonRoutes);
 app.use("/api", orderRoutes);
 
-
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (id, done) {
-  done(null, id)
-});
-
-
 // routes middleware 
 app.use("/auth", authRoutes);
 app.use('/course', courseRoutes)
@@ -118,7 +87,6 @@ app.use("/payment", checkUser, paymentRoutes);
 app.use('/admin', checkUser, restrictTo(1), adminRouter)
 app.use('/user', checkUser, userRouter)
 app.use("/", checkUser, indexRoutes);
-
 
 app.use(globalErrorHandler);
 

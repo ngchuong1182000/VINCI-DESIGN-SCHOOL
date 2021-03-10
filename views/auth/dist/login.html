@@ -3,6 +3,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+  <meta name="google-signin-client_id" content="297010001351-cvn6n1fmrtlh3doj0oss1ipqiq5icslp.apps.googleusercontent.com">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
   <!-- Google Fonts-->
@@ -28,8 +30,7 @@
           <div class="login_item">
             <div class="modal__line"></div><span class="modal__title"></span>
             <section>
-              <div class="login_other">
-                <button class="bnt_login_email" type="button"><span style="padding: 10px; font-weight: 500;">
+              <div class="login_other"><a class="bnt_login_email" href="/auth/google"><span style="padding: 10px; font-weight: 500;">
                     <div class="login__google__wrapper">
                       <svg class="das__icon login__google__icon" width="28px" height="28px" viewbox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" alt="icon">
                         <g id="Icons/28px/Gmail" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -47,7 +48,7 @@
                         </g>
                       </svg>
                       <div class="login__google__divider"></div><span class="text_login_other">Qua Email</span>
-                    </div></span></button><span style="transition: opacity 0.5s ease 0s;"><a class="login__facebook__btn metro" type="button" href="/auth/facebook">
+                    </div></span></a><span style="transition: opacity 0.5s ease 0s;"><a class="login__facebook__btn metro" type="button" href="/auth/facebook">
                     <div class="login__facebook__wrapper">
                       <svg class="das__icon login__facebook__icon" width="28px" height="28px" viewbox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" alt="icon">
                         <title>Icons/28px/FB</title>
@@ -59,8 +60,7 @@
                         </g>
                       </svg>
                       <div class="login__facebook__divider"></div><span class="text_login_other">Qua Facebook</span>
-                    </div></a></span>
-              </div><span class="text_choose">- or -</span>
+                    </div></a></span></div><span class="text_choose">- or -</span>
             </section>
             <form action="/auth/login" method="post"><span>Email</span>
               <div class="form-outline mb-4">

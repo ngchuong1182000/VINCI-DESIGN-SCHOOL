@@ -3,6 +3,9 @@ head
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   meta(http-equiv='X-UA-Compatible', content='ie=edge')
+  script(src='https://apis.google.com/js/platform.js', async='', defer='')
+  meta(name='google-signin-client_id', content='297010001351-cvn6n1fmrtlh3doj0oss1ipqiq5icslp.apps.googleusercontent.com')
+
   link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css')
   link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css', rel='stylesheet')
   // Google Fonts
@@ -30,7 +33,7 @@ body
             span.modal__title
             section
               .login_other
-                button.bnt_login_email(type='button')
+                a.bnt_login_email(href='/auth/google')
                   span(style='padding: 10px; font-weight: 500;')
                     .login__google__wrapper
                       svg.das__icon.login__google__icon(width='28px', height='28px', viewbox='0 0 28 28', version='1.1', xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', alt='icon')
@@ -77,5 +80,4 @@ body
               .login__register
                 span.register__text Bạn chưa có tài khoản  ?
                 a.login__register__link(href='/auth/signup') Đăng ký ngay
-
 
