@@ -1,5 +1,11 @@
 "use strict";
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var catchAsync = require("../../utils/catchAsync");
 
 var Course = require("../../models/course.model");
@@ -9,6 +15,8 @@ var Category = require("../../models/category.model");
 var Section = require("../../models/section.model");
 
 var Lesson = require("../../models/lesson.model");
+
+var Notifications = require("../../models/notifications.model");
 
 var cloudinary = require('../../utils/setup.cloudinary');
 
@@ -55,7 +63,8 @@ exports.getPageCreateCourse = catchAsync(function _callee2(req, res, next) {
           category = _context2.sent;
           res.render("admin/courses/create-course", {
             user: user,
-            category: category
+            category: category,
+            title: 'CREATE COURSE'
           });
 
         case 5:
@@ -66,12 +75,13 @@ exports.getPageCreateCourse = catchAsync(function _callee2(req, res, next) {
   });
 });
 exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
-  var _req$body, courseName, trainerName, categoryId, shortDescription, title1, title2, detailDescription1, detailDescription2, price, slug, files, urls, data, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
+  var user, _req$body, courseName, trainerName, categoryId, shortDescription, title1, title2, detailDescription1, detailDescription2, price, slug, files, urls, data, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
 
   return regeneratorRuntime.async(function _callee3$(_context5) {
     while (1) {
       switch (_context5.prev = _context5.next) {
         case 0:
+          user = req.user;
           _req$body = req.body, courseName = _req$body.courseName, trainerName = _req$body.trainerName, categoryId = _req$body.categoryId, shortDescription = _req$body.shortDescription, title1 = _req$body.title1, title2 = _req$body.title2, detailDescription1 = _req$body.detailDescription1, detailDescription2 = _req$body.detailDescription2, price = _req$body.price;
           slug = slugify(courseName, {
             lower: true
@@ -88,7 +98,7 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
           _iteratorNormalCompletion = true;
           _didIteratorError = false;
           _iteratorError = undefined;
-          _context5.prev = 8;
+          _context5.prev = 9;
 
           _loop = function _loop() {
             var file, folder, options, nameVideos, uploader, newPath;
@@ -147,55 +157,55 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
 
           _iterator = files[Symbol.iterator]();
 
-        case 11:
+        case 12:
           if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-            _context5.next = 17;
+            _context5.next = 18;
             break;
           }
 
-          _context5.next = 14;
+          _context5.next = 15;
           return regeneratorRuntime.awrap(_loop());
 
-        case 14:
+        case 15:
           _iteratorNormalCompletion = true;
-          _context5.next = 11;
+          _context5.next = 12;
           break;
 
-        case 17:
-          _context5.next = 23;
+        case 18:
+          _context5.next = 24;
           break;
 
-        case 19:
-          _context5.prev = 19;
-          _context5.t0 = _context5["catch"](8);
+        case 20:
+          _context5.prev = 20;
+          _context5.t0 = _context5["catch"](9);
           _didIteratorError = true;
           _iteratorError = _context5.t0;
 
-        case 23:
-          _context5.prev = 23;
+        case 24:
           _context5.prev = 24;
+          _context5.prev = 25;
 
           if (!_iteratorNormalCompletion && _iterator["return"] != null) {
             _iterator["return"]();
           }
 
-        case 26:
-          _context5.prev = 26;
+        case 27:
+          _context5.prev = 27;
 
           if (!_didIteratorError) {
-            _context5.next = 29;
+            _context5.next = 30;
             break;
           }
 
           throw _iteratorError;
 
-        case 29:
-          return _context5.finish(26);
-
         case 30:
-          return _context5.finish(23);
+          return _context5.finish(27);
 
         case 31:
+          return _context5.finish(24);
+
+        case 32:
           data.imageCover = urls[0];
           data.demoVideoId = urls[3];
           data.detailDescription = [{
@@ -207,18 +217,42 @@ exports.postPageCreateCourse = catchAsync(function _callee3(req, res, next) {
             content: detailDescription2,
             imgURL: urls[2]
           }];
-          _context5.next = 36;
+          _context5.prev = 35;
+          _context5.next = 38;
           return regeneratorRuntime.awrap(Course.create(data));
 
-        case 36:
-          res.redirect("/admin/course/".concat(slug));
+        case 38:
+          _context5.next = 40;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Created Course ".concat(courseName, " Success !!!"),
+            isSuccess: true,
+            user: user._id
+          }));
 
-        case 37:
+        case 40:
+          res.redirect("/admin/course/".concat(slug));
+          return _context5.abrupt("return");
+
+        case 44:
+          _context5.prev = 44;
+          _context5.t1 = _context5["catch"](35);
+          _context5.next = 48;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Create Course ".concat(courseName, " False !!!"),
+            isSuccess: false,
+            user: user._id
+          }));
+
+        case 48:
+          res.redirect('back');
+          return _context5.abrupt("return");
+
+        case 50:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[8, 19, 23, 31], [24,, 26, 30]]);
+  }, null, null, [[9, 20, 24, 32], [25,, 27, 31], [35, 44]]);
 });
 exports.getDetailCourse = catchAsync(function _callee4(req, res, next) {
   var user, slug, course;
@@ -249,7 +283,7 @@ exports.getDetailCourse = catchAsync(function _callee4(req, res, next) {
   });
 });
 exports.updateInformationCourse = catchAsync(function _callee5(req, res, next) {
-  var user, oldSlug, _req$body2, courseName, price, shortDescription, trainerName, detailDescription1, title1, detailDescription2, title2, _id, slug, data, newCourse, course;
+  var user, oldSlug, _req$body2, courseName, price, shortDescription, trainerName, detailDescription1, title1, detailDescription2, title2, oldCourse, data, newCourse, course;
 
   return regeneratorRuntime.async(function _callee5$(_context7) {
     while (1) {
@@ -264,25 +298,33 @@ exports.updateInformationCourse = catchAsync(function _callee5(req, res, next) {
           }));
 
         case 5:
-          _id = _context7.sent._id;
-          slug = slugify(courseName, {
-            lower: true
-          });
+          oldCourse = _context7.sent;
           data = {
             courseName: courseName,
             price: price.toString().split('.').splice(0, 1).join() * 1000,
             shortDescription: shortDescription,
             trainerName: trainerName,
-            detailDescription1: detailDescription1,
-            title1: title1,
-            detailDescription2: detailDescription2,
-            title2: title2,
-            slug: slug
+            detailDescription: [{
+              title: title1,
+              content: detailDescription1,
+              imgURL: oldCourse.detailDescription[0].imgURL
+            }, {
+              title: title2,
+              content: detailDescription2,
+              imgURL: oldCourse.detailDescription[1].imgURL
+            }]
           };
+
+          if (oldCourse.courseName !== courseName) {
+            data.slug = slugify(courseName, {
+              lower: true
+            });
+          }
+
           _context7.prev = 8;
           _context7.next = 11;
           return regeneratorRuntime.awrap(Course.findByIdAndUpdate({
-            _id: _id
+            _id: oldCourse._id
           }, data, {
             runValidators: true
           }));
@@ -296,51 +338,62 @@ exports.updateInformationCourse = catchAsync(function _callee5(req, res, next) {
 
         case 14:
           course = _context7.sent;
-          res.render('admin/courses/course-detail', {
-            user: user,
-            course: course,
-            title: course.slug.toUpperCase(),
-            message: "Update Information Successfully !!!"
-          });
-          _context7.next = 21;
-          break;
+          _context7.next = 17;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Updated Course ".concat(course.courseName, " Success !!!"),
+            isSuccess: true,
+            user: user._id
+          }));
 
-        case 18:
-          _context7.prev = 18;
+        case 17:
+          console.log(course);
+          res.redirect("/admin/course/".concat(course.slug));
+          return _context7.abrupt("return");
+
+        case 22:
+          _context7.prev = 22;
           _context7.t0 = _context7["catch"](8);
-          res.render('err/Error404', {
-            code: 500
-          });
+          _context7.next = 26;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Update Course ".concat(courseName, " False !!!"),
+            isSuccess: false,
+            user: user._id
+          }));
 
-        case 21:
+        case 26:
+          res.redirect("/admin/course/".concat(oldSlug));
+          return _context7.abrupt("return");
+
+        case 28:
         case "end":
           return _context7.stop();
       }
     }
-  }, null, null, [[8, 18]]);
+  }, null, null, [[8, 22]]);
 });
 exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
-  var user, urls, files, _id, data, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _loop2, _iterator2, _step2, newCourse, course;
+  var user, slug, urls, files, _id, data, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _loop2, _iterator2, _step2, newCourse, course;
 
   return regeneratorRuntime.async(function _callee6$(_context10) {
     while (1) {
       switch (_context10.prev = _context10.next) {
         case 0:
           user = req.user;
+          slug = req.params.slug;
           urls = [];
           files = req.files;
-          _context10.next = 5;
+          _context10.next = 6;
           return regeneratorRuntime.awrap(Course.findOne({
-            slug: req.params.slug
+            slug: slug
           }));
 
-        case 5:
+        case 6:
           _id = _context10.sent._id;
           data = {};
           _iteratorNormalCompletion2 = true;
           _didIteratorError2 = false;
           _iteratorError2 = undefined;
-          _context10.prev = 10;
+          _context10.prev = 11;
 
           _loop2 = function _loop2() {
             var file, folder, options, nameVideos, uploader, newPath;
@@ -399,55 +452,55 @@ exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
 
           _iterator2 = files[Symbol.iterator]();
 
-        case 13:
+        case 14:
           if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-            _context10.next = 19;
+            _context10.next = 20;
             break;
           }
 
-          _context10.next = 16;
+          _context10.next = 17;
           return regeneratorRuntime.awrap(_loop2());
 
-        case 16:
+        case 17:
           _iteratorNormalCompletion2 = true;
-          _context10.next = 13;
+          _context10.next = 14;
           break;
 
-        case 19:
-          _context10.next = 25;
+        case 20:
+          _context10.next = 26;
           break;
 
-        case 21:
-          _context10.prev = 21;
-          _context10.t0 = _context10["catch"](10);
+        case 22:
+          _context10.prev = 22;
+          _context10.t0 = _context10["catch"](11);
           _didIteratorError2 = true;
           _iteratorError2 = _context10.t0;
 
-        case 25:
-          _context10.prev = 25;
+        case 26:
           _context10.prev = 26;
+          _context10.prev = 27;
 
           if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
             _iterator2["return"]();
           }
 
-        case 28:
-          _context10.prev = 28;
+        case 29:
+          _context10.prev = 29;
 
           if (!_didIteratorError2) {
-            _context10.next = 31;
+            _context10.next = 32;
             break;
           }
 
           throw _iteratorError2;
 
-        case 31:
-          return _context10.finish(28);
-
         case 32:
-          return _context10.finish(25);
+          return _context10.finish(29);
 
         case 33:
+          return _context10.finish(26);
+
+        case 34:
           data.imageCover = urls[0];
 
           if (urls.length >= 4) {
@@ -455,17 +508,17 @@ exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
           } // update dữ liệu vào db
 
 
-          _context10.prev = 35;
-          _context10.next = 38;
+          _context10.prev = 36;
+          _context10.next = 39;
           return regeneratorRuntime.awrap(Course.findByIdAndUpdate({
             _id: _id
           }, data, {
             runValidators: true
           }));
 
-        case 38:
+        case 39:
           newCourse = _context10.sent;
-          _context10.next = 41;
+          _context10.next = 42;
           return regeneratorRuntime.awrap(Course.updateOne({
             _id: _id
           }, {
@@ -476,8 +529,8 @@ exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
             runValidators: true
           }));
 
-        case 41:
-          _context10.next = 43;
+        case 42:
+          _context10.next = 44;
           return regeneratorRuntime.awrap(Course.updateOne({
             _id: _id
           }, {
@@ -488,36 +541,45 @@ exports.updateVideoImages = catchAsync(function _callee6(req, res, next) {
             runValidators: true
           }));
 
-        case 43:
-          _context10.next = 45;
+        case 44:
+          _context10.next = 46;
           return regeneratorRuntime.awrap(Course.findById({
             _id: newCourse._id
           }));
 
-        case 45:
+        case 46:
           course = _context10.sent;
-          res.render('admin/courses/course-detail', {
-            user: user,
-            course: course,
-            title: course.slug.toUpperCase(),
-            message: "Update Video And Image Successfully !!!"
-          });
-          _context10.next = 52;
-          break;
+          _context10.next = 49;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Updated Course IMAGE/VIDEO ".concat(course.courseName, " Success !!!"),
+            isSuccess: true,
+            user: user._id
+          }));
 
         case 49:
-          _context10.prev = 49;
-          _context10.t1 = _context10["catch"](35);
-          res.render('err/Error404', {
-            code: 500
-          });
+          res.redirect('back');
+          return _context10.abrupt("return");
 
-        case 52:
+        case 53:
+          _context10.prev = 53;
+          _context10.t1 = _context10["catch"](36);
+          _context10.next = 57;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Updated Course IMAGE/VIDEO ".concat(slug, " False !!!"),
+            isSuccess: false,
+            user: user._id
+          }));
+
+        case 57:
+          res.redirect('back');
+          return _context10.abrupt("return");
+
+        case 59:
         case "end":
           return _context10.stop();
       }
     }
-  }, null, null, [[10, 21, 25, 33], [26,, 28, 32], [35, 49]]);
+  }, null, null, [[11, 22, 26, 34], [27,, 29, 33], [36, 53]]);
 });
 exports.getAddSection = catchAsync(function _callee7(req, res, next) {
   var user;
@@ -527,7 +589,8 @@ exports.getAddSection = catchAsync(function _callee7(req, res, next) {
         case 0:
           user = req.user;
           res.render('admin/section/new-section', {
-            user: user
+            user: user,
+            title: 'ADD SECTION'
           });
 
         case 2:
@@ -611,27 +674,37 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
           return regeneratorRuntime.awrap(Section.create(data));
 
         case 21:
-          res.redirect("/admin/course/".concat(slug));
-          _context13.next = 28;
-          break;
+          _context13.next = 23;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Created Section ".concat(sectionTitle, " Success !!!"),
+            isSuccess: true,
+            user: user._id
+          }));
 
-        case 24:
-          _context13.prev = 24;
-          _context13.t0 = _context13["catch"](18);
-          res.render("admin/courses/course-detail", {
-            user: user,
-            course: course,
-            title: course.slug.toUpperCase(),
-            message: "\u0110\xE3 C\xF3 T\xEAn : ".concat(sectionTitle)
-          });
+        case 23:
+          res.redirect("/admin/course/".concat(slug));
           return _context13.abrupt("return");
 
-        case 28:
+        case 27:
+          _context13.prev = 27;
+          _context13.t0 = _context13["catch"](18);
+          _context13.next = 31;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Create Section ".concat(sectionTitle, " False !!!"),
+            isSuccess: true,
+            user: user._id
+          }));
+
+        case 31:
+          res.redirect("/admin/course/".concat(slug));
+          return _context13.abrupt("return");
+
+        case 33:
         case "end":
           return _context13.stop();
       }
     }
-  }, null, null, [[18, 24]]);
+  }, null, null, [[18, 27]]);
 });
 exports.getAddLesion = catchAsync(function _callee9(req, res, next) {
   var user;
@@ -642,7 +715,7 @@ exports.getAddLesion = catchAsync(function _callee9(req, res, next) {
           user = req.user;
           res.render('admin/lession/new-lession', {
             user: user,
-            title: "Add New Lession"
+            title: "ADD LESSON"
           });
 
         case 2:
@@ -671,14 +744,23 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
         case 6:
           sectionId = _context16.sent._id;
 
-          if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-            res.render('admin/lession/new-lession', {
-              user: user,
-              title: "Add New Lession",
-              message: "vui long chon video"
-            });
+          if (!(file.mimetype === "image/jpeg" || file.mimetype === "image/png")) {
+            _context16.next = 12;
+            break;
           }
 
+          _context16.next = 10;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "vui long chon video",
+            isSuccess: false,
+            user: user._id
+          }));
+
+        case 10:
+          res.redirect("/");
+          return _context16.abrupt("return");
+
+        case 12:
           nameVideos = file.filename.split(".").slice(0, -1).join(".");
           options = {
             resource_type: "video",
@@ -704,10 +786,10 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
             });
           };
 
-          _context16.next = 13;
+          _context16.next = 17;
           return regeneratorRuntime.awrap(uploader(file.path));
 
-        case 13:
+        case 17:
           videoId = _context16.sent.secure_url;
           fs.unlinkSync(file.path);
           data = {
@@ -716,33 +798,42 @@ exports.postAddLesion = catchAsync(function _callee10(req, res, next) {
             videoId: videoId,
             sectionId: sectionId
           };
-          _context16.prev = 16;
-          _context16.next = 19;
+          _context16.prev = 20;
+          _context16.next = 23;
           return regeneratorRuntime.awrap(Lesson.create(data));
 
-        case 19:
+        case 23:
           _context16.next = 25;
-          break;
-
-        case 21:
-          _context16.prev = 21;
-          _context16.t0 = _context16["catch"](16);
-          res.render('admin/lession/new-lession', {
-            user: user,
-            title: "Add New Lession",
-            message: "\u0110\xE3 C\xF3 T\xEAn : ".concat(lessonTitle)
-          });
-          return _context16.abrupt("return");
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Created Lesson ".concat(lessonTitle, " Success !!!"),
+            isSuccess: true,
+            user: user._id
+          }));
 
         case 25:
           res.redirect("/admin/course/".concat(slug1));
+          return _context16.abrupt("return");
 
-        case 26:
+        case 29:
+          _context16.prev = 29;
+          _context16.t0 = _context16["catch"](20);
+          _context16.next = 33;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "\u0110\xE3 C\xF3 T\xEAn : ".concat(lessonTitle),
+            isSuccess: false,
+            user: user._id
+          }));
+
+        case 33:
+          res.redirect("/admin/course/".concat(slug1));
+          return _context16.abrupt("return");
+
+        case 35:
         case "end":
           return _context16.stop();
       }
     }
-  }, null, null, [[16, 21]]);
+  }, null, null, [[20, 29]]);
 });
 exports.getLesson = catchAsync(function _callee11(req, res, next) {
   var user, _req$params2, slug1, slug2, slug3, course, section, lesson;
@@ -776,7 +867,7 @@ exports.getLesson = catchAsync(function _callee11(req, res, next) {
           lesson = _context17.sent;
           res.render('admin/lession/detail-lesson', {
             user: user,
-            title: lesson.slug,
+            title: lesson.slug.toUpperCase(),
             course: course,
             section: section,
             lesson: lesson
@@ -790,7 +881,7 @@ exports.getLesson = catchAsync(function _callee11(req, res, next) {
   });
 });
 exports.updateLesson = catchAsync(function _callee12(req, res, next) {
-  var _req$params3, slug1, slug2, slug3, file, user, _req$body5, lessonDescription, lessonTitle, course, section, oldLesson, slug, nameVideos, _options, uploader, videoId, data, lesson, _data, _lesson;
+  var _req$params3, slug1, slug2, slug3, file, user, _req$body5, lessonDescription, lessonTitle, data, course, section, oldLesson, nameVideos, _options, uploader, videoId, lessonUpdate, lesson;
 
   return regeneratorRuntime.async(function _callee12$(_context19) {
     while (1) {
@@ -800,44 +891,57 @@ exports.updateLesson = catchAsync(function _callee12(req, res, next) {
           file = req.file;
           user = req.user;
           _req$body5 = req.body, lessonDescription = _req$body5.lessonDescription, lessonTitle = _req$body5.lessonTitle;
-          _context19.next = 6;
+          data = _objectSpread({}, req.body);
+          _context19.next = 7;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: slug1
           }));
 
-        case 6:
+        case 7:
           course = _context19.sent;
-          _context19.next = 9;
+          _context19.next = 10;
           return regeneratorRuntime.awrap(Section.findOne({
             slug: slug2
           }));
 
-        case 9:
+        case 10:
           section = _context19.sent;
-          _context19.next = 12;
+          _context19.next = 13;
           return regeneratorRuntime.awrap(Lesson.findOne({
             slug: slug3
           }));
 
-        case 12:
+        case 13:
           oldLesson = _context19.sent;
-          slug = slugify(lessonTitle, {
-            lower: true
-          });
 
-          if (!file) {
-            _context19.next = 38;
-            break;
-          }
-
-          if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-            res.render("admin/course/".concat(slug1, "/").concat(slug2, "/").concat(slug3), {
-              user: user,
-              title: "Add New Lession",
-              message: "vui long chon video"
+          if (oldLesson.lessonTitle !== lessonTitle) {
+            data.slug = slugify(lessonTitle, {
+              lower: true
             });
           }
 
+          if (!file) {
+            _context19.next = 29;
+            break;
+          }
+
+          if (!(file.mimetype === "image/jpeg" || file.mimetype === "image/png")) {
+            _context19.next = 21;
+            break;
+          }
+
+          _context19.next = 19;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "vui long chon video",
+            isSuccess: false,
+            user: user._id
+          }));
+
+        case 19:
+          res.redirect("/admin/course/".concat(slug1, "/").concat(slug2, "/").concat(slug3));
+          return _context19.abrupt("return");
+
+        case 21:
           nameVideos = file.filename.split(".").slice(0, -1).join(".");
           _options = {
             resource_type: "video",
@@ -863,96 +967,60 @@ exports.updateLesson = catchAsync(function _callee12(req, res, next) {
             });
           };
 
-          _context19.next = 21;
+          _context19.next = 26;
           return regeneratorRuntime.awrap(uploader(file.path));
 
-        case 21:
+        case 26:
           videoId = _context19.sent.secure_url;
           fs.unlinkSync(file.path);
-          data = {
-            lessonTitle: lessonTitle,
-            lessonDescription: lessonDescription,
-            videoId: videoId,
-            slug: slug
-          };
-          _context19.prev = 24;
-          _context19.next = 27;
+          data.videoId = videoId;
+
+        case 29:
+          _context19.prev = 29;
+          console.log(data);
+          _context19.next = 33;
           return regeneratorRuntime.awrap(Lesson.findByIdAndUpdate({
             _id: oldLesson._id
           }, data));
 
-        case 27:
-          _context19.next = 29;
-          return regeneratorRuntime.awrap(Lesson.findOne({
-            slug: slug3
-          }));
-
-        case 29:
-          lesson = _context19.sent;
-          res.render('admin/lession/detail-lesson', {
-            user: user,
-            title: lesson.slug,
-            course: course,
-            section: section,
-            lesson: lesson,
-            message: "Update Success !!!"
-          });
-          _context19.next = 36;
-          break;
-
         case 33:
-          _context19.prev = 33;
-          _context19.t0 = _context19["catch"](24);
-          res.render('err/Error404', {
-            code: 500
-          });
+          lessonUpdate = _context19.sent;
+          _context19.next = 36;
+          return regeneratorRuntime.awrap(Lesson.findOne({
+            _id: lessonUpdate._id
+          }));
 
         case 36:
-          _context19.next = 51;
-          break;
-
-        case 38:
-          _context19.prev = 38;
-          _data = {
-            lessonTitle: lessonTitle,
-            lessonDescription: lessonDescription,
-            slug: slug
-          };
-          _context19.next = 42;
-          return regeneratorRuntime.awrap(Lesson.findByIdAndUpdate({
-            _id: oldLesson._id
-          }, _data));
-
-        case 42:
-          _context19.next = 44;
-          return regeneratorRuntime.awrap(Lesson.findOne({
-            slug: slug3
+          lesson = _context19.sent;
+          _context19.next = 39;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Update Lesson ".concat(lesson.lessonTitle, " Success !!!"),
+            isSuccess: true,
+            user: user._id
           }));
 
-        case 44:
-          _lesson = _context19.sent;
-          res.render('admin/lession/detail-lesson', {
-            user: user,
-            title: _lesson.slug,
-            course: course,
-            section: section,
-            lesson: _lesson,
-            message: "Update Success !!!"
-          });
-          _context19.next = 51;
+        case 39:
+          res.redirect("/admin/course/".concat(slug1, "/").concat(slug2, "/").concat(lesson.slug));
+          _context19.next = 47;
           break;
 
-        case 48:
-          _context19.prev = 48;
-          _context19.t1 = _context19["catch"](38);
-          res.render('err/Error404', {
-            code: 500
-          });
+        case 42:
+          _context19.prev = 42;
+          _context19.t0 = _context19["catch"](29);
+          _context19.next = 46;
+          return regeneratorRuntime.awrap(Notifications.create({
+            notification: "Update Lesson ".concat(oldLesson.lessonTitle, " False !!!"),
+            isSuccess: false,
+            user: user._id
+          }));
 
-        case 51:
+        case 46:
+          res.redirect("/admin/course/".concat(slug1, "/").concat(slug2, "/").concat(slug3));
+
+        case 47:
         case "end":
           return _context19.stop();
       }
     }
-  }, null, null, [[24, 33], [38, 48]]);
+  }, null, null, [[29, 42]]);
 });

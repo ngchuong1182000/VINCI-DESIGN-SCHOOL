@@ -96,5 +96,17 @@ userSchema.methods = {
     return this.codeActive = Math.floor(Math.random() * (99999 - 10000) + 10000);
   }
 };
+userSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "notifications",
+    select: '-__v'
+  });
+  next();
+});
+userSchema.virtual("notifications", {
+  ref: "notifications",
+  foreignField: "user",
+  localField: "_id"
+});
 var User = mongoose.model("User", userSchema);
 module.exports = User;

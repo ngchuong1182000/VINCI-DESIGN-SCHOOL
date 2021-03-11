@@ -101,6 +101,20 @@ userSchema.methods = {
   },
 };
 
+userSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "notifications",
+    select: '-__v',
+  });
+  next();
+})
+
+userSchema.virtual("notifications", {
+  ref: "notifications",
+  foreignField: "user",
+  localField: "_id"
+});
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

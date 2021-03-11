@@ -16,7 +16,6 @@ const {
   getLesson,
   updateLesson
 } = require('../../controllers/admin/index.controller');
-const { get } = require("lodash");
 
 
 router.route("/index")

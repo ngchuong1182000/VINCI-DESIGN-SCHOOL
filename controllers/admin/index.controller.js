@@ -3,12 +3,15 @@ const Course = require("../../models/course.model");
 const Category = require("../../models/category.model");
 const Section = require("../../models/section.model");
 const Lesson = require("../../models/lesson.model");
+const Notifications = require("../../models/notifications.model");
 const cloudinary = require('../../utils/setup.cloudinary');
 const fs = require('fs');
 const slugify = require('slugify');
 
 exports.getIndex = catchAsync(async (req, res, next) => {
-  const { user } = req;
+  const {
+    user
+  } = req;
   const course = await Course.find({});
   res.render("admin/index", {
     title: "ADMIN PAGE",
@@ -18,15 +21,38 @@ exports.getIndex = catchAsync(async (req, res, next) => {
 });
 
 exports.getPageCreateCourse = catchAsync(async (req, res, next) => {
-  const { user } = req;
+  const {
+    user
+  } = req;
   const category = await Category.find({});
-  res.render("admin/courses/create-course", { user, category })
+  res.render("admin/courses/create-course", {
+    user,
+    category,
+    title: 'CREATE COURSE'
+  })
 })
 
 exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
-  const { courseName, trainerName, categoryId, shortDescription, title1, title2, detailDescription1, detailDescription2, price } = req.body;
-  const slug = slugify(courseName, { lower: true })
-  const { files } = req;
+  const {
+    user
+  } = req;
+  const {
+    courseName,
+    trainerName,
+    categoryId,
+    shortDescription,
+    title1,
+    title2,
+    detailDescription1,
+    detailDescription2,
+    price
+  } = req.body;
+  const slug = slugify(courseName, {
+    lower: true
+  })
+  const {
+    files
+  } = req;
   const urls = [];
   const data = {
     courseName,
@@ -40,8 +66,7 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
     const options = {};
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       folder = "images";
-    }
-    else if (file.mimetype === "video/mp4") {
+    } else if (file.mimetype === "video/mp4") {
       folder = "video";
       options.resource_type = "video";
     }
@@ -54,8 +79,7 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
   }
   data.imageCover = urls[0];
   data.demoVideoId = urls[3];
-  data.detailDescription = [
-    {
+  data.detailDescription = [{
       title: title1,
       content: detailDescription1,
       imgURL: urls[1]
@@ -66,49 +90,131 @@ exports.postPageCreateCourse = catchAsync(async (req, res, next) => {
       imgURL: urls[2]
     }
   ]
-  await Course.create(data);
-
-  res.redirect(`/admin/course/${slug}`);
+  try {
+    await Course.create(data);
+    await Notifications.create({
+      notification: `Created Course ${courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug}`);
+    return;
+  } catch (error) {
+    await Notifications.create({
+      notification: `Create Course ${courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect('back')
+    return;
+  }
 });
 
 exports.getDetailCourse = catchAsync(async (req, res, next) => {
-  const { user } = req;
-  const { slug } = req.params;
-  const course = await Course.findOne({ slug });
-  res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase() })
+  const {
+    user
+  } = req;
+  const {
+    slug
+  } = req.params;
+  const course = await Course.findOne({
+    slug
+  });
+  res.render('admin/courses/course-detail', {
+    user,
+    course,
+    title: course.slug.toUpperCase()
+  })
 });
 
 exports.updateInformationCourse = catchAsync(async (req, res, next) => {
-  const { user } = req;
+  const {
+    user
+  } = req;
+
   const oldSlug = req.params.slug;
-  const { courseName, price, shortDescription, trainerName, detailDescription1, title1, detailDescription2, title2 } = req.body;
-  const _id = (await Course.findOne({ slug: oldSlug }))._id
-  const slug = slugify(courseName, { lower: true });
-  const data = {
+
+  const {
     courseName,
-    price: price.toString().split('.').splice(0, 1).join() * 1000,
+    price,
     shortDescription,
     trainerName,
     detailDescription1,
     title1,
     detailDescription2,
-    title2,
-    slug
+    title2
+  } = req.body;
+
+  const oldCourse = await Course.findOne({
+    slug: oldSlug
+  });
+
+  const data = {
+    courseName,
+    price: price.toString().split('.').splice(0, 1).join() * 1000,
+    shortDescription,
+    trainerName,
+    detailDescription: [{
+      title: title1,
+      content: detailDescription1,
+      imgURL: oldCourse.detailDescription[0].imgURL
+    }, {
+      title: title2,
+      content: detailDescription2,
+      imgURL: oldCourse.detailDescription[1].imgURL
+    }]
+  }
+  if (oldCourse.courseName !== courseName) {
+    data.slug = slugify(courseName, {
+      lower: true
+    });
   }
   try {
-    const newCourse = await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
-    const course = await Course.findById({ _id: newCourse._id })
-    res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase(), message: "Update Information Successfully !!!" })
+    const newCourse = await Course.findByIdAndUpdate({
+      _id: oldCourse._id
+    }, data, {
+      runValidators: true
+    });
+    const course = await Course.findById({
+      _id: newCourse._id
+    });
+    await Notifications.create({
+      notification: `Updated Course ${course.courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    console.log(course);
+    res.redirect(`/admin/course/${course.slug}`);
+    return;
   } catch (error) {
-    res.render('err/Error404', { code: 500 });
+    await Notifications.create({
+      notification: `Update Course ${courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${oldSlug}`);
+    return;
   }
 })
 
 exports.updateVideoImages = catchAsync(async (req, res, next) => {
-  const { user } = req;
+  const {
+    user
+  } = req;
+  const {
+    slug
+  } = req.params
+
   const urls = [];
-  const { files } = req;
-  const _id = (await Course.findOne({ slug: req.params.slug }))._id;
+
+  const {
+    files
+  } = req;
+
+  const _id = (await Course.findOne({
+    slug: slug
+  }))._id;
+
   const data = {}
   for (const file of files) {
     let folder;
@@ -132,15 +238,23 @@ exports.updateVideoImages = catchAsync(async (req, res, next) => {
   }
   // update dữ liệu vào db
   try {
-    const newCourse = await Course.findByIdAndUpdate({ _id }, data, { runValidators: true });
-    await Course.updateOne({ _id }, {
+    const newCourse = await Course.findByIdAndUpdate({
+      _id
+    }, data, {
+      runValidators: true
+    });
+    await Course.updateOne({
+      _id
+    }, {
       $set: {
         "detailDescription.0.imgURL": urls[1]
       }
     }, {
       runValidators: true
     });
-    await Course.updateOne({ _id }, {
+    await Course.updateOne({
+      _id
+    }, {
       $set: {
         "detailDescription.1.imgURL": urls[2]
       }
@@ -148,27 +262,58 @@ exports.updateVideoImages = catchAsync(async (req, res, next) => {
       runValidators: true
     });
 
-    const course = await Course.findById({ _id: newCourse._id })
-    res.render('admin/courses/course-detail', { user, course, title: course.slug.toUpperCase(), message: "Update Video And Image Successfully !!!" })
+    const course = await Course.findById({
+      _id: newCourse._id
+    })
+    await Notifications.create({
+      notification: `Updated Course IMAGE/VIDEO ${course.courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect('back');
+    return;
   } catch (error) {
-    res.render('err/Error404', { code: 500 });
+    await Notifications.create({
+      notification: `Updated Course IMAGE/VIDEO ${slug} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect('back');
+    return;
   }
 })
 
 
 exports.getAddSection = catchAsync(async (req, res, next) => {
   const user = req.user
-  res.render('admin/section/new-section', { user })
+  res.render('admin/section/new-section', {
+    user,
+    title: 'ADD SECTION'
+  })
 });
 
 exports.postAddSection = catchAsync(async (req, res, next) => {
-  const { sectionTitle, sectionDescription } = req.body
+  const {
+    sectionTitle,
+    sectionDescription
+  } = req.body
   const user = req.user
-  const { file } = req;
-  const { slug } = req.params;
-  const course = await Course.findOne({ slug });
-  if(file.mimetype === "video/mp4"){
-    res.render(`admin/section/new-section`, { user, course, title: course.slug.toUpperCase(), message: `Chọn Image nhé :)` })
+  const {
+    file
+  } = req;
+  const {
+    slug
+  } = req.params;
+  const course = await Course.findOne({
+    slug
+  });
+  if (file.mimetype === "video/mp4") {
+    res.render(`admin/section/new-section`, {
+      user,
+      course,
+      title: course.slug.toUpperCase(),
+      message: `Chọn Image nhé :)`
+    })
     return;
   }
   const nameVideos = file.filename.split(".").slice(0, -1).join(".");
@@ -178,29 +323,68 @@ exports.postAddSection = catchAsync(async (req, res, next) => {
   const uploader = async path => await cloudinary.uploads(path, options)
   const imageCover = (await uploader(file.path)).secure_url
   fs.unlinkSync(file.path)
-  const data = { sectionTitle, sectionDescription, imageCover, courseId: course._id }
+  const data = {
+    sectionTitle,
+    sectionDescription,
+    imageCover,
+    courseId: course._id
+  }
   try {
     await Section.create(data);
-    res.redirect(`/admin/course/${slug}`)
+    await Notifications.create({
+      notification: `Created Section ${sectionTitle} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug}`);
+    return;
   } catch (error) {
-    res.render(`admin/courses/course-detail`, { user, course, title: course.slug.toUpperCase(), message: `Đã Có Tên : ${sectionTitle}` })
+    await Notifications.create({
+      notification: `Create Section ${sectionTitle} False !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug}`)
     return;
   }
 });
 
 exports.getAddLesion = catchAsync(async (req, res, next) => {
-  const { user } = req
-  res.render('admin/lession/new-lession', { user, title: "Add New Lession" })
+  const {
+    user
+  } = req;
+  res.render('admin/lession/new-lession', {
+    user,
+    title: "ADD LESSON"
+  })
 });
 
 exports.postAddLesion = catchAsync(async (req, res, next) => {
-  const { user } = req
-  const { lessonTitle, lessonDescription } = req.body
-  const { file } = req;
-  const { slug1, slug2 } = req.params;
-  const sectionId = (await Section.findOne({ slug: slug2 }))._id;
+  const {
+    user
+  } = req
+  const {
+    lessonTitle,
+    lessonDescription
+  } = req.body
+  const {
+    file
+  } = req;
+  const {
+    slug1,
+    slug2
+  } = req.params;
+  const sectionId = (await Section.findOne({
+    slug: slug2
+  }))._id;
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    res.render('admin/lession/new-lession', { user, title: "Add New Lession", message: "vui long chon video" })
+    await Notifications.create({
+      notification: `vui long chon video`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect("/");
+    return;
   }
   const nameVideos = file.filename.split(".").slice(0, -1).join(".");
   const options = {
@@ -210,37 +394,101 @@ exports.postAddLesion = catchAsync(async (req, res, next) => {
   const uploader = async path => await cloudinary.uploads(path, options)
   const videoId = (await uploader(file.path)).secure_url
   fs.unlinkSync(file.path)
-  const data = { lessonTitle, lessonDescription, videoId, sectionId }
+  const data = {
+    lessonTitle,
+    lessonDescription,
+    videoId,
+    sectionId
+  }
   try {
     await Lesson.create(data);
+    await Notifications.create({
+      notification: `Created Lesson ${lessonTitle} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug1}`)
+    return
   } catch (error) {
-    res.render('admin/lession/new-lession', { user, title: "Add New Lession", message: `Đã Có Tên : ${lessonTitle}` })
+    await Notifications.create({
+      notification: `Đã Có Tên : ${lessonTitle}`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug1}`)
     return;
   }
-  res.redirect(`/admin/course/${slug1}`)
 });
 
 exports.getLesson = catchAsync(async (req, res, next) => {
-  const { user } = req
-  const { slug1, slug2, slug3 } = req.params
-  const course = await Course.findOne({ slug: slug1 })
-  const section = await Section.findOne({ slug: slug2 })
-  const lesson = await Lesson.findOne({ slug: slug3 })
-  res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson })
+  const {
+    user
+  } = req
+  const {
+    slug1,
+    slug2,
+    slug3
+  } = req.params
+  const course = await Course.findOne({
+    slug: slug1
+  })
+  const section = await Section.findOne({
+    slug: slug2
+  })
+  const lesson = await Lesson.findOne({
+    slug: slug3
+  })
+  res.render('admin/lession/detail-lesson', {
+    user,
+    title: lesson.slug.toUpperCase(),
+    course,
+    section,
+    lesson
+  })
 })
 
 exports.updateLesson = catchAsync(async (req, res, next) => {
-  const { slug1, slug2, slug3 } = req.params
-  const { file } = req
-  const { user } = req
-  let { lessonDescription, lessonTitle } = req.body;
-  const course = await Course.findOne({ slug: slug1 })
-  const section = await Section.findOne({ slug: slug2 })
-  const oldLesson = await Lesson.findOne({ slug: slug3 });
-  const slug = slugify(lessonTitle, { lower: true });
+  const {
+    slug1,
+    slug2,
+    slug3
+  } = req.params
+  const {
+    file
+  } = req
+  const {
+    user
+  } = req
+  let {
+    lessonDescription,
+    lessonTitle
+  } = req.body;
+  let data = {
+    ...req.body
+  }
+  const course = await Course.findOne({
+    slug: slug1
+  })
+  const section = await Section.findOne({
+    slug: slug2
+  })
+  const oldLesson = await Lesson.findOne({
+    slug: slug3
+  });
+  if (oldLesson.lessonTitle !== lessonTitle) {
+    data.slug = slugify(lessonTitle, {
+      lower: true
+    });
+  }
   if (file) {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-      res.render(`admin/course/${slug1}/${slug2}/${slug3}`, { user, title: "Add New Lession", message: "vui long chon video" })
+      await Notifications.create({
+        notification: `vui long chon video`,
+        isSuccess: false,
+        user: user._id
+      })
+      res.redirect(`/admin/course/${slug1}/${slug2}/${slug3}`)
+      return;
     }
     const nameVideos = file.filename.split(".").slice(0, -1).join(".");
     const options = {
@@ -250,22 +498,29 @@ exports.updateLesson = catchAsync(async (req, res, next) => {
     const uploader = async path => await cloudinary.uploads(path, options)
     const videoId = (await uploader(file.path)).secure_url
     fs.unlinkSync(file.path)
-    const data = { lessonTitle, lessonDescription, videoId, slug }
-    try {
-      await Lesson.findByIdAndUpdate({ _id: oldLesson._id }, data)
-      const lesson = await Lesson.findOne({ slug: slug3 });
-      res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson, message: "Update Success !!!" })
-    } catch (error) {
-      res.render('err/Error404', { code: 500 })
-    }
-  } else {
-    try {
-      const data = { lessonTitle, lessonDescription, slug }
-      await Lesson.findByIdAndUpdate({ _id: oldLesson._id }, data)
-      const lesson = await Lesson.findOne({ slug: slug3 });
-      res.render('admin/lession/detail-lesson', { user, title: lesson.slug, course, section, lesson, message: "Update Success !!!" })
-    } catch (error) {
-      res.render('err/Error404', { code: 500 })
-    }
+    data.videoId = videoId;
+  }
+
+  try {
+    console.log(data);
+    const lessonUpdate = await Lesson.findByIdAndUpdate({
+      _id: oldLesson._id
+    }, data)
+    const lesson = await Lesson.findOne({
+      _id: lessonUpdate._id
+    });
+    await Notifications.create({
+      notification: `Update Lesson ${lesson.lessonTitle} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug1}/${slug2}/${lesson.slug}`)
+  } catch (error) {
+    await Notifications.create({
+      notification: `Update Lesson ${oldLesson.lessonTitle} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug1}/${slug2}/${slug3}`)
   }
 })

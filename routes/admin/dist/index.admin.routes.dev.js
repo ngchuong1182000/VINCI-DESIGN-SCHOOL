@@ -20,9 +20,6 @@ var _require = require('../../controllers/admin/index.controller'),
     getLesson = _require.getLesson,
     updateLesson = _require.updateLesson;
 
-var _require2 = require("lodash"),
-    get = _require2.get;
-
 router.route("/index").get(getIndex);
 router.route("/course/create-course").get(getPageCreateCourse).post(multer.array("fileUpload", 12), postPageCreateCourse); // Course
 

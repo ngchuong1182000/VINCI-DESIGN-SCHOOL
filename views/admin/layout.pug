@@ -2,7 +2,7 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(content='width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no', name='viewport')
-  title= title
+  title= title ? title : "Vince Design School"
   // General CSS Files
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
   link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.7.2/css/all.css', integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr', crossorigin='anonymous')
@@ -30,8 +30,7 @@ body
               i.fas.fa-search
             .search-backdrop
             .search-result
-              .search-header
-                | Histories
+              .search-header Histories
               .search-item
                 a(href='#') How to hack NASA using CSS
                 a.search-close(href='#')
@@ -44,166 +43,61 @@ body
                 a(href='#') #Stisla
                 a.search-close(href='#')
                   i.fas.fa-times
-              .search-header
-                | Result
-              .search-item
-                a(href='#')
-                  img.mr-3.rounded(width='30', src='../assets/img/products/product-3-50.png', alt='product')
-                  |                   oPhone S9 Limited Edition
-              .search-item
-                a(href='#')
-                  img.mr-3.rounded(width='30', src='../assets/img/products/product-2-50.png', alt='product')
-                  |                   Drone X2 New Gen-7
-              .search-item
-                a(href='#')
-                  img.mr-3.rounded(width='30', src='../assets/img/products/product-1-50.png', alt='product')
-                  |                   Headphone Blitz
-              .search-header
-                | Projects
-              .search-item
-                a(href='#')
-                  .search-icon.bg-danger.text-white.mr-3
-                    i.fas.fa-code
-                  |                   Stisla Admin Template
-              .search-item
-                a(href='#')
-                  .search-icon.bg-primary.text-white.mr-3
-                    i.fas.fa-laptop
-                  |                   Create a new Homepage Design
         ul.navbar-nav.navbar-right
-          li.dropdown.dropdown-list-toggle
-            a.nav-link.nav-link-lg.message-toggle.beep(href='#', data-toggle='dropdown')
-              i.far.fa-envelope
-            .dropdown-menu.dropdown-list.dropdown-menu-right
-              .dropdown-header
-                | Messages
-                .float-right
-                  a(href='#') Mark All As Read
-              .dropdown-list-content.dropdown-list-message
-                a.dropdown-item.dropdown-item-unread(href='#')
-                  .dropdown-item-avatar
-                    img.rounded-circle(alt='image', src='../assets/img/avatar/avatar-1.png')
-                    .is-online
-                  .dropdown-item-desc
-                    b Kusnaedi
-                    p Hello, Bro!
-                    .time 10 Hours Ago
-                a.dropdown-item.dropdown-item-unread(href='#')
-                  .dropdown-item-avatar
-                    img.rounded-circle(alt='image', src='../assets/img/avatar/avatar-2.png')
-                  .dropdown-item-desc
-                    b Dedik Sugiharto
-                    p Lorem ipsum dolor sit amet, consectetur adipisicing elit
-                    .time 12 Hours Ago
-                a.dropdown-item.dropdown-item-unread(href='#')
-                  .dropdown-item-avatar
-                    img.rounded-circle(alt='image', src='../assets/img/avatar/avatar-3.png')
-                    .is-online
-                  .dropdown-item-desc
-                    b Agung Ardiansyah
-                    p Sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    .time 12 Hours Ago
-                a.dropdown-item(href='#')
-                  .dropdown-item-avatar
-                    img.rounded-circle(alt='image', src='../assets/img/avatar/avatar-4.png')
-                  .dropdown-item-desc
-                    b Ardian Rahardiansyah
-                    p Duis aute irure dolor in reprehenderit in voluptate velit ess
-                    .time 16 Hours Ago
-                a.dropdown-item(href='#')
-                  .dropdown-item-avatar
-                    img.rounded-circle(alt='image', src='../assets/img/avatar/avatar-5.png')
-                  .dropdown-item-desc
-                    b Alfa Zulkarnain
-                    p Exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    .time Yesterday
-              .dropdown-footer.text-center
-                a(href='#')
-                  | View All 
-                  i.fas.fa-chevron-right
           li.dropdown.dropdown-list-toggle
             a.nav-link.notification-toggle.nav-link-lg.beep(href='#', data-toggle='dropdown')
               i.far.fa-bell
             .dropdown-menu.dropdown-list.dropdown-menu-right
-              .dropdown-header
-                | Notifications
-                .float-right
-                  a(href='#') Mark All As Read
+              .dropdown-header.text-center Notifications
               .dropdown-list-content.dropdown-list-icons
-                a.dropdown-item.dropdown-item-unread(href='#')
-                  .dropdown-item-icon.bg-primary.text-white
-                    i.fas.fa-code
-                  .dropdown-item-desc
-                    | Template update is available now!
-                    .time.text-primary 2 Min Ago
-                a.dropdown-item(href='#')
-                  .dropdown-item-icon.bg-info.text-white
-                    i.far.fa-user
-                  .dropdown-item-desc
-                    b You
-                    |  and 
-                    b Dedik Sugiharto
-                    |  are now friends
-                    .time 10 Hours Ago
-                a.dropdown-item(href='#')
-                  .dropdown-item-icon.bg-success.text-white
-                    i.fas.fa-check
-                  .dropdown-item-desc
-                    b Kusnaedi
-                    |  has moved task 
-                    b Fix bug header
-                    |  to 
-                    b Done
-                    .time 12 Hours Ago
-                a.dropdown-item(href='#')
-                  .dropdown-item-icon.bg-danger.text-white
-                    i.fas.fa-exclamation-triangle
-                  .dropdown-item-desc
-                    | Low disk space. Let&apos;s clean it!
-                    .time 17 Hours Ago
-                a.dropdown-item(href='#')
-                  .dropdown-item-icon.bg-info.text-white
-                    i.fas.fa-bell
-                  .dropdown-item-desc
-                    | Welcome to Stisla template!
-                    .time Yesterday
+                if user.notifications.length > 0
+                  - for (var i = user.notifications.length - 1; i >= 0; i--) {
+                    - let a = user.notifications[i];
+                      a.dropdown-item.dropdown-item-unread(href='#')
+                        if a.isSuccess
+                          .dropdown-item-icon.bg-success.text-white
+                            i.fas.fa-check
+                        else 
+                          .dropdown-item-icon.bg-danger.text-white
+                            i.fas.fa-exclamation-triangle
+                        .dropdown-item-desc= a.notification
+                          -
+                            let currentLoadTime = new Date().getTime()
+                            let finalDate
+                            let date = new Date(currentLoadTime - a.createdAt.getTime())
+                            let minutes = parseInt((date / (1000 * 60)) % 60)
+                            let hours = parseInt((date / (1000 * 60 * 60)) % 24)
+                            let days  = parseInt((date / (1000 * 60 * 60 *24)) % 24)
+                            finalDate = days + " day " + hours + " hours " + minutes + " minutes ago";
+                            if (days > 365){
+                              finalDate = "một năm trước"
+                            }
+                          .time.text-primary= finalDate
+                  - }
               .dropdown-footer.text-center
-                a(href='#')
-                  | View All 
-                  i.fas.fa-chevron-right
+                h5 Love You 
           li.dropdown
             a.nav-link.dropdown-toggle.nav-link-lg.nav-link-user(href='#', data-toggle='dropdown')
               img.rounded-circle.mr-1(alt='image', src= user.photo)
               .d-sm-none.d-lg-inline-block= `Hi, ${user.name}`
             .dropdown-menu.dropdown-menu-right
               .dropdown-title Logged in 5 min ago
-              a.dropdown-item.has-icon(href='features-profile.html')
+              a.dropdown-item.has-icon(href='#') Profile
                 i.far.fa-user
-                |  Profile
-              a.dropdown-item.has-icon(href='features-activities.html')
+              a.dropdown-item.has-icon(href='#') Activities
                 i.fas.fa-bolt
-                |  Activities
-              a.dropdown-item.has-icon(href='features-settings.html')
+              a.dropdown-item.has-icon(href='#') Settings
                 i.fas.fa-cog
-                |  Settings
               .dropdown-divider
-              a.dropdown-item.has-icon.text-danger(href='#')
-                i.fas.fa-sign-out-alt
-                |  Logout
-      .loading#loading
-        img(src="/admin/img/laoding.gif", alt="loading", srcset="")
+              a.dropdown-item.has-icon.text-danger(href='/auth/signout') Logout 
+                i.fas.fa-sign-out-alt 
       .main-sidebar
         aside#sidebar-wrapper
           .sidebar-brand
-            a(href='/admin/index') Chương
+            a(href='/admin/index') Vince Design School
           .sidebar-brand.sidebar-brand-sm
-            a(href='/admin/index') C
+            a(href='/admin/index') VCS
           ul.sidebar-menu
-            li.menu-header Dashboard
-            li.nav-item.dropdown
-              a.nav-link.has-dropdown(href='/')
-                i.fas.fa-fire
-                span Home Page Admin
             li.menu-header Management Menu
             li.nav-item.dropdown
               a.nav-link.has-dropdown(href='#', data-toggle='dropdown')
@@ -230,33 +124,6 @@ body
                   a.nav-link(href='bootstrap-alert.html') View All Order
                 li
                   a.nav-link(href='bootstrap-badge.html') Check New Order
-            li.nav-item.dropdown
-              a.nav-link.has-dropdown(href='#')
-                i.fas.fa-th
-                span Secctions
-              ul.dropdown-menu
-                li
-                  a.nav-link(href='bootstrap-alert.html') View All Secctions
-                li
-                  a.nav-link(href='bootstrap-badge.html') Check New Secctions
-            li.nav-item.dropdown
-              a.nav-link.has-dropdown(href='#')
-                i.fas.fa-th
-                span Lesson
-              ul.dropdown-menu
-                li
-                  a.nav-link(href='bootstrap-alert.html') View All Lesson
-                li
-                  a.nav-link(href='bootstrap-badge.html') Check New Lesson
-            li.nav-item.dropdown
-              a.nav-link.has-dropdown(href='#')
-                i.fas.fa-th
-                span Category
-              ul.dropdown-menu
-                li
-                  a.nav-link(href='bootstrap-alert.html') View All Category
-                li
-                  a.nav-link(href='bootstrap-badge.html') Check New Category
       // Main Content
       block content
   // General JS Scripts
