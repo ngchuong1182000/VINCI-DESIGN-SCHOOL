@@ -11,8 +11,8 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const expressSession = require('express-session')
 
 const User = require("./models/user.model")
-const { connectAuthFacebook } = require('./utils/passport-facebook.setup')
-const { connectAuthGoogle } = require('./utils/passport-google.setup')
+const { connectAuthFacebook } = require('./helpers/passport-facebook.setup')
+const { connectAuthGoogle } = require('./helpers/passport-google.setup')
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);

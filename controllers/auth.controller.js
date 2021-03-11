@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const catchAsync = require('../utils/catchAsync');
 const sgMail = require('@sendgrid/mail');
-const { createSendToken } = require('../helpers/createSendToken')
+const { createSendToken } = require('../utils/createSendToken')
 
 
 exports.getSignup = function (req, res, next) {
@@ -126,10 +126,8 @@ exports.checkUser = catchAsync(async (req, res, next) => {
 
 module.exports.signout = (req, res) => {
   res.clearCookie("token");
-  res.clearCookie('connect.sid')
-  res.render('auth/login', {
-    message: "Signout success",
-  })
+  res.clearCookie('connect.sid');
+  res.redirect('/');
 };
 
 exports.restrictTo = (...role) => {

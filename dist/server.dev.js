@@ -24,10 +24,10 @@ var expressSession = require('express-session');
 
 var User = require("./models/user.model");
 
-var _require = require('./utils/passport-facebook.setup'),
+var _require = require('./helpers/passport-facebook.setup'),
     connectAuthFacebook = _require.connectAuthFacebook;
 
-var _require2 = require('./utils/passport-google.setup'),
+var _require2 = require('./helpers/passport-google.setup'),
     connectAuthGoogle = _require2.connectAuthGoogle;
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);

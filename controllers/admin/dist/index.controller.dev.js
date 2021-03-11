@@ -555,6 +555,21 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
 
         case 6:
           course = _context13.sent;
+
+          if (!(file.mimetype === "video/mp4")) {
+            _context13.next = 10;
+            break;
+          }
+
+          res.render("admin/section/new-section", {
+            user: user,
+            course: course,
+            title: course.slug.toUpperCase(),
+            message: "Ch\u1ECDn Image nh\xE9 :)"
+          });
+          return _context13.abrupt("return");
+
+        case 10:
           nameVideos = file.filename.split(".").slice(0, -1).join(".");
           options = {
             public_id: "images/".concat(nameVideos)
@@ -579,10 +594,10 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
             });
           };
 
-          _context13.next = 12;
+          _context13.next = 15;
           return regeneratorRuntime.awrap(uploader(file.path));
 
-        case 12:
+        case 15:
           imageCover = _context13.sent.secure_url;
           fs.unlinkSync(file.path);
           data = {
@@ -591,18 +606,18 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
             imageCover: imageCover,
             courseId: course._id
           };
-          _context13.prev = 15;
-          _context13.next = 18;
+          _context13.prev = 18;
+          _context13.next = 21;
           return regeneratorRuntime.awrap(Section.create(data));
 
-        case 18:
+        case 21:
           res.redirect("/admin/course/".concat(slug));
-          _context13.next = 25;
+          _context13.next = 28;
           break;
 
-        case 21:
-          _context13.prev = 21;
-          _context13.t0 = _context13["catch"](15);
+        case 24:
+          _context13.prev = 24;
+          _context13.t0 = _context13["catch"](18);
           res.render("admin/courses/course-detail", {
             user: user,
             course: course,
@@ -611,12 +626,12 @@ exports.postAddSection = catchAsync(function _callee8(req, res, next) {
           });
           return _context13.abrupt("return");
 
-        case 25:
+        case 28:
         case "end":
           return _context13.stop();
       }
     }
-  }, null, null, [[15, 21]]);
+  }, null, null, [[18, 24]]);
 });
 exports.getAddLesion = catchAsync(function _callee9(req, res, next) {
   var user;

@@ -26,10 +26,6 @@ var userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true
   },
-  profile: {
-    type: String,
-    trim: true
-  },
   hashed_password: {
     type: String,
     required: true
@@ -46,10 +42,6 @@ var userSchema = new mongoose.Schema({
   },
   photo: {
     type: String
-  },
-  resetPasswordLink: {
-    type: String,
-    "default": ""
   },
   purchased_course: [{
     type: mongoose.Schema.ObjectId,

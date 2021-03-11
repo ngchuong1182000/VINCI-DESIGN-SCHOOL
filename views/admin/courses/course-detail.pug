@@ -75,7 +75,7 @@ block content
                           label.custom-file-label Choose File
                         .form-text.text-muted The Video must have a maximum size of 100 MB
                 .card-footer.text-center
-                  button.btn.btn-primary#submit Save Changes
+                  button.btn.btn-primary Save Changes
           .col-12.col-md-12.col-lg-7(style="margin-top: 100px")
             .card
               form.needs-validation(action=`/admin/course/${course.slug}/updateInformation`, method="post")
@@ -111,7 +111,7 @@ block content
                       label(for='site-description') Description Detail 2
                       textarea#site-description.form-control(name='detailDescription2',style='min-height:10rem')= course.detailDescription[0].content
                 .card-footer.text-center
-                  button.btn.btn-primary#submit Save Changes
+                  button.btn.btn-primary Save Changes
       .section-body
         h2.section-title
           a.btn.btn-primary(href=`/admin/course/${course.slug}/add/section`) Add New Section

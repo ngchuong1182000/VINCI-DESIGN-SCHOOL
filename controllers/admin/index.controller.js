@@ -167,6 +167,10 @@ exports.postAddSection = catchAsync(async (req, res, next) => {
   const { file } = req;
   const { slug } = req.params;
   const course = await Course.findOne({ slug });
+  if(file.mimetype === "video/mp4"){
+    res.render(`admin/section/new-section`, { user, course, title: course.slug.toUpperCase(), message: `Chọn Image nhé :)` })
+    return;
+  }
   const nameVideos = file.filename.split(".").slice(0, -1).join(".");
   const options = {
     public_id: `images/${nameVideos}`
