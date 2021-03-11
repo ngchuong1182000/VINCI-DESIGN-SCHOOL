@@ -126,6 +126,7 @@ exports.checkUser = catchAsync(async (req, res, next) => {
 
 module.exports.signout = (req, res) => {
   res.clearCookie("token");
+  res.clearCookie('connect.sid')
   res.render('auth/login', {
     message: "Signout success",
   })
