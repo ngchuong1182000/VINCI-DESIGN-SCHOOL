@@ -73,7 +73,7 @@ html(lang="en")
               .payment__user__info
                 .user__detail
                   span.text__body--normal--black--fixed Bạn đang đăng nhập tài khoản 
-                  span.text__body--bold--fixed= user.email
+                  input(type="text", name="email",readonly, value= user.email).text__body--bold--fixed
                 a(href='/auth/login')
                   span.text__body--normal--gray--fixed.user__login Đăng Nhập Bằng Tài Khoản Khác ?  
         section.course__benefit

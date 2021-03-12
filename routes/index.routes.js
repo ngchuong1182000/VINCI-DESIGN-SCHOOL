@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const { checkUser } = require('../controllers/auth.controller')
 const { getHomePage } = require('../controllers/index.controller')
 
 router.get('/', getHomePage);
