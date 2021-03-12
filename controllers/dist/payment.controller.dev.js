@@ -134,14 +134,20 @@ exports.postCheckOut = catchAsync(function _callee2(req, res, next) {
           vnpUrl += '?' + querystring.stringify(vnp_Params, {
             encode: true
           });
+
+          if (!(user.purchased_course.indexOf(course._id) == -1)) {
+            _context2.next = 43;
+            break;
+          }
+
           user.purchased_course.push(course._id);
-          _context2.next = 42;
+          _context2.next = 43;
           return regeneratorRuntime.awrap(user.save());
 
-        case 42:
+        case 43:
           res.redirect(vnpUrl);
 
-        case 43:
+        case 44:
         case "end":
           return _context2.stop();
       }
@@ -154,7 +160,6 @@ exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          console.log(req.query);
           vnp_Params = req.query;
           secureHash = vnp_Params['vnp_SecureHash'];
           delete vnp_Params['vnp_SecureHash'];
@@ -169,7 +174,7 @@ exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
           checkSum = sha256(signData);
 
           if (!(secureHash === checkSum)) {
-            _context3.next = 16;
+            _context3.next = 15;
             break;
           }
 
@@ -177,13 +182,13 @@ exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
           res.redirect("/user/myCourse");
           return _context3.abrupt("return");
 
-        case 16:
+        case 15:
           res.render('err/Error404', {
             code: 500
           });
           return _context3.abrupt("return");
 
-        case 18:
+        case 17:
         case "end":
           return _context3.stop();
       }

@@ -22,11 +22,19 @@ function sortObject(o) {
 }
 
 exports.getDetail = catchAsync(async (req, res, next) => {
-  const { slug } = req.params;
-  const { user } = req;
-  const course = await Course.findOne({ slug });
+  const {
+    slug
+  } = req.params;
+  const {
+    user
+  } = req;
+  const course = await Course.findOne({
+    slug
+  });
   if (!course) {
-    res.render('err/Error404', { code: 500 })
+    res.render('err/Error404', {
+      code: 500
+    })
     return;
   }
   let isBought = false;
@@ -40,13 +48,22 @@ exports.getDetail = catchAsync(async (req, res, next) => {
     }
   });
 
-  res.render('courses/payment', { course, user });
+  res.render('courses/payment', {
+    course,
+    user
+  });
 });
 
 exports.postCheckOut = catchAsync(async (req, res, next) => {
-  const { user } = req;
-  let { slug } = req.params;
-  let course = await Course.findOne({ slug });
+  const {
+    user
+  } = req;
+  let {
+    slug
+  } = req.params;
+  let course = await Course.findOne({
+    slug
+  });
 
   var ipAddr = req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress ||
@@ -90,7 +107,9 @@ exports.postCheckOut = catchAsync(async (req, res, next) => {
   vnp_Params = sortObject(vnp_Params);
 
   var querystring = require('qs');
-  var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
+  var signData = secretKey + querystring.stringify(vnp_Params, {
+    encode: false
+  });
 
   var sha256 = require('sha256');
 
@@ -98,16 +117,19 @@ exports.postCheckOut = catchAsync(async (req, res, next) => {
 
   vnp_Params['vnp_SecureHashType'] = 'SHA256';
   vnp_Params['vnp_SecureHash'] = secureHash;
-  vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: true });
+  vnpUrl += '?' + querystring.stringify(vnp_Params, {
+    encode: true
+  });
 
-  user.purchased_course.push(course._id);
-  await user.save();
+  if (user.purchased_course.indexOf(course._id) == -1) {
+    user.purchased_course.push(course._id);
+    await user.save();
+  }
 
   res.redirect(vnpUrl);
 });
 
 exports.returnPaymentLink = catchAsync(async (req, res, next) => {
-  console.log(req.query);
   var vnp_Params = req.query;
   var secureHash = vnp_Params['vnp_SecureHash'];
   delete vnp_Params['vnp_SecureHash'];
@@ -115,7 +137,9 @@ exports.returnPaymentLink = catchAsync(async (req, res, next) => {
   vnp_Params = sortObject(vnp_Params);
   var secretKey = process.env.vnp_HashSecret;
   var querystring = require('qs');
-  var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
+  var signData = secretKey + querystring.stringify(vnp_Params, {
+    encode: false
+  });
   var sha256 = require('sha256');
   var checkSum = sha256(signData);
   if (secureHash === checkSum) {
@@ -123,7 +147,9 @@ exports.returnPaymentLink = catchAsync(async (req, res, next) => {
     res.redirect("/user/myCourse")
     return;
   } else {
-    res.render('err/Error404', { code: 500 })
+    res.render('err/Error404', {
+      code: 500
+    })
     return;
   }
 })

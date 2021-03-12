@@ -3,22 +3,33 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const catchAsync = require('../utils/catchAsync');
 const sgMail = require('@sendgrid/mail');
-const { createSendToken } = require('../utils/createSendToken')
+const {
+  createSendToken
+} = require('../utils/createSendToken')
 
 
 exports.getSignup = function (req, res, next) {
   res.render('auth/signup');
 };
 module.exports.signup = catchAsync(async (req, res, next) => {
-  const { username, email, password, ConfirmPassword } = req.body;
+  const {
+    username,
+    email,
+    password,
+    ConfirmPassword
+  } = req.body;
   if (password !== ConfirmPassword) {
     res.render('auth/signup', {
       message: "Password and password confirm is not correct !"
     });
     return;
   }
-  const user = await User.findOne({ email });
-  const userOther = await User.findOne({ username });
+  const user = await User.findOne({
+    email
+  });
+  const userOther = await User.findOne({
+    username
+  });
   if (user) {
     res.render('auth/signup', {
       message: "Email is taken !"
@@ -47,7 +58,7 @@ module.exports.signup = catchAsync(async (req, res, next) => {
   };
   sgMail
     .send(msg)
-    .then(() => { }, error => {
+    .then(() => {}, error => {
       console.error(error);
       if (error.response) {
         console.error(error.response.body)
@@ -63,9 +74,15 @@ exports.getSignUpSuccess = function (req, res, next) {
 }
 
 exports.postSignupSuccess = catchAsync(async (req, res, next) => {
-  const { slug } = req.params;
-  const { code } = req.body;
-  const user = await User.findOne({ email: slug });
+  const {
+    slug
+  } = req.params;
+  const {
+    code
+  } = req.body;
+  const user = await User.findOne({
+    email: slug
+  });
   if (user.codeActive != code) {
     res.render(res.render("auth/signup-success", {
       title: 'Singup success, Please check your email account for account confirmation, and enter the code we sent you here :',
@@ -74,7 +91,9 @@ exports.postSignupSuccess = catchAsync(async (req, res, next) => {
   }
   user.isActive = true;
   user.codeActive = "";
-  await User.findByIdAndUpdate({ _id: user._id }, user);
+  await User.findByIdAndUpdate({
+    _id: user._id
+  }, user);
   createSendToken(user, res);
 });
 
@@ -83,14 +102,19 @@ exports.getLogin = function (req, res, next) {
 };
 module.exports.signin = catchAsync(async (req, res, next) => {
   // check if user exists
-  const { email, password } = req.body;
+  const {
+    email,
+    password
+  } = req.body;
   if (!email || !password) {
     res.render('auth/login', {
       message: "email or password can't empty !!!"
     });
     return;
   };
-  const user = await User.findOne({ email });
+  const user = await User.findOne({
+    email
+  });
   if (!user) {
     res.render('auth/login', {
       message: `Can Not Find This Email !!! `
@@ -113,13 +137,29 @@ module.exports.signin = catchAsync(async (req, res, next) => {
 
 
 exports.checkUser = catchAsync(async (req, res, next) => {
-  const { token } = req.signedCookies;
+  const {
+    token
+  } = req.signedCookies;
+
   if (!token) {
+    if (req._passport.session) {
+      const userPassport = req._passport.session.user;
+      const user = await User.findById({
+        _id: userPassport._id
+      })
+      req.user = user
+      next();
+      return
+    }
     next()
     return;
   }
-  const { _id } = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findById({ _id });
+  const {
+    _id
+  } = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await User.findById({
+    _id
+  });
   req.user = user
   next();
 });
@@ -133,7 +173,9 @@ module.exports.signout = (req, res) => {
 exports.restrictTo = (...role) => {
   return (req, res, next) => {
     if (!req.user || !role.includes(req.user.role)) {
-      return res.render('err/Error404', { code: 404 });
+      return res.render('err/Error404', {
+        code: 404
+      });
     }
     return next();
   }
@@ -147,7 +189,9 @@ module.exports.requireSignin = expressJwt({
 
 module.exports.authMiddleware = (req, res, next) => {
   const authUserId = req.user._id;
-  User.findById({ _id: authUserId }, (err, user) => {
+  User.findById({
+    _id: authUserId
+  }, (err, user) => {
     if (err || !user) {
       return res.status(400).json({
         error: "User not found",
@@ -160,7 +204,9 @@ module.exports.authMiddleware = (req, res, next) => {
 
 module.exports.adminMiddleware = (req, res, next) => {
   const adminUserId = req.user._id;
-  User.findById({ _id: adminUserId }, (err, user) => {
+  User.findById({
+    _id: adminUserId
+  }, (err, user) => {
     if (err || !user) {
       return res.status(400).json({
         error: "User not found",
@@ -183,7 +229,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 })
 
 exports.postForgotPassword = catchAsync(async (req, res, next) => {
-  const { email } = req.body;
+  const {
+    email
+  } = req.body;
   if (!email) {
     res.render("auth/forgot-password", {
       title: "Forgot Password",
@@ -191,7 +239,9 @@ exports.postForgotPassword = catchAsync(async (req, res, next) => {
     })
     return;
   }
-  let user = await User.findOne({ email });
+  let user = await User.findOne({
+    email
+  });
   if (!user) {
     res.render("auth/forgot-password", {
       title: "Forgot Password",
@@ -211,7 +261,7 @@ exports.postForgotPassword = catchAsync(async (req, res, next) => {
   };
   sgMail
     .send(msg)
-    .then(() => { }, error => {
+    .then(() => {}, error => {
       console.error(error);
       if (error.response) {
         console.error(error.response.body)
@@ -227,9 +277,17 @@ exports.getForgotPasswordSuccess = catchAsync(async (req, res, next) => {
   })
 })
 exports.postForgotPasswordSuccess = catchAsync(async (req, res, next) => {
-  const { email } = req.params;
-  const { code, password, passwordAgain } = req.body;
-  const user = await User.findOne({ email })
+  const {
+    email
+  } = req.params;
+  const {
+    code,
+    password,
+    passwordAgain
+  } = req.body;
+  const user = await User.findOne({
+    email
+  })
   if (password !== passwordAgain || code !== user.codeActive) {
     res.render('auth/forgot-password-success', {
       title: 'Enter Code And New Password',
@@ -240,5 +298,7 @@ exports.postForgotPasswordSuccess = catchAsync(async (req, res, next) => {
   user.password = password
   user.codeActive = ""
   await user.save();
-  res.render('auth/login', { message: "Thay đổi mật khẩu thành công !!!" });
+  res.render('auth/login', {
+    message: "Thay đổi mật khẩu thành công !!!"
+  });
 })

@@ -232,7 +232,7 @@ module.exports.signin = catchAsync(function _callee3(req, res, next) {
   });
 });
 exports.checkUser = catchAsync(function _callee4(req, res, next) {
-  var token, _jwt$verify, _id, user;
+  var token, userPassport, _user, _jwt$verify, _id, user;
 
   return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
@@ -241,26 +241,44 @@ exports.checkUser = catchAsync(function _callee4(req, res, next) {
           token = req.signedCookies.token;
 
           if (token) {
-            _context4.next = 4;
+            _context4.next = 12;
             break;
           }
 
+          if (!req._passport.session) {
+            _context4.next = 10;
+            break;
+          }
+
+          userPassport = req._passport.session.user;
+          _context4.next = 6;
+          return regeneratorRuntime.awrap(User.findById({
+            _id: userPassport._id
+          }));
+
+        case 6:
+          _user = _context4.sent;
+          req.user = _user;
           next();
           return _context4.abrupt("return");
 
-        case 4:
+        case 10:
+          next();
+          return _context4.abrupt("return");
+
+        case 12:
           _jwt$verify = jwt.verify(token, process.env.JWT_SECRET), _id = _jwt$verify._id;
-          _context4.next = 7;
+          _context4.next = 15;
           return regeneratorRuntime.awrap(User.findById({
             _id: _id
           }));
 
-        case 7:
+        case 15:
           user = _context4.sent;
           req.user = user;
           next();
 
-        case 10:
+        case 18:
         case "end":
           return _context4.stop();
       }
