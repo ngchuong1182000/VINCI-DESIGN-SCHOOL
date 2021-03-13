@@ -30,30 +30,32 @@ const courseSchema = mongoose.Schema({
     trim: true,
     required: [true, "short Description need require a short description"]
   },
-  detailDescription: [
-    {
-      title: {
-        type: String,
-        required: [true, "detail Description need require 2 title description"]
-      },
-      content: {
-        type: String,
-        required: [true, "detail Description need require 2 content description"]
-      },
-      imgURL: {
-        type: String,
-        required: [true, "detail Description need require 2 images description"]
-      },
+  detailDescription: [{
+    title: {
+      type: String,
+      required: [true, "detail Description need require 2 title description"]
+    },
+    content: {
+      type: String,
+      required: [true, "detail Description need require 2 content description"]
+    },
+    imgURL: {
+      type: String,
+      required: [true, "detail Description need require 2 images description"]
+    },
+    type: {
       type: {
-        type: {
-          type: String
-        }
+        type: String
       }
     }
-  ],
+  }],
   price: {
     type: Number,
     required: [true, 'A Course must have a price']
+  },
+  countBought: {
+    type: Number,
+    default: 0
   },
   imageCover: {
     type: String,
@@ -61,14 +63,22 @@ const courseSchema = mongoose.Schema({
   }
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
 });
 
 
-courseSchema.index({ slug: 1 });
+courseSchema.index({
+  slug: 1
+});
 courseSchema.pre("save", function (next) {
-  this.slug = slugify(this.courseName, { lower: true });
+  this.slug = slugify(this.courseName, {
+    lower: true
+  });
   next();
 });
 

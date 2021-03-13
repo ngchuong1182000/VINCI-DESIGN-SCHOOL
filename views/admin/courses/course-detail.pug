@@ -21,7 +21,7 @@ block content
                 .profile-widget-items
                   .profile-widget-item
                     .profile-widget-item-label Bought
-                    .profile-widget-item-value 187
+                    .profile-widget-item-value= course.countBought
                   .profile-widget-item
                     .profile-widget-item-label Price
                     .profile-widget-item-value= course.price.toLocaleString("it-it", { style : "currency", currency: "VND"})

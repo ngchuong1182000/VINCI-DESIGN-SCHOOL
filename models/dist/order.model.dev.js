@@ -1,5 +1,8 @@
-const mongoose = require("mongoose");
-const orderSchema = mongoose.Schema({
+"use strict";
+
+var mongoose = require("mongoose");
+
+var orderSchema = mongoose.Schema({
   courseId: {
     type: mongoose.Schema.ObjectId,
     ref: "Course"
@@ -8,14 +11,18 @@ const orderSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User"
   },
-  total_order : {
-    type : Number,
-    required : [true, "orderSchema required !!!"]
+  total_order: {
+    type: Number,
+    required: [true, "orderSchema required !!!"]
   }
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
 });
 orderSchema.pre(/^find/, function (next) {
   this.populate({
@@ -23,14 +30,13 @@ orderSchema.pre(/^find/, function (next) {
     select: '-__v'
   });
   next();
-})
+});
 orderSchema.pre(/^find/, function (next) {
   this.populate({
     path: "courseId",
     select: '-__v'
   });
   next();
-})
-const Order = mongoose.model('Order', orderSchema);
-
+});
+var Order = mongoose.model('Order', orderSchema);
 module.exports = Order;

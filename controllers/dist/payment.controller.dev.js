@@ -2,6 +2,8 @@
 
 var Course = require("../models/course.model");
 
+var Order = require("../models/order.model");
+
 var catchAsync = require('../utils/catchAsync');
 
 var shortid = require('shortid');
@@ -102,7 +104,7 @@ exports.postCheckOut = catchAsync(function _callee2(req, res, next) {
           orderId = shortid.generate();
           amount = course.price;
           bankCode = req.body.bankCode;
-          orderInfo = "Thanh toan don hang ".concat(orderId, ".");
+          orderInfo = "".concat(course._id);
           currCode = 'VND';
           vnp_Params = {};
           vnp_Params['vnp_Version'] = '2';
@@ -134,20 +136,9 @@ exports.postCheckOut = catchAsync(function _callee2(req, res, next) {
           vnpUrl += '?' + querystring.stringify(vnp_Params, {
             encode: true
           });
-
-          if (!(user.purchased_course.indexOf(course._id) == -1)) {
-            _context2.next = 43;
-            break;
-          }
-
-          user.purchased_course.push(course._id);
-          _context2.next = 43;
-          return regeneratorRuntime.awrap(user.save());
-
-        case 43:
           res.redirect(vnpUrl);
 
-        case 44:
+        case 40:
         case "end":
           return _context2.stop();
       }
@@ -155,7 +146,7 @@ exports.postCheckOut = catchAsync(function _callee2(req, res, next) {
   });
 });
 exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
-  var vnp_Params, secureHash, secretKey, querystring, signData, sha256, checkSum;
+  var vnp_Params, secureHash, secretKey, querystring, signData, sha256, checkSum, courseId, user, course, data;
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
@@ -174,21 +165,55 @@ exports.returnPaymentLink = catchAsync(function _callee3(req, res, next) {
           checkSum = sha256(signData);
 
           if (!(secureHash === checkSum)) {
-            _context3.next = 15;
+            _context3.next = 30;
             break;
           }
 
+          courseId = vnp_Params['vnp_OrderInfo'];
+          user = req.user;
+          _context3.next = 15;
+          return regeneratorRuntime.awrap(Course.findById({
+            _id: courseId
+          }));
+
+        case 15:
+          course = _context3.sent;
+
+          if (!(user.purchased_course.indexOf(course._id) == -1)) {
+            _context3.next = 26;
+            break;
+          }
+
+          data = {
+            courseId: courseId,
+            userId: user._id,
+            total_order: course.price
+          };
+          course.countBought += 1;
+          _context3.next = 21;
+          return regeneratorRuntime.awrap(course.save());
+
+        case 21:
+          _context3.next = 23;
+          return regeneratorRuntime.awrap(Order.create(data));
+
+        case 23:
+          user.purchased_course.push(course._id);
+          _context3.next = 26;
+          return regeneratorRuntime.awrap(user.save());
+
+        case 26:
           //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
           res.redirect("/user/myCourse");
           return _context3.abrupt("return");
 
-        case 15:
+        case 30:
           res.render('err/Error404', {
             code: 500
           });
           return _context3.abrupt("return");
 
-        case 17:
+        case 32:
         case "end":
           return _context3.stop();
       }

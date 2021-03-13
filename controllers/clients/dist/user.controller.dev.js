@@ -18,48 +18,47 @@ exports.getMyCourse = catchAsync(function _callee(req, res, next) {
         case 0:
           user = req.user;
           myCourse = [];
-          console.log(user);
 
           if (user) {
-            _context.next = 5;
+            _context.next = 4;
             break;
           }
 
           return _context.abrupt("return", res.redirect('/auth/login'));
 
-        case 5:
+        case 4:
           courseBought = user.purchased_course;
           i = 0;
 
-        case 7:
+        case 6:
           if (!(i < courseBought.length)) {
-            _context.next = 16;
+            _context.next = 15;
             break;
           }
 
           _context.t0 = myCourse;
-          _context.next = 11;
+          _context.next = 10;
           return regeneratorRuntime.awrap(Course.findById({
             _id: courseBought[i]
           }));
 
-        case 11:
+        case 10:
           _context.t1 = _context.sent;
 
           _context.t0.push.call(_context.t0, _context.t1);
 
-        case 13:
+        case 12:
           i++;
-          _context.next = 7;
+          _context.next = 6;
           break;
 
-        case 16:
+        case 15:
           res.render('clients/my-course', {
             user: user,
             myCourse: myCourse
           });
 
-        case 17:
+        case 16:
         case "end":
           return _context.stop();
       }

@@ -56,6 +56,10 @@ var courseSchema = mongoose.Schema({
     type: Number,
     required: [true, 'A Course must have a price']
   },
+  countBought: {
+    type: Number,
+    "default": 0
+  },
   imageCover: {
     type: String,
     required: [true, 'course need required image cover']

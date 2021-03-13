@@ -16,6 +16,8 @@ var Section = require("../../models/section.model");
 
 var Lesson = require("../../models/lesson.model");
 
+var Order = require("../../models/order.model");
+
 var Notifications = require("../../models/notifications.model");
 
 var cloudinary = require('../../utils/setup.cloudinary');
@@ -1023,4 +1025,33 @@ exports.updateLesson = catchAsync(function _callee12(req, res, next) {
       }
     }
   }, null, null, [[29, 42]]);
+});
+exports.getOrders = catchAsync(function _callee13(req, res, next) {
+  var user, orders, total_order;
+  return regeneratorRuntime.async(function _callee13$(_context20) {
+    while (1) {
+      switch (_context20.prev = _context20.next) {
+        case 0:
+          user = req.user;
+          _context20.next = 3;
+          return regeneratorRuntime.awrap(Order.find({}));
+
+        case 3:
+          orders = _context20.sent;
+          total_order = orders.reduce(function (a, b) {
+            return a += b.courseId.price;
+          }, 0);
+          res.render('admin/orders/view-orders', {
+            user: user,
+            title: "Orders Page - VDS",
+            orders: orders,
+            total_order: total_order
+          });
+
+        case 6:
+        case "end":
+          return _context20.stop();
+      }
+    }
+  });
 });

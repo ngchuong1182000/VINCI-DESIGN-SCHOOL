@@ -3,6 +3,7 @@ const Course = require("../../models/course.model");
 const Category = require("../../models/category.model");
 const Section = require("../../models/section.model");
 const Lesson = require("../../models/lesson.model");
+const Order = require("../../models/order.model");
 const Notifications = require("../../models/notifications.model");
 const cloudinary = require('../../utils/setup.cloudinary');
 const fs = require('fs');
@@ -523,4 +524,21 @@ exports.updateLesson = catchAsync(async (req, res, next) => {
     })
     res.redirect(`/admin/course/${slug1}/${slug2}/${slug3}`)
   }
+})
+
+exports.getOrders = catchAsync(async (req, res, next) => {
+  const {
+    user
+  } = req
+  const orders = await Order.find({});
+  let total_order = orders.reduce((a, b) => {
+    return a += b.courseId.price
+  }, 0)
+
+  res.render('admin/orders/view-orders', {
+    user,
+    title: "Orders Page - VDS",
+    orders,
+    total_order
+  })
 })

@@ -1,4 +1,5 @@
 const Course = require("../models/course.model");
+const Order = require("../models/order.model");
 const catchAsync = require('../utils/catchAsync');
 const shortid = require('shortid');
 const dateFormat = require('dateformat');
@@ -82,7 +83,7 @@ exports.postCheckOut = catchAsync(async (req, res, next) => {
 
   var amount = course.price;
   var bankCode = req.body.bankCode;
-  let orderInfo = `Thanh toan don hang ${orderId}.`;
+  let orderInfo = `${course._id}`;
 
   var currCode = 'VND';
   var vnp_Params = {};
@@ -121,10 +122,7 @@ exports.postCheckOut = catchAsync(async (req, res, next) => {
     encode: true
   });
 
-  if (user.purchased_course.indexOf(course._id) == -1) {
-    user.purchased_course.push(course._id);
-    await user.save();
-  }
+
 
   res.redirect(vnpUrl);
 });
@@ -143,6 +141,25 @@ exports.returnPaymentLink = catchAsync(async (req, res, next) => {
   var sha256 = require('sha256');
   var checkSum = sha256(signData);
   if (secureHash === checkSum) {
+    let courseId = vnp_Params['vnp_OrderInfo'];
+    let {
+      user
+    } = req;
+    const course = await Course.findById({
+      _id: courseId
+    });
+    if (user.purchased_course.indexOf(course._id) == -1) {
+      let data = {
+        courseId,
+        userId: user._id,
+        total_order: course.price
+      }
+      course.countBought += 1;
+      await course.save();
+      await Order.create(data);
+      user.purchased_course.push(course._id);
+      await user.save();
+    }
     //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
     res.redirect("/user/myCourse")
     return;

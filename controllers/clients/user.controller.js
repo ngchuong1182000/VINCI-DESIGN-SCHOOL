@@ -9,7 +9,6 @@ exports.getMyCourse = catchAsync(async (req, res, next) => {
     user
   } = req;
   const myCourse = [];
-  console.log(user);
 
   if (!user) {
     return res.redirect('/auth/login');
