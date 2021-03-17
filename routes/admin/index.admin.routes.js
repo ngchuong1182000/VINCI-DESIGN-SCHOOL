@@ -15,7 +15,8 @@ const {
   postAddLesion,
   getLesson,
   updateLesson,
-  getOrders
+  getOrders,
+  getFreeCourse
 } = require('../../controllers/admin/index.controller');
 
 router.route("/index")
@@ -49,4 +50,7 @@ router.route('/course/:slug1/:slug2/:slug3')
 router.route('/view-orders')
   .get(getOrders)
 
+router.route('/free-course')
+  .get(getFreeCourse)
+  
 module.exports = router;

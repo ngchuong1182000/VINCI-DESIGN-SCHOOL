@@ -4,6 +4,7 @@ const Category = require("../../models/category.model");
 const Section = require("../../models/section.model");
 const Lesson = require("../../models/lesson.model");
 const Order = require("../../models/order.model");
+const FreeCourse = require("../../models/freeCourse.model")
 const Notifications = require("../../models/notifications.model");
 const cloudinary = require('../../utils/setup.cloudinary');
 const fs = require('fs');
@@ -540,5 +541,16 @@ exports.getOrders = catchAsync(async (req, res, next) => {
     title: "Orders Page - VDS",
     orders,
     total_order
+  })
+})
+
+exports.getFreeCourse = catchAsync(async (req, res, next) => {
+  const {
+    user
+  } = req
+  const freeCourse = await FreeCourse.find({});
+  res.render("admin/courses/free-course", {
+    freeCourse,
+    user
   })
 })

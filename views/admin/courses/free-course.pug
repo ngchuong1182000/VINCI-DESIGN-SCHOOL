@@ -1,0 +1,25 @@
+extends ../layout
+block content
+    .main-content
+        section.section
+            .section-header
+                h1 Free Courses
+                .section-header-breadcrumb
+                    .breadcrumb-item.active
+                        a(href='#') Dashboard
+                    .breadcrumb-item
+                        a(href='#') Courses
+                    .breadcrumb-item Free Courses
+            .section-body
+                .row
+                    each i in freeCourse
+                        .card(style='max-width: 35rem; margin: 1rem 1rem')
+                            .card-header
+                                h4= i.title
+                                .card-header-action
+                                    a.btn.btn-primary(href= `/admin/free-course/${i._id}`) View All
+                            .card-body
+                                .chocolat-parent
+                                    a.chocolat-image(href= i.linkVideo, title='Just an example')
+                                    div(data-crop-image='285')
+                                        img.img-fluid(alt='image', src= i.imageCover)
