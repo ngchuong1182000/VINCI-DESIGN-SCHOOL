@@ -2,7 +2,7 @@
 
 var mongoose = require("mongoose");
 
-var orderSchema = mongoose.Schema({
+var orderSchema = new mongoose.Schema({
   courseId: {
     type: mongoose.Schema.ObjectId,
     ref: "Course"

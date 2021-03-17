@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require('slugify');
 
-const courseSchema = mongoose.Schema({
+const courseSchema = new mongoose.Schema({
   categoryId: {
     type: mongoose.Schema.ObjectId,
     ref: "Category",

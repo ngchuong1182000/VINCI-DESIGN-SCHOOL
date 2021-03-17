@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 
 var slugify = require("slugify");
 
-var lessonSchema = mongoose.Schema({
+var lessonSchema = new mongoose.Schema({
   lessonTitle: {
     type: String,
     required: true,

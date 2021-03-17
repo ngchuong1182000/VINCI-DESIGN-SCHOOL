@@ -44,6 +44,7 @@ a:hover {
   align-items: center;
   color: #fff;
 }
+
 main #navbar {
   max-height: 7rem;
 }
@@ -145,7 +146,7 @@ main #navbar {
 .description {
   transform: translateX(0);
   opacity: 1;
-  padding: 0px 7%;
+  padding: 0px 10%;
   position: relative;
   display: block;
 }
@@ -161,10 +162,9 @@ main #navbar {
 }
 
 .description_section_text {
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.78;
   color: #0c0d0d;
-  font-size: 18px;
   min-width: 135px;
   margin-top: 25px;
   position: relative;
@@ -916,6 +916,7 @@ h2 {
 .search>div>input:not(:placeholder-shown) {
   width: 250px;
 }
+
 /*  avta and menu */
 .img-border img {
   border-radius: 50%;
@@ -1420,9 +1421,7 @@ input[type=checkbox] {
 }
 
 @media screen and (max-width: 992px) {
-  body {
-   
-  }
+  body {}
 }
 
 
@@ -1469,6 +1468,7 @@ input[type=checkbox] {
   width: 100%;
   /* margin-right: 1rem; */
 }
+
 /* tang setting  change avatar */
 
 .rounded {
@@ -1485,4 +1485,111 @@ input[type=checkbox] {
   height: 3rem;
   width: 3rem;
   border-radius: 50% !important;
+}
+
+.video__content {
+  padding-top: 5rem;
+  display: grid;
+  /* /* grid-template-columns: 25% auto;
+  position: relative;
+  overflow: hidden; */
+}
+
+.video__content__wrapper {
+  grid-template-columns: repeat(auto-fill, 348px);
+  gap: 10px 100px;
+  display: grid;
+  margin-left: 20rem;
+  margin-top: -30px;
+}
+
+.video__container {
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+}
+
+.view__number {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.video__container img {
+  height: 196px;
+  max-height: 196px;
+  border: 5px;
+}
+
+.card image {
+  border-radius: 3px;
+}
+
+.video__container__title {
+  margin-top: 8px;
+  display: block;
+  line-height: 1.5;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0c0d0d;
+  flex-grow: 2;
+}
+
+.text__video__free {
+  margin: 20px;
+  display:flex;
+  flex-direction: column;
+}
+
+.video__container__details {
+  display: flex;
+  align-items: center;
+}
+
+.hover__hover_video {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.hover__hover_video i {
+  opacity: 0;
+  display: flex;
+  font-size: 5rem;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  height: 100%;
+  transform: scale()
+}
+.hover__hover_video:hover {
+  background-color: rgba(32, 30, 30, 0.2);
+  transition: all 0.5s;
+}
+.hover__hover_video:hover i{
+  opacity: 1;
+  transition: all 0.5s;
+}
+
+.video__container__divide {
+  width: 1px;
+  height: 15px;
+  background-color: #979ea6;
+  margin: 0 8px;
+}
+
+.video__container__published {
+  font-size: 16px;
+  font-weight: 400;
+  color: #0c0d0d;
+  line-height: 1.78;
+  letter-spacing: normal;
+}
+.freeCourses{
+  display:flex;
+}
+
+.freeCourses .video__container{
+  flex-grow: 0;
+}
+.freeCourses .text__video__free{
+  flex-grow: 2;
 }

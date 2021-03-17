@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 
 var slugify = require('slugify');
 
-var sectionSchema = mongoose.Schema({
+var sectionSchema = new mongoose.Schema({
   sectionTitle: {
     type: String,
     required: [true, "section need a required !!!"],

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const lessonSchema = mongoose.Schema({
+const lessonSchema = new mongoose.Schema({
   lessonTitle: {
     type: String,
     required: true,

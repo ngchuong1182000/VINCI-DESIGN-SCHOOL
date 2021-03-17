@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 
 var slugify = require('slugify');
 
-var courseSchema = mongoose.Schema({
+var courseSchema = new mongoose.Schema({
   categoryId: {
     type: mongoose.Schema.ObjectId,
     ref: "Category",

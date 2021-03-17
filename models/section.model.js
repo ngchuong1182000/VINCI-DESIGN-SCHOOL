@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require('slugify');
 
-const sectionSchema = mongoose.Schema({
+const sectionSchema = new mongoose.Schema({
   sectionTitle: {
     type: String,
     required: [true, "section need a required !!!"],

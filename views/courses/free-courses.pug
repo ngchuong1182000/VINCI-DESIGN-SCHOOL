@@ -1,0 +1,31 @@
+extends ../layouts/common
+block content
+    section.header_table
+        .introduction
+            img(src='/image/freecourse.webp', alt='', width='100%', height='630px')
+        span.online__header__title Video.
+        span.online__header__body Học mọi lúc, mọi nơi.
+        .landing__social
+            svg.das__icon(xmlns='http://www.w3.org/2000/svg', width='24', height='24', viewbox='0 0 24 24', alt='icon', style='height: 24px; width: 24px; cursor: pointer;')
+            path(fill='#FFF', fill-rule='nonzero', d='M23.8 7.6s-.2-1.7-1-2.4c-.9-1-1.9-1-2.4-1C17 4 12 4 12 4s-5 0-8.4.2c-.5.1-1.5.1-2.4 1-.7.7-1 2.4-1 2.4S0 9.5 0 11.5v1.8c0 1.9.2 3.9.2 3.9s.2 1.7 1 2.4c.9 1 2.1.9 2.6 1 1.9.2 8.2.2 8.2.2s5 0 8.4-.3c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.4 1-2.4s.2-1.9.2-3.9v-1.8c0-1.9-.2-3.8-.2-3.8zM9.5 15.5V8.8l6.5 3.4-6.5 3.3z')
+            svg.das__icon(xmlns='http://www.w3.org/2000/svg', width='24', height='24', viewbox='0 0 24 24', alt='icon', style='height: 24px; width: 24px; cursor: pointer;')
+            path(fill='#FFF', fill-rule='nonzero', d='M17.028 0A6.98 6.98 0 0 1 24 6.972v10.056A6.98 6.98 0 0 1 17.028 24H6.972A6.98 6.98 0 0 1 0 17.028V6.972A6.98 6.98 0 0 1 6.972 0zm0 1.875H6.972a5.102 5.102 0 0 0-5.097 5.097v10.056a5.102 5.102 0 0 0 5.097 5.097h10.056a5.102 5.102 0 0 0 5.097-5.097V6.972a5.102 5.102 0 0 0-5.097-5.097zM12 5.531A6.476 6.476 0 0 1 18.469 12 6.476 6.476 0 0 1 12 18.469 6.476 6.476 0 0 1 5.531 12 6.476 6.476 0 0 1 12 5.531zm0 1.875A4.599 4.599 0 0 0 7.406 12 4.599 4.599 0 0 0 12 16.594 4.599 4.599 0 0 0 16.594 12 4.599 4.599 0 0 0 12 7.406zM18.563 4.5a.937.937 0 1 1 0 1.875.937.937 0 0 1 0-1.875z')
+            svg.das__icon(xmlns='http://www.w3.org/2000/svg', width='24', height='24', viewbox='0 0 24 24', alt='icon', style='height: 24px; width: 24px; cursor: pointer;')
+            path(fill='#FFF', fill-rule='nonzero', d='M9.398 24l-.034-10.91H5V8.728h4.364V6c0-4.049 2.507-6 6.119-6 1.73 0 3.217.129 3.65.186v4.232h-2.505c-1.964 0-2.345.934-2.345 2.304v2.005H20l-2.182 4.364h-3.535V24H9.398z')
+    section.description
+        .video__content
+            span.section_general
+                .das__landing__line
+                h3.description_section_text Các Videos
+            .video__content__wrapper
+                each course in freeCourses 
+                    .card.freeCourses(style='width: 18rem;')
+                        .video__container
+                            a(href= course.linkVideo, target="_blank", rel="noopener noreferrer") 
+                                .hover__hover_video
+                                    i.far.fa-play-circle
+                                img.card-img-top(src= course.imageCover, alt='...')
+                        .text__video__free
+                            .video__container__details
+                                span.video__container__published 22/10/2020
+                            span.video__container__title= course.title

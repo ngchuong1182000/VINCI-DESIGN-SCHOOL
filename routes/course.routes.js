@@ -12,7 +12,8 @@ const {
   deleteCourse,
   getDetail,
   getStudy,
-  postComment
+  postComment,
+  getDocumentsFree
 } = require('../controllers/course.controller');
 const {
   requireSignin,
@@ -48,6 +49,6 @@ router
 router.route('/:slug/section/:slug1/lesson/:slug2/study')
   .get(checkUser, getStudy)
   .post(checkUser, postComment)
-
+router.route('/document/free').get(getDocumentsFree)
 
 module.exports = router;

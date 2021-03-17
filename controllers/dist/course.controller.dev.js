@@ -8,6 +8,8 @@ var Comment = require("../models/comment.model");
 
 var User = require("../models/user.model");
 
+var freeCourse = require("../models/freeCourse.model");
+
 var catchAsync = require('../utils/catchAsync');
 
 var AppError = require('../utils/appError');
@@ -209,6 +211,35 @@ exports.postComment = catchAsync(function _callee4(req, res, next) {
         case 9:
         case "end":
           return _context4.stop();
+      }
+    }
+  });
+});
+exports.getDocumentsFree = catchAsync(function _callee5(req, res, next) {
+  var freeCourses, user, data;
+  return regeneratorRuntime.async(function _callee5$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.next = 2;
+          return regeneratorRuntime.awrap(freeCourse.find({}));
+
+        case 2:
+          freeCourses = _context5.sent;
+          user = req.user;
+          data = {
+            freeCourses: freeCourses
+          };
+
+          if (user) {
+            data.user = user;
+          }
+
+          res.render('courses/free-courses', data);
+
+        case 7:
+        case "end":
+          return _context5.stop();
       }
     }
   });

@@ -2,7 +2,7 @@
 
 var mongoose = require("mongoose");
 
-var notificationsScheme = mongoose.Schema({
+var notificationsScheme = new mongoose.Schema({
   notification: {
     type: String,
     required: [true, "notificationsScheme require notification"]
