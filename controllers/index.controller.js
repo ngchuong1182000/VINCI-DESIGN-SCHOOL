@@ -16,3 +16,16 @@ exports.getHomePage = catchAsync(async (req, res, next) => {
   option.user = user;
   res.render('index', option);
 })
+
+exports.getContact = catchAsync(async (req, res, next) => {
+  const {
+    user
+  } = req;
+  if (user) {
+    res.render('contact', {
+      user
+    })
+    return;
+  }
+  res.render('contact')
+})

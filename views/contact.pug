@@ -1,0 +1,37 @@
+extends ./layouts/common
+block content
+    section.header_table
+        .introduction
+            img(src='/image/contact@3x.b5e5f3f8.png', alt='', width='100%')
+        span.online__header__title Liên hệ với DAS
+        span.online__header__body Hãy liên hệ với chúng tôi nếu có bất cứ thắc mắc nào về khoá học hay những khó khăn khi sử dụng website.
+    section.description
+        .description_section
+            span.section_general
+                .das__landing__line
+                span.description_section_text Li&ecirc;n h&#x1EC7; ngay
+            .description__section__detail
+                span.section__detail__title H&atilde;y &dstrok;i&#x1EC1;n th&ocirc;ng tin c&#x1EE7;a b&#x1EA1;n b&ecirc;n d&#x1B0;&#x1EDB;i
+                span.section__detail__other
+                form
+                    .mb-3
+                        label.form-label(for='exampleInputEmail1') Email address
+                        input#input__contact.form-control(type='email', aria-describedby='emailHelp', placeholder='Ví dụ: abc@gmail.com')
+                    .mb-3
+                        label.form-label(for='exampleInputPassword1') Lý do
+                        input#input__contact.form-control(type='text', placeholder='Ví dụ: Muốn hợp tác cùng VINCI')
+                    .mb-3
+                        label.form-label(for='exampleInputPassword1') Nội dung
+                        input#input__text.form-control(type='text')
+                    button.btn.btn-danger(type='submit') Submit
+    section.description__contact
+        .description_section
+            span.section_general
+                .das__landing__line__contact
+                span.description_section_text__contact Mạng Xã Hội
+            .description__section__detail
+                span.section__detail__title__contact Nhìn Theo Dõi VINCI qua các kênh
+                span.section__detail__other
+                    i.fab.fa-youtube.fa-3x(style='color: rgb(255, 255, 255);')
+                    i.fab.fa-facebook-f.fa-3x(style='color: rgb(255, 255, 255);')
+                    i.fab.fa-instagram.fa-3x(style='color: rgb(255, 255, 255);')
