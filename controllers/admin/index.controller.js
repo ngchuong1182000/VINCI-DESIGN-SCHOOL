@@ -535,7 +535,6 @@ exports.getOrders = catchAsync(async (req, res, next) => {
   let total_order = orders.reduce((a, b) => {
     return a += b.courseId.price
   }, 0)
-
   res.render('admin/orders/view-orders', {
     user,
     title: "Orders Page - VDS",

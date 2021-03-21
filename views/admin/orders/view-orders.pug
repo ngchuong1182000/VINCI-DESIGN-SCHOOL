@@ -38,8 +38,8 @@ block content
                                     td= i + 1
                                     td= order._id
                                     td
-                                        img.rounded-circle(alt='image', src= order.userId.photo, width='35', data-toggle='tooltip', title= order.userId.username)
-                                    td
+                                        img.rounded-circle(alt='image', src= `${order.userId.photo}`, width='35', data-toggle='tooltip', title= order.userId.username)
+                                    td  
                                         a(href=`/admin/course/${order.courseId.slug}`)= order.courseId.courseName
                                     td
                                         .badge.badge-success= order.total_order.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })

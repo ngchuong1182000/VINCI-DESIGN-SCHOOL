@@ -627,13 +627,12 @@ h2 {
   overflow: hidden;
   margin-top: -5px;
 }
-
+.section_general{
+  margin-right: 5rem;
+}
 .course__content {
   flex-grow: 1;
-  margin-left: 5rem;
   margin-top: -1rem;
-
-
 }
 
 .course__name {
