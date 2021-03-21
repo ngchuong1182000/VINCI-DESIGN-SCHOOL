@@ -44,9 +44,9 @@ body
                         .col.d-flex.justify-content-end
                             ul.navbar-nav.mb-2.mb-lg-0.d-flex
                                 li.nav-item
-                                    form.d-flex.align-items-center.search
+                                    form.d-flex.align-items-center.search(action="/course/course-online", method='GET')
                                         div
-                                            input(type='text', placeholder='Search . . .', required='')
+                                            input(type='text', placeholder='Search . . .', name='s')
                                 if !user
                                     li.nav-item.d-flex.align-items-center
                                         button.das__nav__btn(type='button')

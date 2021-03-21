@@ -1604,7 +1604,7 @@ input[type=checkbox] {
 	height: 55px;
 }
 .btn{
-height: 50px;
+height:  100%;
 width: 160px;
 }
 #input__text{

@@ -10,32 +10,31 @@ const apiFeatures = require('../utils/apiFeatures');
 const Lesson = require("../models/lesson.model");
 
 exports.getAllCourse = catchAsync(async (req, res, next) => {
-  let filter = {};
   const {
     user
   } = req;
-  if (req.params.slug) {
-    const temp = {
-      slug: req.params.slug
-    };
-    const section = await Course.findOne(temp);
-    filter = {
-      sectionId: section._id
-    };
+  let course;
+  if (req.query.s) {
+    course = await Course.aggregate(
+      [{
+          $unwind: "$courseName"
+        },
+        {
+          $match: {
+            courseName: {
+              $regex: req.query.s,
+              $options: "i"
+            }
+          }
+        }
+      ]
+    )
+  } else {
+    course = await Course.find({});
   }
-  const futures = new apiFeatures(Course.find(filter), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const doc = await futures.query;
-  if (!doc) {
-    next(new AppError(`Not Found A Document`, 404));
-  }
-
   res.render('courses/course-online', {
     title: "Course Online",
-    course: doc,
+    course,
     user
   });
 });
