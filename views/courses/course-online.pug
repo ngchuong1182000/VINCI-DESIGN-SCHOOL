@@ -10,7 +10,7 @@ block content
       .das__landing__line
       span.courses__section Kh&oacute;a h&#x1ECD;c online
     .course__content
-      span.courses__title Kho&aacute; VDS Online
+      span.courses__title= search ? "result search :" + search : "Khóa VDS Online"
       .couses_container
         each c in course
           a(href=`/course/${c.slug}/course-detail`)

@@ -14,6 +14,10 @@ exports.getAllCourse = catchAsync(async (req, res, next) => {
     user
   } = req;
   let course;
+  let options = {
+    title: "Course Online",
+    user
+  }
   if (req.query.s) {
     course = await Course.aggregate(
       [{
@@ -29,14 +33,13 @@ exports.getAllCourse = catchAsync(async (req, res, next) => {
         }
       ]
     )
+    options.course = course;
+    options.search = req.query.s;
   } else {
     course = await Course.find({});
+    options.course = course
   }
-  res.render('courses/course-online', {
-    title: "Course Online",
-    course,
-    user
-  });
+  res.render('courses/course-online', options);
 });
 
 exports.createCourse = factory.createOne(Course);
