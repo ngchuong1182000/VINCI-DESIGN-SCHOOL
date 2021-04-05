@@ -7,8 +7,11 @@ const {
   getPageCreateCourse,
   postPageCreateCourse,
   getDetailCourse,
-  updateInformationCourse,
-  updateVideoImages,
+  updateInformationCourseBase,
+  updateInformationCourseDetail,
+  updateImageDeTailOne,
+  updateImageDeTailTwo,
+  updateImageCoverCourse,
   getAddSection,
   postAddSection,
   getAddLesion,
@@ -30,10 +33,20 @@ router.route("/course/create-course")
 router.route("/course/:slug")
   .get(getDetailCourse)
 
-router.route("/course/:slug/updateInformation")
-  .post(updateInformationCourse)
-router.route("/course/:slug/updateVideoImages")
-  .post(multer.array("fileUpload", 12), updateVideoImages)
+router.route("/course/:slug/update-information-base")
+  .post(updateInformationCourseBase)
+
+router.route("/course/:slug/update-information-detail")
+  .post(updateInformationCourseDetail)
+
+router.route("/course/:slug/updateImageCoverCourse")
+  .post(multer.single("fileUpload"), updateImageCoverCourse)
+
+router.route("/course/:slug/updateImageDetailOne")
+  .post(multer.single("fileUpload"), updateImageDeTailOne)
+
+router.route("/course/:slug/updateImageDetailTwo")
+  .post(multer.single("fileUpload"), updateImageDeTailTwo)
 
 router.route("/course/:slug/add/section")
   .get(getAddSection)
@@ -52,5 +65,5 @@ router.route('/view-orders')
 
 router.route('/free-course')
   .get(getFreeCourse)
-  
+
 module.exports = router;

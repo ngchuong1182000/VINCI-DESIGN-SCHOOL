@@ -11,6 +11,10 @@ head
   link(rel='stylesheet', href='/admin/css/style.css')
   link(rel='stylesheet', href='/admin/css/components.css')
   link(rel="shortcut icon", href="/image/favicon.ico", type="image/x-icon")
+  // cloudinary
+  link(rel="stylesheet", href="/css/cld-video-player.min.css")
+  script(src='/js/cloudinary-core-shrinkwrap.min.js')
+  script(src="/js/cld-video-player.min.js") 
 body
   #app
     .main-wrapper
@@ -114,7 +118,7 @@ body
                 li
                   a.nav-link(href='/admin/free-course') View All Free Course
                 li
-                  a.nav-link(href='bootstrap-badge.html') Post New Free Course
+                  a.nav-link(href='/admin/free-course/create') Post New Free Course
             li.nav-item.dropdown
               a.nav-link.has-dropdown(href='/admin/view-orders')
                 i.fas.fa-th
@@ -126,16 +130,22 @@ body
                   a.nav-link(href='bootstrap-badge.html') Check New Order
       // Main Content
       block content
+
+
+
   // General JS Scripts
   script(src='https://code.jquery.com/jquery-3.3.1.min.js', integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=', crossorigin='anonymous')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
   script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js')
-  script(src='../assets/js/stisla.js')
+  script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous")
+  script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous")
+  script(src='/admin/js/stisla.js')
   // JS Libraies
   // Template JS File
   script(src='/admin/js/scripts.js')
   script(src='/admin/js/custom.js')
   // Page Specific JS File
   script(src='/admin/js/loading.js')
+  script(src='/js/study.js')

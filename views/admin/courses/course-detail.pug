@@ -34,79 +34,96 @@ block content
                     .slash= course.courseName 
                     div= course.shortDescription
               div(style='width: 100%; height: auto;')
-                iframe(width='450', height='315', src= course.demoVideoId, frameborder='0', allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowfullscreen='')
+                .study-video
+                  video#video.cld-video-player.cld-fluid(controls, muted, loop, autoplay, data-default= course.demoVideoId)
+              .card-body
+                form.d-flex.flex-column(action="", method="post")
+                  .mb-3
+                    label.form-label(for='formFile') Choose File Maximum 100MB
+                    input(type='file')
+                  button.btn.btn-primary(type="submit") Change
             .card.profile-widget
-              form.needs-validation(action=`/admin/course/${course.slug}/updateVideoImages`, method="post", enctype="multipart/form-data")
+              nav
                 .card-header
                   h4 Edit Video/Images
-                .card-body
-                  .row
-                    .form-group.row.align-items-center.col-md-12.col-12
-                      label.form-control-label.col-sm-3.text-md-right IMAGE COVER
-                      .col-sm-6.col-md-9
-                        .custom-file
-                          input#site-logo.custom-file-input(type='file', name='fileUpload', required)
-                          label.custom-file-label Choose File
-                        .form-text.text-muted The Video must have a maximum size of 10 MB
-                    .form-group.row.align-items-center.col-md-12.col-12
-                      label.form-control-label.col-sm-3.text-md-right Image Detail 1
-                      .col-sm-6.col-md-9
-                        .custom-file
-                          input#site-logo.custom-file-input(type='file', name='fileUpload' , required)
-                          label.custom-file-label Choose File
-                        .form-text.text-muted The Video must have a maximum size of 10 MB
-                    .form-group.row.align-items-center.col-md-12.col-12
-                      label.form-control-label.col-sm-3.text-md-right Image Detail 2
-                      .col-sm-6.col-md-9
-                        .custom-file
-                          input#site-logo.custom-file-input(type='file', name='fileUpload', required)
-                          label.custom-file-label Choose File
-                        .form-text.text-muted The Video must have a maximum size of 10 MB
-                    .form-group.row.align-items-center.col-md-12.col-12
-                      label.form-control-label.col-sm-3.text-md-right Video Demo
-                      .col-sm-6.col-md-9
-                        .custom-file
-                          input#site-logo.custom-file-input(type='file', name='fileUpload')
-                          label.custom-file-label Choose File
-                        .form-text.text-muted The Video must have a maximum size of 100 MB
-                .card-footer.text-center
-                  button.btn.btn-primary Save Changes
-          .col-12.col-md-12.col-lg-7(style="margin-top: 100px")
-            .card
-              form.needs-validation(action=`/admin/course/${course.slug}/updateInformation`, method="post")
-                .card-header
-                  h4 Edit Information
-                .card-body
-                  .row
-                    .form-group.col-md-6.col-12
-                      label Name Course
-                      input.form-control(type='text', value= course.courseName, required='', name='courseName')
-                    .form-group.col-md-6.col-12
-                      label Price
-                      input.form-control(type='text', value=course.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }), required='', name='price')
-                  .row
-                    .form-group.col-md-6.col-12
-                      label Lecturer
-                      input.form-control(type='text',name="trainerName" value= course.trainerName, required='')
-                    .form-group.col-md-6.col-12
-                      label(for='site-description') Short Description
-                      textarea#site-description.form-control(name='shortDescription',style='min-height:10rem')= course.shortDescription
-                  .row
-                    .form-group.col-md-6.col-12
-                      label title Detail 1
-                      input.form-control(type='text',name="title1" value= course.detailDescription[0].title, required='')
-                    .form-group.col-md-6.col-12
-                      label(for='site-description') Description Detail 1
-                      textarea#site-description.form-control(name='detailDescription1',style='min-height:10rem;' )= course.detailDescription[0].content
-                  .row
-                    .form-group.col-md-6.col-12
-                      label title Detail 2
-                      input.form-control(type='text',name="title2" value= course.detailDescription[1].title, required='')
-                    .form-group.col-md-6.col-12
-                      label(for='site-description') Description Detail 2
-                      textarea#site-description.form-control(name='detailDescription2',style='min-height:10rem')= course.detailDescription[0].content
-                .card-footer.text-center
-                  button.btn.btn-primary Save Changes
+                #nav-tab.nav.nav-tabs(role='tablist')
+                  button#nav-edit-img-cover-tab.nav-link.active(data-bs-toggle='tab', data-bs-target='#nav-edit-img-cover', type='button', role='tab', aria-controls='nav-edit-img-cover', aria-selected='true') Image Cover
+                  button#nav-edit-imageDetail-tab.nav-link(data-bs-toggle='tab', data-bs-target='#nav-edit-imageDetail', type='button', role='tab', aria-controls='nav-edit-imageDetail', aria-selected='false') Image Detail 1
+                  button#nav-edit-imageDetail1-tab.nav-link(data-bs-toggle='tab', data-bs-target='#nav-edit-imageDetail1', type='button', role='tab', aria-controls='nav-edit-imageDetail1', aria-selected='false') Image Detail 2
+                #nav-tabContent.tab-content.bg-light
+                  #nav-edit-img-cover.tab-pane.fade.show.active.p-4(role='tabpanel', aria-labelledby='nav-edit-img-cover-tab') Image Cover
+                    .card
+                      img(src=course.imageCover, class="card-img-top", alt="...")
+                    .card-body
+                      form.d-flex.flex-column(action= `/admin/course/${course.slug}/updateImageCoverCourse`, method="post" , enctype="multipart/form-data") 
+                        .mb-3
+                          label.form-label(for='formFile') Choose File Maximum 10MB
+                          input(type='file', name="fileUpload")
+                        button.btn.btn-primary(type="submit") Change
+                  #nav-edit-imageDetail.tab-pane.fade.p-4(role='tabpanel', aria-labelledby='nav-edit-imageDetail-tab') Image Detail 1
+                    .card
+                      img(src= course.detailDescription[0].imgURL, alt="")
+                    .card-body
+                      form.d-flex.flex-column(action= `/admin/course/${course.slug}/updateImageDetailOne`, method="post" , enctype="multipart/form-data") 
+                        .mb-3
+                          label.form-label(for='formFile') Choose File Maximum 10MB
+                          input(type='file', name="fileUpload")
+                        button.btn.btn-primary(type="submit") Change
+                  #nav-edit-imageDetail1.tab-pane.fade.p-4(role='tabpanel', aria-labelledby='nav-edit-imageDetail1-tab') Image Detail 2
+                    .card
+                      img(src= course.detailDescription[1].imgURL, alt="")
+                    .card-body
+                      form.d-flex.flex-column(action= `/admin/course/${course.slug}/updateImageDetailTwo`, method="post", enctype="multipart/form-data") 
+                        .mb-3
+                          label.form-label(for='formFile') Choose File Maximum 10MB
+                          input(type='file', name="fileUpload" )
+                        button.btn.btn-primary(type="submit") Change
+          .col-12.col-md-12.col-lg-7
+            nav
+              .card-header
+                h4 Change Information
+              #nav-tab.nav.nav-tabs(role='tablist')
+                button#nav-edit-information-base-tab.nav-link.active(data-bs-toggle='tab', data-bs-target='#nav-edit-information-base', type='button', role='tab', aria-controls='nav-edit-information-base', aria-selected='true') Information Base
+                button#nav-edit-information-detail-tab.nav-link(data-bs-toggle='tab', data-bs-target='#nav-edit-information-detail', type='button', role='tab', aria-controls='nav-edit-information-detail', aria-selected='false') Detail Information
+              #nav-tabContent.tab-content.bg-light
+                #nav-edit-information-base.tab-pane.fade.show.active.p-4(role='tabpanel', aria-labelledby='nav-edit-information-base-tab')
+                  .card
+                    form.d-flex.flex-column(action= `/admin/course/${course.slug}/update-information-base`, method="post") 
+                      .card-body
+                        .form-row
+                          .form-group.col-md-6
+                            label(for='inputEmail4') Course Name
+                            input#inputEmail4.form-control(name="courseName", type='text', placeholder='Course Name' value=course.courseName)
+                          .form-group.col-md-6
+                            label(for='inputPassword4') trainerName
+                            input#inputPassword4.form-control(name="trainerName", type='text', placeholder='Trainer Name' value= course.trainerName)
+                          .form-group.col-md-6
+                            label(for='price') Price
+                            input#price.form-control(name="price",type='text', placeholder='Price' value=course.price.toLocaleString("it-it", { style : "currency", currency: "VND"}))
+                          .form-group.col-md-6
+                            label(for='shortDescription') Short Description
+                            textarea#shortDescription.form-control(name="shortDescription", type='text', placeholder='Short Description')=course.shortDescription
+                      .card-footer
+                        button.btn.btn-primary Save
+                #nav-edit-information-detail.tab-pane.fade.p-4(role='tabpanel', aria-labelledby='nav-edit-information-detail-tab')
+                  .card
+                    form.d-flex.flex-column(action= `/admin/course/${course.slug}/update-information-detail`, method="post") 
+                      .card-body
+                        .form-row
+                          .form-group.col-md-6
+                            label(for='inputEmail4') Title Detail One
+                            input#inputEmail4.form-control(name="title1", type='text', placeholder='title' value=course.detailDescription[0].title)
+                          .form-group.col-md-6
+                            label(for='inputPassword4') Title Detail Two
+                            input#inputPassword4.form-control(name="title2", type='text', placeholder='Trainer Name' value=course.detailDescription[1].title)
+                          .form-group.col-md-6
+                            label(for='price') Content Detail One
+                            input#price.form-control(name="content1",type='text', placeholder='Price' value=course.detailDescription[0].content)
+                          .form-group.col-md-6
+                            label(for='price') Content Detail Two
+                            input#price.form-control(name="content2",type='text', placeholder='Price' value=course.detailDescription[1].content)
+                      .card-footer
+                        button.btn.btn-primary Save
       .section-body
         h2.section-title
           a.btn.btn-primary(href=`/admin/course/${course.slug}/add/section`) Add New Section

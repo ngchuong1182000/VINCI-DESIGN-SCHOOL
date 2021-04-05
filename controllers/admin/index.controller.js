@@ -128,43 +128,26 @@ exports.getDetailCourse = catchAsync(async (req, res, next) => {
     title: course.slug.toUpperCase()
   })
 });
-
-exports.updateInformationCourse = catchAsync(async (req, res, next) => {
+exports.updateInformationCourseBase = catchAsync(async (req, res, next) => {
   const {
     user
   } = req;
-
   const oldSlug = req.params.slug;
-
   const {
     courseName,
     price,
     shortDescription,
-    trainerName,
-    detailDescription1,
-    title1,
-    detailDescription2,
-    title2
+    trainerName
   } = req.body;
 
   const oldCourse = await Course.findOne({
     slug: oldSlug
   });
-
   const data = {
     courseName,
     price: price.toString().split('.').splice(0, 1).join() * 1000,
     shortDescription,
     trainerName,
-    detailDescription: [{
-      title: title1,
-      content: detailDescription1,
-      imgURL: oldCourse.detailDescription[0].imgURL
-    }, {
-      title: title2,
-      content: detailDescription2,
-      imgURL: oldCourse.detailDescription[1].imgURL
-    }]
   }
   if (oldCourse.courseName !== courseName) {
     data.slug = slugify(courseName, {
@@ -185,7 +168,6 @@ exports.updateInformationCourse = catchAsync(async (req, res, next) => {
       isSuccess: true,
       user: user._id
     })
-    console.log(course);
     res.redirect(`/admin/course/${course.slug}`);
     return;
   } catch (error) {
@@ -199,6 +181,184 @@ exports.updateInformationCourse = catchAsync(async (req, res, next) => {
   }
 })
 
+exports.updateInformationCourseDetail = catchAsync(async (req, res, next) => {
+  const {
+    user
+  } = req;
+  const slug = req.params.slug;
+  const {
+    title1,
+    title2,
+    content1,
+    content2
+  } = req.body;
+  const course = await Course.findOne({
+    slug
+  })
+  try {
+    course.detailDescription[0].title = title1;
+    course.detailDescription[0].content = content1;
+    course.detailDescription[1].title = title2;
+    course.detailDescription[1].content = content2;
+    course.save();
+    await Notifications.create({
+      notification: `Updated Course ${course.courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${course.slug}`);
+    return;
+  } catch (error) {
+    await Notifications.create({
+      notification: `Update Course ${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect(`/admin/course/${slug}`);
+    return;
+  }
+})
+exports.updateImageCoverCourse = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const {
+    slug
+  } = req.params;
+  const course = await Course.findOne({
+    slug
+  });
+  const {
+    file
+  } = req;
+  console.log(file);
+  if (file.mimetype === "video/mp4") {
+    await Notifications.create({
+      notification: `Update Image Cover for course :${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect("back")
+    return;
+  }
+  const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+  const options = {
+    public_id: `images/${nameVideos}`
+  }
+  const uploader = async path => await cloudinary.uploads(path, options)
+  const imageCover = (await uploader(file.path)).secure_url
+  fs.unlinkSync(file.path)
+
+  try {
+    course.imageCover = imageCover;
+    course.save();
+    await Notifications.create({
+      notification: `Update Image Cover for course :${course.courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    });
+    res.redirect("back");
+  } catch (error) {
+    await Notifications.create({
+      notification: `Update Image Cover for course :${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    });
+    res.redirect("back");
+  }
+})
+
+exports.updateImageDeTailOne = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const {
+    slug
+  } = req.params;
+  const course = await Course.findOne({
+    slug
+  });
+  const {
+    file
+  } = req;
+  if (file.mimetype === "video/mp4") {
+    await Notifications.create({
+      notification: `Update Image Detail One for course : ${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect("back")
+    return;
+  }
+  const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+  const options = {
+    public_id: `images/${nameVideos}`
+  }
+  const uploader = async path => await cloudinary.uploads(path, options)
+  const imageDetail = (await uploader(file.path)).secure_url
+  fs.unlinkSync(file.path)
+
+  try {
+    course.detailDescription[0].imgURL = imageDetail;
+    course.save();
+    await Notifications.create({
+      notification: `Update Image Detail One for course : ${course.courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    });
+    res.redirect("back");
+  } catch (error) {
+    await Notifications.create({
+      notification: `Update Image Detail One for course :${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    });
+    res.redirect("back");
+  }
+})
+exports.updateImageDeTailTwo = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const {
+    slug
+  } = req.params;
+  const course = await Course.findOne({
+    slug
+  });
+  const {
+    file
+  } = req;
+  console.log(file);
+  if (file.mimetype === "video/mp4") {
+    await Notifications.create({
+      notification: `Update Image Detail Two for course : ${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    })
+    res.redirect("back")
+    return;
+  }
+  const nameVideos = file.filename.split(".").slice(0, -1).join(".");
+  const options = {
+    public_id: `images/${nameVideos}`
+  }
+  const uploader = async path => await cloudinary.uploads(path, options)
+  const imageDetail = (await uploader(file.path)).secure_url
+  fs.unlinkSync(file.path)
+
+  try {
+    course.detailDescription[1].imgURL = imageDetail;
+    course.save();
+    await Notifications.create({
+      notification: `Update Image Detail Two for course : ${course.courseName} Success !!!`,
+      isSuccess: true,
+      user: user._id
+    });
+    res.redirect("back");
+  } catch (error) {
+    await Notifications.create({
+      notification: `Update Image Detail Two for course :${course.courseName} False !!!`,
+      isSuccess: false,
+      user: user._id
+    });
+    res.redirect("back");
+  }
+})
 exports.updateVideoImages = catchAsync(async (req, res, next) => {
   const {
     user
